@@ -2,13 +2,17 @@ name: seplos-modbus-mqtt
 description: "Seplos BMS V3 to MQTT/InfluxDB Bridge with Home Assistant auto-discovery"
 
 # Dependencies with variable mappings
-# When user selects existing container, these variables are auto-set
+# When user selects existing container or creates new one, these variables are auto-set
 # Available placeholders: ${HOST}, ${PORT}, ${CONTAINER}
+# Credentials are copied from the dependency's .env variables when available
 dependencies:
   - name: mosquitto
     variables:
       SEPLOS_MQTT_SERVER: "${HOST}"
       SEPLOS_MQTT_PORT: "${PORT}"
+    credentials:
+      SEPLOS_MQTT_USERNAME: "MQTT_USERNAME"
+      SEPLOS_MQTT_PASSWORD: "MQTT_PASSWORD"
   - name: influxdb
     variables:
       SEPLOS_INFLUXDB_URL: "http://${HOST}:${PORT}"

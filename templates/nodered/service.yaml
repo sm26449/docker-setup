@@ -82,5 +82,3 @@ compose: |
       - NODE_RED_CREDENTIAL_SECRET=${NODE_RED_CREDENTIAL_SECRET}
     volumes:
       - ${DOCKER_ROOT}/nodered/data:/data
-    depends_on:
-      - mosquitto

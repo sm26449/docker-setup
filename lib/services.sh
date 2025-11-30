@@ -182,6 +182,7 @@ apply_dependency_connections() {
     local in_deps=false
     local current_dep=""
     local in_vars=false
+    local in_creds=false
 
     while IFS= read -r line <&4 || [[ -n "$line" ]]; do
         # Enter dependencies section
@@ -206,6 +207,7 @@ apply_dependency_connections() {
             current_dep="${BASH_REMATCH[1]}"
             current_dep=$(echo "$current_dep" | xargs)  # trim
             in_vars=false
+            in_creds=false
             continue
         fi
 
@@ -213,14 +215,26 @@ apply_dependency_connections() {
         if [[ "$line" =~ ^[[:space:]]*-[[:space:]]*([a-z][a-z0-9_-]*)$ ]]; then
             current_dep="${BASH_REMATCH[1]}"
             in_vars=false
+            in_creds=false
             continue
         fi
 
         # Enter variables subsection
-        if [[ "$line" =~ ^[[:space:]]+variables: ]]; then
+        if [[ "$line" =~ ^[[:space:]]+variables:[[:space:]]*$ ]]; then
             in_vars=true
+            in_creds=false
             continue
         fi
+
+        # Enter credentials subsection
+        if [[ "$line" =~ ^[[:space:]]+credentials:[[:space:]]*$ ]]; then
+            in_creds=true
+            in_vars=false
+            continue
+        fi
+
+        # Check if we have connection info for this dependency
+        local dep_key="${base_service}_${current_dep}"
 
         # Parse variable mapping (VAR_NAME: "value with ${HOST} ${PORT}")
         if $in_vars && [[ "$line" =~ ^[[:space:]]+([A-Z][A-Z0-9_]*):[[:space:]]*[\"\']?(.*)[\"\']?$ ]]; then
@@ -230,9 +244,6 @@ apply_dependency_connections() {
             var_template="${var_template%\"}"
             var_template="${var_template%\'}"
 
-            # Check if we have connection info for this dependency
-            # Use base_service for key lookup (matches how check_dependencies stores it)
-            local dep_key="${base_service}_${current_dep}"
             if [[ -n "${DEPENDENCY_CONNECTIONS[$dep_key]}" ]]; then
                 local info="${DEPENDENCY_CONNECTIONS[$dep_key]}"
                 local container=$(echo "$info" | cut -d: -f1)
@@ -247,7 +258,7 @@ apply_dependency_connections() {
 
                 # Only print once per dependency
                 if [[ -z "${_printed_deps[$dep_key]}" ]]; then
-                    echo -e "  ${GREEN}→${NC} Using existing ${current_dep}: ${BOLD}${container}${NC} (${host}:${port})"
+                    echo -e "  ${GREEN}→${NC} Using ${current_dep}: ${BOLD}${container}${NC} (${host}:${port})"
                     _printed_deps[$dep_key]=1
                 fi
 
@@ -255,6 +266,24 @@ apply_dependency_connections() {
 
                 # Mark this variable as coming from existing container (skip port availability check)
                 VARS_FROM_EXISTING_CONTAINERS["$var_name"]=1
+            fi
+        fi
+
+        # Parse credentials mapping (DEST_VAR: "SOURCE_VAR")
+        # This copies the value of SOURCE_VAR from .env to DEST_VAR
+        if $in_creds && [[ "$line" =~ ^[[:space:]]+([A-Z][A-Z0-9_]*):[[:space:]]*[\"\']?([A-Z][A-Z0-9_]*)[\"\']?$ ]]; then
+            local dest_var="${BASH_REMATCH[1]}"
+            local source_var="${BASH_REMATCH[2]}"
+
+            # Only copy if we have connection info (dependency was selected/created)
+            if [[ -n "${DEPENDENCY_CONNECTIONS[$dep_key]}" ]]; then
+                # Check if source var exists in .env
+                local source_value=$(get_env_var "$source_var")
+                if [[ -n "$source_value" ]]; then
+                    set_env_var "$dest_var" "$source_value"
+                    VARS_FROM_EXISTING_CONTAINERS["$dest_var"]=1
+                    echo -e "  ${GREEN}→${NC} Copied ${source_var} → ${dest_var}"
+                fi
             fi
         fi
     done 4< "$template"
@@ -1362,6 +1391,7 @@ generate_service_config_files() {
     local current_path=""
     local current_content=""
     local in_content=false
+    local -A written_files=()  # Track files already written to prevent duplicates
 
     while IFS= read -r line || [[ -n "$line" ]]; do
         # Check if we're entering config_files section
@@ -1377,19 +1407,23 @@ generate_service_config_files() {
 
         # Check if we've left config_files section (line starts with letter, no indent)
         if [[ "$line" =~ ^[a-z] ]]; then
-            # Write last file if exists
-            if [[ -n "$current_path" ]] && [[ -n "$current_content" ]]; then
+            # Write last file if exists and not already written
+            if [[ -n "$current_path" ]] && [[ -n "$current_content" ]] && [[ -z "${written_files[$current_path]}" ]]; then
                 write_config_file "$compose_service_name" "$current_path" "$current_content" "$docker_root" "$stack"
+                written_files[$current_path]=1
             fi
+            current_path=""
+            current_content=""
             in_config_files=false
             continue
         fi
 
         # New config file entry (starts with "  - path:")
         if [[ "$line" == "  - path:"* ]]; then
-            # Write previous file if exists
-            if [[ -n "$current_path" ]] && [[ -n "$current_content" ]]; then
+            # Write previous file if exists and not already written
+            if [[ -n "$current_path" ]] && [[ -n "$current_content" ]] && [[ -z "${written_files[$current_path]}" ]]; then
                 write_config_file "$compose_service_name" "$current_path" "$current_content" "$docker_root" "$stack"
+                written_files[$current_path]=1
             fi
             # Extract path value
             current_path="${line#*path: }"
@@ -1416,16 +1450,17 @@ generate_service_config_files() {
                 else
                     current_content="${content_line}"
                 fi
-            elif [[ "$line" == "  - path:"* ]] || [[ "$line" =~ ^[a-z] ]]; then
-                # End of content, new entry or section
+            else
+                # End of content block (line not indented enough)
                 in_content=false
             fi
         fi
     done < "$template"
 
-    # Write last file if exists
-    if [[ -n "$current_path" ]] && [[ -n "$current_content" ]]; then
+    # Write last file if exists and not already written
+    if [[ -n "$current_path" ]] && [[ -n "$current_content" ]] && [[ -z "${written_files[$current_path]}" ]]; then
         write_config_file "$compose_service_name" "$current_path" "$current_content" "$docker_root" "$stack"
+        written_files[$current_path]=1
     fi
 
     return 0
@@ -1690,6 +1725,13 @@ run_service_hooks() {
             cmd="${cmd//\$\{DOCKER_ROOT\}/${docker_root}}"
             cmd="${cmd//\$\{SERVICE\}/${service}}"
             cmd="${cmd//\$\{STACK\}/${stack}}"
+
+            # Substitute environment variables from .env file
+            while [[ "$cmd" =~ \$\{([A-Za-z_][A-Za-z0-9_]*)\} ]]; do
+                local var_name="${BASH_REMATCH[1]}"
+                local var_value=$(get_env_var "$var_name")
+                cmd="${cmd//\$\{${var_name}\}/${var_value}}"
+            done
 
             print_info "  Executing: ${cmd}"
             if eval "$cmd"; then
