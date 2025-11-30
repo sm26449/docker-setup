@@ -5,22 +5,27 @@ variables:
   INFLUXDB_PORT:
     default: "8086"
     description: "InfluxDB port"
-  DOCKER_INFLUXDB_INIT_MODE:
-    default: "setup"
-    description: "Init mode"
+    prompt: true
   DOCKER_INFLUXDB_INIT_USERNAME:
     default: "admin"
     description: "Admin username"
+    prompt: true
   DOCKER_INFLUXDB_INIT_PASSWORD:
     default: ""
     description: "Admin password"
     generate: password
+    prompt: true
   DOCKER_INFLUXDB_INIT_ORG:
     default: "homelab"
     description: "Organization name"
+    prompt: true
   DOCKER_INFLUXDB_INIT_BUCKET:
     default: "default"
     description: "Default bucket"
+    prompt: true
+  DOCKER_INFLUXDB_INIT_MODE:
+    default: "setup"
+    description: "Init mode"
 
 compose: |
   influxdb:

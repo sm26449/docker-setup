@@ -10,6 +10,15 @@ variables:
     default: "9001"
     description: "MQTT WebSocket port"
     prompt: true
+  MQTT_USERNAME:
+    default: "mqtt"
+    description: "MQTT username"
+    prompt: true
+  MQTT_PASSWORD:
+    default: ""
+    description: "MQTT password"
+    generate: password
+    prompt: true
 
 # Copy config files from template to ${DOCKER_ROOT}/<stack>/<service>/
 copy_files:
@@ -27,7 +36,8 @@ hooks:
     - "chmod 600 ${SERVICE_DATA}/config/pwfile 2>/dev/null || true"
     - "chown -R 1883:1883 ${SERVICE_DATA} 2>/dev/null || true"
   post_deploy:
-    - "sleep 2"
+    - "sleep 3"
+    - "docker exec ${CONTAINER_NAME} mosquitto_passwd -b /mosquitto/config/pwfile ${MQTT_USERNAME} ${MQTT_PASSWORD} 2>/dev/null || echo 'Note: Add MQTT user manually with Credentials menu'"
     - "docker logs ${CONTAINER_NAME} 2>&1 | tail -3 || true"
 
 compose: |

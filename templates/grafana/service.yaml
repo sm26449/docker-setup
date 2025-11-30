@@ -10,10 +10,16 @@ variables:
   GRAFANA_PORT:
     default: "3000"
     description: "Grafana web port"
+    prompt: true
+  GF_SECURITY_ADMIN_USER:
+    default: "admin"
+    description: "Admin username"
+    prompt: true
   GF_SECURITY_ADMIN_PASSWORD:
     default: ""
     description: "Admin password"
     generate: password
+    prompt: true
 
 config_files:
   - path: "provisioning/datasources/influxdb.yaml"
@@ -49,6 +55,7 @@ compose: |
     ports:
       - "${GRAFANA_PORT:-3000}:3000"
     environment:
+      - GF_SECURITY_ADMIN_USER=${GF_SECURITY_ADMIN_USER:-admin}
       - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
       - GF_USERS_ALLOW_SIGN_UP=false
     volumes:
