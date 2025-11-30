@@ -570,7 +570,7 @@ configure_influxdb_v2_auth() {
 
         case $token_choice in
             1)
-                local new_token=$(generate_random_string 64)
+                local new_token=$(generate_password 64)
                 set_env_var "TELEGRAF_INFLUXDB_TOKEN" "$new_token"
                 echo ""
                 echo -e "${YELLOW}Generated token:${NC}"

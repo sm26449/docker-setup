@@ -386,7 +386,7 @@ install_docker_compose() {
     else
         # Fallback: Install standalone binary
         print_warning "Plugin installation failed, installing standalone binary..."
-        local compose_version="v2.24.0"
+        local compose_version="v2.32.1"
         curl -SL "https://github.com/docker/compose/releases/download/${compose_version}/docker-compose-linux-$(uname -m)" \
             -o /usr/local/bin/docker-compose
         chmod +x /usr/local/bin/docker-compose

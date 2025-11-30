@@ -54,5 +54,3 @@ compose: |
     volumes:
       - ${DOCKER_ROOT}/grafana/data:/var/lib/grafana
       - ${DOCKER_ROOT}/grafana/provisioning:/etc/grafana/provisioning
-    depends_on:
-      - influxdb

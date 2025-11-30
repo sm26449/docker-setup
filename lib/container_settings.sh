@@ -34,7 +34,8 @@ get_all_compose_files() {
 # Select stack for container settings
 #######################################
 select_settings_stack() {
-    local compose_files=($(get_all_compose_files))
+    local compose_files=()
+    mapfile -t compose_files < <(get_all_compose_files | tr ' ' '\n')
 
     if [[ ${#compose_files[@]} -eq 0 ]]; then
         print_error "No docker-compose files found. Add services first."

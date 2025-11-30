@@ -43,7 +43,8 @@ find_service_containers() {
 #######################################
 select_service_container() {
     local service_type=$1
-    local containers=($(find_service_containers "$service_type"))
+    local containers=()
+    mapfile -t containers < <(find_service_containers "$service_type" | tr ' ' '\n')
 
     if [[ ${#containers[@]} -eq 0 ]]; then
         print_error "${service_type^} is not running. Start it first."
@@ -1470,7 +1471,8 @@ mbusd_set_timeout() {
 
 mbusd_restart() {
     echo ""
-    local containers=($(find_service_containers "mbusd"))
+    local containers=()
+    mapfile -t containers < <(find_service_containers "mbusd" | tr ' ' '\n')
 
     if [[ ${#containers[@]} -eq 0 ]]; then
         print_error "mbusd is not running"
@@ -1681,7 +1683,8 @@ ser2net_update_config() {
     echo ""
 
     # Find ser2net data directory
-    local containers=($(find_service_containers "ser2net"))
+    local containers=()
+    mapfile -t containers < <(find_service_containers "ser2net" | tr ' ' '\n')
     local config_dir=""
 
     if [[ ${#containers[@]} -gt 0 ]]; then
@@ -1757,7 +1760,8 @@ EOF
 
 ser2net_restart() {
     echo ""
-    local containers=($(find_service_containers "ser2net"))
+    local containers=()
+    mapfile -t containers < <(find_service_containers "ser2net" | tr ' ' '\n')
 
     if [[ ${#containers[@]} -eq 0 ]]; then
         print_error "ser2net is not running"
