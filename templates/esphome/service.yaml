@@ -1,0 +1,19 @@
+name: esphome
+description: "ESP8266/ESP32 firmware builder"
+
+variables:
+  ESPHOME_PORT:
+    default: "6052"
+    description: "Web port"
+
+compose: |
+  esphome:
+    image: ghcr.io/esphome/esphome:latest
+    container_name: esphome
+    restart: unless-stopped
+    ports:
+      - "${ESPHOME_PORT:-6052}:6052"
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_ROOT}/esphome/config:/config

@@ -1,0 +1,35 @@
+name: wireguard
+description: "VPN server"
+
+variables:
+  WG_PORT:
+    default: "51820"
+    description: "WireGuard port"
+  SERVERURL:
+    default: "auto"
+    description: "Server URL or IP"
+  PEERS:
+    default: "1"
+    description: "Number of client configs"
+
+compose: |
+  wireguard:
+    image: lscr.io/linuxserver/wireguard:latest
+    container_name: wireguard
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    ports:
+      - "${WG_PORT:-51820}:51820/udp"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - SERVERURL=${SERVERURL:-auto}
+      - PEERS=${PEERS:-1}
+    volumes:
+      - ${DOCKER_ROOT}/wireguard/config:/config
+      - /lib/modules:/lib/modules:ro
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1

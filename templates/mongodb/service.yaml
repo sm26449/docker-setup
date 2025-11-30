@@ -1,0 +1,27 @@
+name: mongodb
+description: "NoSQL document database"
+
+variables:
+  MONGODB_PORT:
+    default: "27017"
+    description: "MongoDB port"
+  MONGO_INITDB_ROOT_USERNAME:
+    default: "root"
+    description: "Root username"
+  MONGO_INITDB_ROOT_PASSWORD:
+    default: ""
+    description: "Root password"
+    generate: password
+
+compose: |
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "${MONGODB_PORT:-27017}:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME:-root}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    volumes:
+      - ${DOCKER_ROOT}/mongodb/data:/data/db

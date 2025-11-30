@@ -1,0 +1,22 @@
+name: watchtower
+description: "Automatic Docker container updates"
+
+variables:
+  WATCHTOWER_CLEANUP:
+    default: "true"
+    description: "Remove old images"
+  WATCHTOWER_SCHEDULE:
+    default: "0 0 4 * * *"
+    description: "Update schedule (cron)"
+
+compose: |
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: unless-stopped
+    environment:
+      - WATCHTOWER_CLEANUP=${WATCHTOWER_CLEANUP:-true}
+      - WATCHTOWER_SCHEDULE=${WATCHTOWER_SCHEDULE:-0 0 4 * * *}
+      - TZ=${TZ}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

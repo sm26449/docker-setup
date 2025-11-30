@@ -1,0 +1,10 @@
+name: telegraf
+description: "Telegraf metrics agent (select a variant)"
+
+# This is a parent template with variants
+# When selected, user will be prompted to choose:
+#   - telegraf_docker: Docker & System metrics
+#   - telegraf_victron: Victron Energy MQTT
+#   - telegraf_system: System metrics only
+#
+# No compose section here - variants handle deployment

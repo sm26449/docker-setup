@@ -1,0 +1,27 @@
+name: vaultwarden
+description: "Bitwarden-compatible password manager"
+
+variables:
+  VAULTWARDEN_PORT:
+    default: "8082"
+    description: "Web port"
+  ADMIN_TOKEN:
+    default: ""
+    description: "Admin panel token"
+    generate: random
+  SIGNUPS_ALLOWED:
+    default: "true"
+    description: "Allow new signups"
+
+compose: |
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    ports:
+      - "${VAULTWARDEN_PORT:-8082}:80"
+    environment:
+      - ADMIN_TOKEN=${ADMIN_TOKEN}
+      - SIGNUPS_ALLOWED=${SIGNUPS_ALLOWED:-true}
+    volumes:
+      - ${DOCKER_ROOT}/vaultwarden/data:/data

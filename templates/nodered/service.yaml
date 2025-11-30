@@ -1,0 +1,86 @@
+name: nodered
+description: "Flow-based programming for IoT"
+
+dependencies:
+  - name: mosquitto
+    variables:
+      NODERED_MQTT_HOST: "${HOST}"
+      NODERED_MQTT_PORT: "${PORT}"
+
+variables:
+  NODERED_PORT:
+    default: "1880"
+    description: "Node-RED web port"
+  NODE_RED_CREDENTIAL_SECRET:
+    default: ""
+    description: "Secret for encrypting credentials"
+    generate: random
+
+config_files:
+  - path: "data/settings.js"
+    content: |
+      /**
+       * Node-RED Settings
+       * https://nodered.org/docs/user-guide/runtime/settings-file
+       */
+      module.exports = {
+          flowFile: 'flows.json',
+          flowFilePretty: true,
+
+          // Credential encryption
+          credentialSecret: process.env.NODE_RED_CREDENTIAL_SECRET || false,
+
+          // User directory
+          userDir: '/data',
+
+          // Logging
+          logging: {
+              console: {
+                  level: "info",
+                  metrics: false,
+                  audit: false
+              }
+          },
+
+          // Editor settings
+          editorTheme: {
+              projects: {
+                  enabled: false
+              },
+              palette: {
+                  editable: true
+              }
+          },
+
+          // Function global context
+          functionGlobalContext: {
+          },
+
+          // Export global context
+          exportGlobalContextKeys: false,
+
+          // Debug max length
+          debugMaxLength: 1000,
+
+          // MQTT reconnect time
+          mqttReconnectTime: 15000,
+
+          // Serial reconnect time
+          serialReconnectTime: 15000
+      }
+
+compose: |
+  nodered:
+    image: nodered/node-red:latest
+    container_name: nodered
+    restart: unless-stopped
+    user: "${PUID}:${PGID}"
+    ports:
+      - "${NODERED_PORT:-1880}:1880"
+    environment:
+      - TZ=${TZ}
+      - NODE_RED_CREDENTIAL_SECRET=${NODE_RED_CREDENTIAL_SECRET}
+    volumes:
+      - ${DOCKER_ROOT}/nodered/data:/data
+    depends_on:
+      - mosquitto

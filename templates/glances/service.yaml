@@ -1,0 +1,25 @@
+name: glances
+description: "System monitoring tool"
+
+variables:
+  GLANCES_PORT:
+    default: "61208"
+    description: "Web port"
+  GLANCES_OPT:
+    default: "-w"
+    description: "Glances options"
+
+compose: |
+  glances:
+    image: nicolargo/glances:latest-full
+    container_name: glances
+    restart: unless-stopped
+    pid: host
+    ports:
+      - "${GLANCES_PORT:-61208}:61208"
+      - "61209:61209"
+    environment:
+      - GLANCES_OPT=${GLANCES_OPT:--w}
+      - TZ=${TZ}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro

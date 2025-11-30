@@ -1,0 +1,39 @@
+name: mariadb
+description: "MySQL-compatible database"
+
+variables:
+  MARIADB_PORT:
+    default: "3306"
+    description: "MariaDB port"
+  MYSQL_ROOT_PASSWORD:
+    default: ""
+    description: "Root password"
+    generate: password
+  MYSQL_DATABASE:
+    default: "homeassistant"
+    description: "Default database"
+  MYSQL_USER:
+    default: "homeassistant"
+    description: "Database user"
+  MYSQL_PASSWORD:
+    default: ""
+    description: "User password"
+    generate: password
+
+compose: |
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb
+    restart: unless-stopped
+    ports:
+      - "${MARIADB_PORT:-3306}:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-homeassistant}
+      - MYSQL_USER=${MYSQL_USER:-homeassistant}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_ROOT}/mariadb/data:/var/lib/mysql

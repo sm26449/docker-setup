@@ -1,0 +1,32 @@
+name: vscode
+description: "VS Code in the browser"
+
+variables:
+  VSCODE_PORT:
+    default: "8443"
+    description: "Web port"
+  PASSWORD:
+    default: ""
+    description: "Web password"
+    generate: password
+  SUDO_PASSWORD:
+    default: ""
+    description: "Sudo password"
+    generate: password
+
+compose: |
+  vscode:
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: vscode
+    restart: unless-stopped
+    ports:
+      - "${VSCODE_PORT:-8443}:8443"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - PASSWORD=${PASSWORD}
+      - SUDO_PASSWORD=${SUDO_PASSWORD}
+    volumes:
+      - ${DOCKER_ROOT}/vscode/config:/config
+      - ${DOCKER_ROOT}/vscode/data:/data

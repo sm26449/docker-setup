@@ -1,0 +1,29 @@
+name: pihole
+description: "Network-wide ad blocking"
+
+variables:
+  PIHOLE_PORT:
+    default: "8089"
+    description: "Web admin port"
+  WEBPASSWORD:
+    default: ""
+    description: "Admin password"
+    generate: password
+
+compose: |
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    restart: unless-stopped
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+      - "${PIHOLE_PORT:-8089}:80"
+    environment:
+      - TZ=${TZ}
+      - WEBPASSWORD=${WEBPASSWORD}
+    volumes:
+      - ${DOCKER_ROOT}/pihole/config:/etc/pihole
+      - ${DOCKER_ROOT}/pihole/config/dnsmasq.d:/etc/dnsmasq.d
+    cap_add:
+      - NET_ADMIN

@@ -1,0 +1,44 @@
+name: mosquitto
+description: "MQTT broker"
+
+variables:
+  MQTT_PORT:
+    default: "1883"
+    description: "MQTT port"
+    prompt: true
+  MQTT_WS_PORT:
+    default: "9001"
+    description: "MQTT WebSocket port"
+    prompt: true
+
+# Copy config files from template to ${DOCKER_ROOT}/<stack>/<service>/
+copy_files:
+  - src: mosquitto.conf
+    dest: config/mosquitto.conf
+  - src: pwfile
+    dest: config/pwfile
+
+# Hooks for pre/post deployment actions
+hooks:
+  pre_deploy:
+    - "mkdir -p ${SERVICE_DATA}/config ${SERVICE_DATA}/data ${SERVICE_DATA}/logs"
+    - "chmod 755 ${SERVICE_DATA}/config ${SERVICE_DATA}/data ${SERVICE_DATA}/logs"
+    - "chmod 644 ${SERVICE_DATA}/config/mosquitto.conf 2>/dev/null || true"
+    - "chmod 600 ${SERVICE_DATA}/config/pwfile 2>/dev/null || true"
+    - "chown -R 1883:1883 ${SERVICE_DATA} 2>/dev/null || true"
+  post_deploy:
+    - "sleep 2"
+    - "docker logs ${CONTAINER_NAME} 2>&1 | tail -3 || true"
+
+compose: |
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    restart: unless-stopped
+    ports:
+      - "${MQTT_PORT:-1883}:1883"
+      - "${MQTT_WS_PORT:-9001}:9001"
+    volumes:
+      - ${DOCKER_ROOT}/mosquitto/config:/mosquitto/config
+      - ${DOCKER_ROOT}/mosquitto/data:/mosquitto/data
+      - ${DOCKER_ROOT}/mosquitto/logs:/mosquitto/log

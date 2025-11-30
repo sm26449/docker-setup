@@ -1,0 +1,97 @@
+name: mbusd
+description: "Modbus TCP gateway for RS485/RTU devices"
+
+variables:
+  MBUSD_PORT:
+    description: "Modbus TCP port"
+    default: "502"
+  MBUSD_SERIAL_PORT:
+    description: "Serial device path (e.g., /dev/ttyUSB0, /dev/ttyAMA0)"
+    default: "/dev/ttyUSB0"
+  MBUSD_BAUD_RATE:
+    description: "Serial baud rate"
+    default: "9600"
+  MBUSD_PARITY:
+    description: "Parity (none, even, odd)"
+    default: "none"
+  MBUSD_DATA_BITS:
+    description: "Data bits (7 or 8)"
+    default: "8"
+  MBUSD_STOP_BITS:
+    description: "Stop bits (1 or 2)"
+    default: "1"
+  MBUSD_MAX_CONNECTIONS:
+    description: "Maximum TCP connections"
+    default: "4"
+  MBUSD_TIMEOUT:
+    description: "Response timeout in seconds"
+    default: "3"
+
+config_files:
+  - path: "config/mbusd.conf"
+    content: |
+      # mbusd configuration file
+      # Modbus TCP to RTU/RS485 gateway
+
+      # Roles:
+      # master = mbusd acts as Modbus master on serial side
+      # slave = mbusd acts as Modbus slave (device) on serial side
+
+      # Connection settings
+      [conn]
+      # TCP port to listen on
+      port = ${MBUSD_PORT:-502}
+
+      # Maximum TCP connections
+      maxconn = ${MBUSD_MAX_CONNECTIONS:-4}
+
+      # Response timeout (seconds)
+      timeout = ${MBUSD_TIMEOUT:-3}
+
+      # Serial port settings
+      [serial]
+      # Serial device
+      device = ${MBUSD_SERIAL_PORT:-/dev/ttyUSB0}
+
+      # Baud rate
+      speed = ${MBUSD_BAUD_RATE:-9600}
+
+      # Parity: none, even, odd
+      parity = ${MBUSD_PARITY:-none}
+
+      # Data bits: 7, 8
+      databits = ${MBUSD_DATA_BITS:-8}
+
+      # Stop bits: 1, 2
+      stopbits = ${MBUSD_STOP_BITS:-1}
+
+      # RS-485 mode settings (uncomment if using RS-485)
+      # [rs485]
+      # enable = yes
+      # rts_on_send = yes
+      # rts_after_send = no
+      # delay_rts_before_send = 0
+      # delay_rts_after_send = 0
+
+compose: |
+  mbusd:
+    image: oitc/mbusd:latest
+    container_name: ${COMPOSE_PROJECT_NAME:-docker}-mbusd
+    restart: unless-stopped
+    ports:
+      - "${MBUSD_PORT:-502}:502"
+    devices:
+      - "${MBUSD_SERIAL_PORT:-/dev/ttyUSB0}:${MBUSD_SERIAL_PORT:-/dev/ttyUSB0}"
+    environment:
+      - MBUSD_SERIAL_PORT=${MBUSD_SERIAL_PORT:-/dev/ttyUSB0}
+      - MBUSD_BAUD_RATE=${MBUSD_BAUD_RATE:-9600}
+      - MBUSD_PARITY=${MBUSD_PARITY:-none}
+      - MBUSD_DATA_BITS=${MBUSD_DATA_BITS:-8}
+      - MBUSD_STOP_BITS=${MBUSD_STOP_BITS:-1}
+      - MBUSD_MAX_CONNECTIONS=${MBUSD_MAX_CONNECTIONS:-4}
+      - MBUSD_TIMEOUT=${MBUSD_TIMEOUT:-3}
+    volumes:
+      - ${DOCKER_ROOT}/${COMPOSE_PROJECT_NAME:-docker}/mbusd/config:/etc/mbusd:ro
+    labels:
+      - "com.docker.compose.project=${COMPOSE_PROJECT_NAME:-docker}"
+      - "io.portainer.accesscontrol.teams=homelab"

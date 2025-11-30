@@ -1,0 +1,17 @@
+name: uptime-kuma
+description: "Self-hosted monitoring tool"
+
+variables:
+  UPTIME_KUMA_PORT:
+    default: "3001"
+    description: "Web port"
+
+compose: |
+  uptime-kuma:
+    image: louislam/uptime-kuma:latest
+    container_name: uptime-kuma
+    restart: unless-stopped
+    ports:
+      - "${UPTIME_KUMA_PORT:-3001}:3001"
+    volumes:
+      - ${DOCKER_ROOT}/uptime-kuma/data:/app/data

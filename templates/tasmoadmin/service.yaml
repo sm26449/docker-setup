@@ -1,0 +1,19 @@
+name: tasmoadmin
+description: "Web admin interface for Tasmota devices"
+
+variables:
+  TASMOADMIN_PORT:
+    default: "9541"
+    description: "TasmoAdmin web port"
+
+compose: |
+  tasmoadmin:
+    image: ghcr.io/tasmoadmin/tasmoadmin:latest
+    container_name: tasmoadmin
+    restart: unless-stopped
+    ports:
+      - "${TASMOADMIN_PORT:-9541}:80"
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_ROOT}/tasmoadmin/data:/data

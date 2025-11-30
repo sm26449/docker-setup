@@ -1,0 +1,127 @@
+name: ser2net
+description: "Serial to TCP proxy for serial/RS485 devices"
+
+variables:
+  SER2NET_PORT1:
+    description: "TCP port for first serial device"
+    default: "3001"
+  SER2NET_SERIAL1:
+    description: "First serial device path"
+    default: "/dev/ttyUSB0"
+  SER2NET_BAUD1:
+    description: "Baud rate for first device"
+    default: "9600"
+  SER2NET_PORT2:
+    description: "TCP port for second serial device (0 to disable)"
+    default: "0"
+  SER2NET_SERIAL2:
+    description: "Second serial device path"
+    default: "/dev/ttyUSB1"
+  SER2NET_BAUD2:
+    description: "Baud rate for second device"
+    default: "9600"
+  SER2NET_PORT3:
+    description: "TCP port for third serial device (0 to disable)"
+    default: "0"
+  SER2NET_SERIAL3:
+    description: "Third serial device path"
+    default: "/dev/ttyAMA0"
+  SER2NET_BAUD3:
+    description: "Baud rate for third device"
+    default: "115200"
+
+config_files:
+  - path: "config/ser2net.yaml"
+    content: |
+      # ser2net configuration file
+      # Serial to TCP/Telnet proxy
+      #
+      # Documentation: https://github.com/cminyard/ser2net
+      #
+      # Connection types:
+      #   telnet - Telnet protocol with negotiation
+      #   raw - Raw TCP without protocol overhead
+      #   rawlp - Raw with local port settings
+
+      %YAML 1.1
+      ---
+
+      # Global settings
+      define: &banner Connected to ser2net port \p device \d\r\n
+
+      # Default serial settings
+      default:
+        name: local
+        value:
+          kickolduser: true
+          accepter: telnet(rfc2217),tcp
+
+      # Connection definitions
+      connection: &con1
+        accepter: tcp,${SER2NET_PORT1:-3001}
+        connector: serialdev,${SER2NET_SERIAL1:-/dev/ttyUSB0},${SER2NET_BAUD1:-9600}n81,local
+        options:
+          banner: *banner
+          kickolduser: true
+
+      # Additional connections can be added below
+      # Uncomment and modify as needed
+
+      # connection: &con2
+      #   accepter: tcp,${SER2NET_PORT2:-3002}
+      #   connector: serialdev,${SER2NET_SERIAL2:-/dev/ttyUSB1},${SER2NET_BAUD2:-9600}n81,local
+      #   options:
+      #     banner: *banner
+      #     kickolduser: true
+
+      # connection: &con3
+      #   accepter: tcp,${SER2NET_PORT3:-3003}
+      #   connector: serialdev,${SER2NET_SERIAL3:-/dev/ttyAMA0},${SER2NET_BAUD3:-115200}n81,local
+      #   options:
+      #     banner: *banner
+      #     kickolduser: true
+
+  - path: "config/ser2net.conf"
+    content: |
+      # ser2net legacy configuration file (for older versions)
+      # Format: <TCP port>:<state>:<timeout>:<device>:<options>
+      #
+      # state: raw, rawlp, telnet, off
+      # timeout: 0 = no timeout
+      # options: baud rate, parity (NONE/EVEN/ODD), stop bits, flow control
+      #
+      # Examples:
+      # 3001:raw:0:/dev/ttyUSB0:9600 NONE 1STOPBIT 8DATABITS
+      # 3002:telnet:0:/dev/ttyUSB1:115200 NONE 1STOPBIT 8DATABITS
+
+      # First serial device
+      ${SER2NET_PORT1:-3001}:raw:0:${SER2NET_SERIAL1:-/dev/ttyUSB0}:${SER2NET_BAUD1:-9600} NONE 1STOPBIT 8DATABITS XONXOFF LOCAL -RTSCTS
+
+      # Additional devices (uncomment as needed)
+      # ${SER2NET_PORT2:-3002}:raw:0:${SER2NET_SERIAL2:-/dev/ttyUSB1}:${SER2NET_BAUD2:-9600} NONE 1STOPBIT 8DATABITS XONXOFF LOCAL -RTSCTS
+      # ${SER2NET_PORT3:-3003}:raw:0:${SER2NET_SERIAL3:-/dev/ttyAMA0}:${SER2NET_BAUD3:-115200} NONE 1STOPBIT 8DATABITS XONXOFF LOCAL -RTSCTS
+
+compose: |
+  ser2net:
+    image: lscr.io/linuxserver/ser2net:latest
+    container_name: ${COMPOSE_PROJECT_NAME:-docker}-ser2net
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=${TZ:-Europe/Bucharest}
+    ports:
+      - "${SER2NET_PORT1:-3001}:${SER2NET_PORT1:-3001}"
+      # Uncomment additional ports as needed:
+      # - "${SER2NET_PORT2:-3002}:${SER2NET_PORT2:-3002}"
+      # - "${SER2NET_PORT3:-3003}:${SER2NET_PORT3:-3003}"
+    devices:
+      - "${SER2NET_SERIAL1:-/dev/ttyUSB0}:${SER2NET_SERIAL1:-/dev/ttyUSB0}"
+      # Uncomment additional devices as needed:
+      # - "${SER2NET_SERIAL2:-/dev/ttyUSB1}:${SER2NET_SERIAL2:-/dev/ttyUSB1}"
+      # - "${SER2NET_SERIAL3:-/dev/ttyAMA0}:${SER2NET_SERIAL3:-/dev/ttyAMA0}"
+    volumes:
+      - ${DOCKER_ROOT}/${COMPOSE_PROJECT_NAME:-docker}/ser2net/config:/config
+    labels:
+      - "com.docker.compose.project=${COMPOSE_PROJECT_NAME:-docker}"
+      - "io.portainer.accesscontrol.teams=homelab"

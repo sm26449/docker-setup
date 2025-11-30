@@ -1,0 +1,23 @@
+name: duplicati
+description: "Backup solution"
+
+variables:
+  DUPLICATI_PORT:
+    default: "8200"
+    description: "Web port"
+
+compose: |
+  duplicati:
+    image: lscr.io/linuxserver/duplicati:latest
+    container_name: duplicati
+    restart: unless-stopped
+    ports:
+      - "${DUPLICATI_PORT:-8200}:8200"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_ROOT}/duplicati/config:/config
+      - ${DOCKER_ROOT}/duplicati/data/backups:/backups
+      - ${DOCKER_ROOT}/duplicati/data:/source:ro

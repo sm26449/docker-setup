@@ -1,0 +1,40 @@
+name: influxdb
+description: "Time-series database"
+
+variables:
+  INFLUXDB_PORT:
+    default: "8086"
+    description: "InfluxDB port"
+  DOCKER_INFLUXDB_INIT_MODE:
+    default: "setup"
+    description: "Init mode"
+  DOCKER_INFLUXDB_INIT_USERNAME:
+    default: "admin"
+    description: "Admin username"
+  DOCKER_INFLUXDB_INIT_PASSWORD:
+    default: ""
+    description: "Admin password"
+    generate: password
+  DOCKER_INFLUXDB_INIT_ORG:
+    default: "homelab"
+    description: "Organization name"
+  DOCKER_INFLUXDB_INIT_BUCKET:
+    default: "default"
+    description: "Default bucket"
+
+compose: |
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    restart: unless-stopped
+    ports:
+      - "${INFLUXDB_PORT:-8086}:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=${DOCKER_INFLUXDB_INIT_MODE:-setup}
+      - DOCKER_INFLUXDB_INIT_USERNAME=${DOCKER_INFLUXDB_INIT_USERNAME:-admin}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}
+      - DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG:-homelab}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET:-default}
+    volumes:
+      - ${DOCKER_ROOT}/influxdb/data/data:/var/lib/influxdb2
+      - ${DOCKER_ROOT}/influxdb/config:/etc/influxdb2

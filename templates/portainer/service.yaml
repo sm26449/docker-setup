@@ -1,0 +1,22 @@
+name: portainer
+description: "Docker management UI"
+
+variables:
+  PORTAINER_PORT:
+    default: "9443"
+    description: "Web UI HTTPS port"
+  PORTAINER_IMAGE:
+    default: "portainer/portainer-ee:lts"
+    description: "Image (portainer-ce:latest or portainer-ee:lts)"
+
+compose: |
+  portainer:
+    image: ${PORTAINER_IMAGE:-portainer/portainer-ce:latest}
+    container_name: portainer
+    restart: always
+    ports:
+      - "${PORTAINER_PORT:-9443}:9443"
+      - "8000:8000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ${DOCKER_ROOT}/portainer/data:/data

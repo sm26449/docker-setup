@@ -1,0 +1,184 @@
+name: telegraf_victron
+description: "Telegraf - Victron Energy MQTT (Venus OS)"
+
+dependencies:
+  - name: influxdb
+    variables:
+      TELEGRAF_INFLUXDB_URL: "http://${HOST}:${PORT}"
+  - name: mosquitto
+    variables:
+      TELEGRAF_MQTT_SERVER: "tcp://${HOST}:${PORT}"
+
+variables:
+  # Collection interval
+  TELEGRAF_INTERVAL:
+    default: "10s"
+    description: "Metrics collection interval"
+
+  # InfluxDB 2.x settings
+  TELEGRAF_INFLUXDB_URL:
+    default: "http://influxdb:8086"
+    description: "InfluxDB URL"
+    prompt: true
+
+  TELEGRAF_INFLUXDB_TOKEN:
+    default: ""
+    description: "InfluxDB API token"
+    prompt: true
+
+  TELEGRAF_INFLUXDB_ORG:
+    default: "homelab"
+    description: "InfluxDB organization"
+    prompt: true
+
+  TELEGRAF_INFLUXDB_BUCKET:
+    default: "victron"
+    description: "InfluxDB bucket for Victron data"
+    prompt: true
+
+  # MQTT settings
+  TELEGRAF_MQTT_SERVER:
+    default: "ssl://venus.local:8883"
+    description: "Victron Venus OS MQTT URL (ssl:// for TLS)"
+    prompt: true
+
+  TELEGRAF_MQTT_INSECURE:
+    default: "true"
+    description: "Skip TLS verification (Venus uses self-signed certs)"
+
+  # Victron specific
+  VICTRON_PORTAL_ID:
+    default: ""
+    description: "VRM Portal ID (12 hex chars, find in Venus OS: Settings → VRM Online Portal)"
+    prompt: true
+
+  VICTRON_MONITOR_BATTERY:
+    default: "true"
+    description: "Monitor battery (BMV/SmartShunt)"
+    prompt: true
+
+  VICTRON_MONITOR_GRID:
+    default: "true"
+    description: "Monitor grid meter"
+    prompt: true
+
+  VICTRON_MONITOR_PVINVERTER:
+    default: "true"
+    description: "Monitor PV inverter (Fronius/SMA)"
+    prompt: true
+
+  VICTRON_MONITOR_VEBUS:
+    default: "true"
+    description: "Monitor inverter/charger (MultiPlus/Quattro)"
+    prompt: true
+
+  VICTRON_MONITOR_SYSTEM:
+    default: "true"
+    description: "Monitor system overview"
+    prompt: true
+
+  VICTRON_MONITOR_SOLARCHARGER:
+    default: "false"
+    description: "Monitor MPPT solar charger"
+
+  VICTRON_MONITOR_TEMPERATURE:
+    default: "true"
+    description: "Monitor temperature sensors"
+
+config_files:
+  - path: "config/telegraf.conf"
+    content: |
+      # Telegraf Configuration - Victron Energy Mode
+      # Collects data from Venus OS via MQTT
+
+      [global_tags]
+
+      [agent]
+        interval = "${TELEGRAF_INTERVAL}"
+        round_interval = true
+        metric_batch_size = 1000
+        metric_buffer_limit = 10000
+        collection_jitter = "0s"
+        flush_interval = "10s"
+        flush_jitter = "0s"
+        precision = ""
+        hostname = ""
+        omit_hostname = false
+
+      ###############################################################################
+      #                            OUTPUT PLUGINS                                   #
+      ###############################################################################
+
+      [[outputs.influxdb_v2]]
+        urls = ["${TELEGRAF_INFLUXDB_URL}"]
+        token = "${TELEGRAF_INFLUXDB_TOKEN}"
+        organization = "${TELEGRAF_INFLUXDB_ORG}"
+        bucket = "${TELEGRAF_INFLUXDB_BUCKET}"
+
+      ###############################################################################
+      #                            INPUT PLUGINS                                    #
+      ###############################################################################
+
+      # Victron Energy MQTT Input
+      [[inputs.mqtt_consumer]]
+        servers = ["${TELEGRAF_MQTT_SERVER}"]
+        qos = 0
+        connection_timeout = "30s"
+        client_id = "telegraf-victron"
+
+        # TLS configuration for Venus OS (self-signed certs)
+        insecure_skip_verify = true
+
+        # Topics to subscribe - Victron Venus OS structure
+        # N/<portal_id>/<device_type>/<device_id>/<path>
+        topics = [
+          "N/${VICTRON_PORTAL_ID}/battery/#",
+          "N/${VICTRON_PORTAL_ID}/grid/#",
+          "N/${VICTRON_PORTAL_ID}/pvinverter/#",
+          "N/${VICTRON_PORTAL_ID}/vebus/#",
+          "N/${VICTRON_PORTAL_ID}/system/#",
+          "N/${VICTRON_PORTAL_ID}/solarcharger/#",
+          "N/${VICTRON_PORTAL_ID}/temperature/#"
+        ]
+
+        # Data format - Victron uses JSON
+        data_format = "json"
+
+        # Extract device_type as measurement name for simpler queries
+        # Topic: N/<portal_id>/<device_type>/<instance>/<path...>
+        [[inputs.mqtt_consumer.topic_parsing]]
+          topic = "N/+/+/+/+"
+          measurement = "_/_/measurement/_/_"
+          tags = "_/portal_id/_/instance/path"
+
+        [[inputs.mqtt_consumer.topic_parsing]]
+          topic = "N/+/+/+/+/+"
+          measurement = "_/_/measurement/_/_/_"
+          tags = "_/portal_id/_/instance/path/subpath"
+
+compose: |
+  telegraf-victron:
+    image: telegraf:latest
+    container_name: telegraf-victron
+    restart: unless-stopped
+    hostname: telegraf-victron
+    environment:
+      - TELEGRAF_INTERVAL=${TELEGRAF_INTERVAL:-10s}
+      - TELEGRAF_INFLUXDB_URL=${TELEGRAF_INFLUXDB_URL}
+      - TELEGRAF_INFLUXDB_TOKEN=${TELEGRAF_INFLUXDB_TOKEN}
+      - TELEGRAF_INFLUXDB_ORG=${TELEGRAF_INFLUXDB_ORG}
+      - TELEGRAF_INFLUXDB_BUCKET=${TELEGRAF_INFLUXDB_BUCKET}
+      - TELEGRAF_MQTT_SERVER=${TELEGRAF_MQTT_SERVER}
+      - VICTRON_PORTAL_ID=${VICTRON_PORTAL_ID:-+}
+    volumes:
+      - ${DOCKER_ROOT}/telegraf-victron/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    healthcheck:
+      test: ["CMD", "telegraf", "--test"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

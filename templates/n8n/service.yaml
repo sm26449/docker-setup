@@ -1,0 +1,32 @@
+name: n8n
+description: "Workflow automation tool"
+
+variables:
+  N8N_PORT:
+    default: "5678"
+    description: "Web port"
+  N8N_BASIC_AUTH_ACTIVE:
+    default: "true"
+    description: "Enable basic auth"
+  N8N_BASIC_AUTH_USER:
+    default: "admin"
+    description: "Auth username"
+  N8N_BASIC_AUTH_PASSWORD:
+    default: ""
+    description: "Auth password"
+    generate: password
+
+compose: |
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: unless-stopped
+    ports:
+      - "${N8N_PORT:-5678}:5678"
+    environment:
+      - N8N_BASIC_AUTH_ACTIVE=${N8N_BASIC_AUTH_ACTIVE:-true}
+      - N8N_BASIC_AUTH_USER=${N8N_BASIC_AUTH_USER:-admin}
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_ROOT}/n8n/data:/home/node/.n8n

@@ -1,0 +1,17 @@
+name: redis
+description: "In-memory data store"
+
+variables:
+  REDIS_PORT:
+    default: "6379"
+    description: "Redis port"
+
+compose: |
+  redis:
+    image: redis:alpine
+    container_name: redis
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - ${DOCKER_ROOT}/redis/data:/data

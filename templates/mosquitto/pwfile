@@ -1,0 +1,3 @@
+# Mosquitto password file
+# Add users with: docker exec mosquitto mosquitto_passwd -b /mosquitto/config/pwfile username password
+# Or use the Credentials menu in this tool

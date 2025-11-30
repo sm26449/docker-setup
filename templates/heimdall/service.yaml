@@ -1,0 +1,22 @@
+name: heimdall
+description: "Application dashboard"
+
+variables:
+  HEIMDALL_PORT:
+    default: "8084"
+    description: "Web port"
+
+compose: |
+  heimdall:
+    image: lscr.io/linuxserver/heimdall:latest
+    container_name: heimdall
+    restart: unless-stopped
+    ports:
+      - "${HEIMDALL_PORT:-8084}:80"
+      - "8444:443"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_ROOT}/heimdall/config:/config

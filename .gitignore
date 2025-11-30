@@ -1,0 +1,22 @@
+# Claude Code files
+CLAUDE.md
+.claude/
+
+# macOS
+.DS_Store
+*.DS_Store
+
+# Environment files with secrets
+.env
+*.env.local
+
+# Backup files
+*.bak
+*.backup
+
+# Generated files
+docker-compose.yml
+
+# Logs
+*.log
+logs/

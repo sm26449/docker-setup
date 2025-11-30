@@ -1,0 +1,111 @@
+name: homeassistant
+description: "Home automation platform"
+
+dependencies:
+  - name: mariadb
+    variables:
+      HA_MARIADB_HOST: "${HOST}"
+      HA_MARIADB_PORT: "${PORT}"
+  - name: mosquitto
+    variables:
+      HA_MQTT_HOST: "${HOST}"
+      HA_MQTT_PORT: "${PORT}"
+  - name: influxdb
+    variables:
+      HA_INFLUXDB_HOST: "${HOST}"
+      HA_INFLUXDB_PORT: "${PORT}"
+
+variables:
+  HA_PORT:
+    default: "8123"
+    description: "Home Assistant web port"
+
+config_files:
+  - path: "config/configuration.yaml"
+    content: |
+      # Home Assistant Configuration
+      # https://www.home-assistant.io/docs/configuration/
+
+      homeassistant:
+        name: Home
+        unit_system: metric
+        time_zone: ${TZ}
+        # Customize as needed:
+        # latitude: !secret latitude
+        # longitude: !secret longitude
+        # elevation: 0
+        # country: RO
+
+      # Default config includes:
+      # - automation
+      # - backup
+      # - frontend
+      # - history
+      # - logbook
+      # - map
+      # - mobile_app
+      # - my
+      # - sun
+      # - system_health
+      default_config:
+
+      # Text to speech
+      tts:
+        - platform: google_translate
+
+      # MQTT configuration
+      mqtt:
+        broker: mosquitto
+        port: 1883
+        # username: !secret mqtt_user
+        # password: !secret mqtt_password
+
+      # Database (MariaDB)
+      recorder:
+        db_url: mysql://homeassistant:${MYSQL_PASSWORD}@mariadb/homeassistant?charset=utf8mb4
+        purge_keep_days: 10
+        commit_interval: 1
+
+      # InfluxDB for long-term storage
+      influxdb:
+        host: influxdb
+        port: 8086
+        database: homeassistant
+        max_retries: 3
+        default_measurement: state
+
+      # Logger
+      logger:
+        default: info
+        logs:
+          homeassistant.core: warning
+          homeassistant.components.mqtt: info
+
+  - path: "config/secrets.yaml"
+    content: |
+      # Home Assistant Secrets
+      # Store sensitive data here
+
+      # mqtt_user: your_mqtt_username
+      # mqtt_password: your_mqtt_password
+
+      # latitude: 44.4268
+      # longitude: 26.1025
+
+compose: |
+  homeassistant:
+    image: ghcr.io/home-assistant/home-assistant:stable
+    container_name: homeassistant
+    restart: unless-stopped
+    network_mode: host
+    privileged: true
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_ROOT}/homeassistant/config:/config
+      - /etc/localtime:/etc/localtime:ro
+      - /run/dbus:/run/dbus:ro
+    depends_on:
+      - mariadb
+      - mosquitto
+      - influxdb

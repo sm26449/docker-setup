@@ -1,0 +1,24 @@
+name: gotify
+description: "Self-hosted push notification server"
+
+variables:
+  GOTIFY_PORT:
+    default: "8083"
+    description: "Web port"
+  GOTIFY_DEFAULTUSER_PASS:
+    default: ""
+    description: "Default user password"
+    generate: password
+
+compose: |
+  gotify:
+    image: gotify/server:latest
+    container_name: gotify
+    restart: unless-stopped
+    ports:
+      - "${GOTIFY_PORT:-8083}:80"
+    environment:
+      - GOTIFY_DEFAULTUSER_PASS=${GOTIFY_DEFAULTUSER_PASS}
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_ROOT}/gotify/data:/app/data

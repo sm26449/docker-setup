@@ -1,0 +1,21 @@
+name: filebrowser
+description: "Web-based file manager"
+
+variables:
+  FILEBROWSER_PORT:
+    default: "8085"
+    description: "Web port"
+
+compose: |
+  filebrowser:
+    image: filebrowser/filebrowser:latest
+    container_name: filebrowser
+    restart: unless-stopped
+    ports:
+      - "${FILEBROWSER_PORT:-8085}:80"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+    volumes:
+      - ${DOCKER_ROOT}/filebrowser/data:/srv
+      - ${DOCKER_ROOT}/filebrowser/config/filebrowser.db:/database.db

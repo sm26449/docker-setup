@@ -1,0 +1,149 @@
+name: seplos-modbus-mqtt
+description: "Seplos BMS V3 to MQTT/InfluxDB Bridge with Home Assistant auto-discovery"
+
+# Dependencies with variable mappings
+# When user selects existing container, these variables are auto-set
+# Available placeholders: ${HOST}, ${PORT}, ${CONTAINER}
+dependencies:
+  - name: mosquitto
+    variables:
+      SEPLOS_MQTT_SERVER: "${HOST}"
+      SEPLOS_MQTT_PORT: "${PORT}"
+  - name: influxdb
+    variables:
+      SEPLOS_INFLUXDB_URL: "http://${HOST}:${PORT}"
+      SEPLOS_INFLUXDB_ENABLED: "true"
+
+variables:
+  # Serial settings
+  SEPLOS_SERIAL_PORT:
+    default: "/dev/ttyUSB0"
+    description: "Serial port for RS485 adapter"
+    prompt: true
+  SEPLOS_SERIAL_BAUDRATE:
+    default: "19200"
+    description: "Baud rate (19200 for Seplos V3)"
+
+  # MQTT settings
+  SEPLOS_MQTT_SERVER:
+    default: "localhost"
+    description: "MQTT broker address"
+    prompt: true
+  SEPLOS_MQTT_PORT:
+    default: "1883"
+    description: "MQTT broker port"
+    prompt: true
+  SEPLOS_MQTT_USERNAME:
+    default: ""
+    description: "MQTT username (leave empty if not required)"
+    prompt: true
+  SEPLOS_MQTT_PASSWORD:
+    default: ""
+    description: "MQTT password"
+    prompt: true
+  SEPLOS_MQTT_PREFIX:
+    default: "seplos"
+    description: "MQTT topic prefix"
+  SEPLOS_MQTT_PUBLISH_MODE:
+    default: "changed"
+    description: "Publish mode: 'changed' or 'all'"
+
+  # InfluxDB settings
+  SEPLOS_INFLUXDB_ENABLED:
+    default: "false"
+    description: "Enable InfluxDB integration (true/false)"
+    prompt: true
+  SEPLOS_INFLUXDB_URL:
+    default: "http://localhost:8086"
+    description: "InfluxDB URL"
+    prompt: true
+  SEPLOS_INFLUXDB_TOKEN:
+    default: ""
+    description: "InfluxDB API token"
+    prompt: true
+  SEPLOS_INFLUXDB_ORG:
+    default: "homelab"
+    description: "InfluxDB organization"
+    prompt: true
+  SEPLOS_INFLUXDB_BUCKET:
+    default: "seplos"
+    description: "InfluxDB bucket"
+    prompt: true
+  SEPLOS_INFLUXDB_WRITE_INTERVAL:
+    default: "5"
+    description: "Min seconds between writes per battery"
+  SEPLOS_INFLUXDB_PUBLISH_MODE:
+    default: "changed"
+    description: "InfluxDB publish mode: 'changed' or 'all'"
+
+  # Health settings
+  SEPLOS_HEALTH_CHECK_INTERVAL:
+    default: "60"
+    description: "Health check interval in seconds"
+  SEPLOS_HEALTH_STALE_TIMEOUT:
+    default: "120"
+    description: "Mark battery offline after N seconds without data"
+
+  # General settings
+  SEPLOS_LOG_LEVEL:
+    default: "INFO"
+    description: "Log level: DEBUG, INFO, WARNING, ERROR"
+
+# Copy files from template to ${DOCKER_ROOT}/<stack>/<service>/
+copy_files:
+  - src: seplos_bms_mqtt.ini.example
+    dest: config/seplos_bms_mqtt.ini
+
+# Hooks for pre/post deployment actions
+hooks:
+  pre_deploy:
+    - "echo 'Preparing Seplos BMS MQTT service...'"
+    - "chmod 644 ${SERVICE_DATA}/config/seplos_bms_mqtt.ini 2>/dev/null || true"
+  post_deploy:
+    - "echo 'Seplos BMS MQTT service deployed successfully'"
+    - "echo 'Config file: ${SERVICE_DATA}/config/seplos_bms_mqtt.ini'"
+    - "docker logs ${CONTAINER_NAME} --tail 5 2>/dev/null || true"
+
+compose: |
+  seplos-modbus-mqtt:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: seplos-modbus-mqtt:latest
+    container_name: seplos-modbus-mqtt
+    restart: unless-stopped
+    network_mode: host
+    devices:
+      - ${SEPLOS_SERIAL_PORT:-/dev/ttyUSB0}:${SEPLOS_SERIAL_PORT:-/dev/ttyUSB0}
+    environment:
+      - SERIAL_PORT=${SEPLOS_SERIAL_PORT:-/dev/ttyUSB0}
+      - SERIAL_BAUDRATE=${SEPLOS_SERIAL_BAUDRATE:-19200}
+      - MQTT_SERVER=${SEPLOS_MQTT_SERVER:-localhost}
+      - MQTT_PORT=${SEPLOS_MQTT_PORT:-1883}
+      - MQTT_USERNAME=${SEPLOS_MQTT_USERNAME:-}
+      - MQTT_PASSWORD=${SEPLOS_MQTT_PASSWORD:-}
+      - MQTT_PREFIX=${SEPLOS_MQTT_PREFIX:-seplos}
+      - MQTT_PUBLISH_MODE=${SEPLOS_MQTT_PUBLISH_MODE:-changed}
+      - INFLUXDB_ENABLED=${SEPLOS_INFLUXDB_ENABLED:-false}
+      - INFLUXDB_URL=${SEPLOS_INFLUXDB_URL:-http://localhost:8086}
+      - INFLUXDB_TOKEN=${SEPLOS_INFLUXDB_TOKEN:-}
+      - INFLUXDB_ORG=${SEPLOS_INFLUXDB_ORG:-homelab}
+      - INFLUXDB_BUCKET=${SEPLOS_INFLUXDB_BUCKET:-seplos}
+      - INFLUXDB_WRITE_INTERVAL=${SEPLOS_INFLUXDB_WRITE_INTERVAL:-5}
+      - INFLUXDB_PUBLISH_MODE=${SEPLOS_INFLUXDB_PUBLISH_MODE:-changed}
+      - HEALTH_CHECK_INTERVAL=${SEPLOS_HEALTH_CHECK_INTERVAL:-60}
+      - HEALTH_STALE_TIMEOUT=${SEPLOS_HEALTH_STALE_TIMEOUT:-120}
+      - GENERAL_LOG_LEVEL=${SEPLOS_LOG_LEVEL:-INFO}
+    volumes:
+      - ${DOCKER_ROOT}/seplos-modbus-mqtt/config:/app/config:ro
+    healthcheck:
+      test: ["CMD", "python3", "/app/healthcheck.py"]
+      interval: 60s
+      timeout: 10s
+      start_period: 60s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

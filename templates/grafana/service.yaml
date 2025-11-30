@@ -1,0 +1,58 @@
+name: grafana
+description: "Monitoring dashboards and visualization"
+
+dependencies:
+  - name: influxdb
+    variables:
+      GRAFANA_INFLUXDB_URL: "http://${HOST}:${PORT}"
+
+variables:
+  GRAFANA_PORT:
+    default: "3000"
+    description: "Grafana web port"
+  GF_SECURITY_ADMIN_PASSWORD:
+    default: ""
+    description: "Admin password"
+    generate: password
+
+config_files:
+  - path: "provisioning/datasources/influxdb.yaml"
+    content: |
+      # Grafana InfluxDB Datasource Provisioning
+      apiVersion: 1
+
+      datasources:
+        - name: InfluxDB
+          type: influxdb
+          access: proxy
+          url: http://influxdb:8086
+          # For InfluxDB 2.x with Flux
+          jsonData:
+            version: Flux
+            organization: docker-services
+            defaultBucket: default
+            tlsSkipVerify: true
+          secureJsonData:
+            token: ${INFLUXDB_TOKEN}
+          # Uncomment below for InfluxDB 1.x
+          # database: telegraf
+          # user: admin
+          # secureJsonData:
+          #   password: your_password
+
+compose: |
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    user: "${PUID}:${PGID}"
+    ports:
+      - "${GRAFANA_PORT:-3000}:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GF_SECURITY_ADMIN_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - ${DOCKER_ROOT}/grafana/data:/var/lib/grafana
+      - ${DOCKER_ROOT}/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - influxdb

@@ -1,0 +1,8 @@
+# Ignore everything from the cloned repository
+*
+
+# Except these files (docker-setup specific)
+!.gitignore
+!service.yaml
+!service.*.yaml
+!INTEGRATION.md

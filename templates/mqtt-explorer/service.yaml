@@ -1,0 +1,25 @@
+name: mqtt-explorer
+description: "MQTT client and visualizer"
+
+dependencies:
+  - name: mosquitto
+    variables:
+      MQTT_EXPLORER_BROKER_HOST: "${HOST}"
+      MQTT_EXPLORER_BROKER_PORT: "${PORT}"
+
+variables:
+  MQTT_EXPLORER_PORT:
+    default: "4000"
+    description: "Web port"
+
+compose: |
+  mqtt-explorer:
+    image: smeagolworms4/mqtt-explorer:latest
+    container_name: mqtt-explorer
+    restart: unless-stopped
+    ports:
+      - "${MQTT_EXPLORER_PORT:-4000}:4000"
+    volumes:
+      - ${DOCKER_ROOT}/mqtt-explorer/config:/mqtt-explorer/config
+    depends_on:
+      - mosquitto

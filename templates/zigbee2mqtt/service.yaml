@@ -1,0 +1,73 @@
+name: zigbee2mqtt
+description: "Zigbee to MQTT bridge"
+
+dependencies:
+  - name: mosquitto
+    variables:
+      ZIGBEE2MQTT_CONFIG_MQTT_SERVER: "mqtt://${HOST}:${PORT}"
+
+variables:
+  ZIGBEE2MQTT_PORT:
+    default: "8088"
+    description: "Web frontend port"
+  ZIGBEE2MQTT_CONFIG_MQTT_SERVER:
+    default: "mqtt://mosquitto:1883"
+    description: "MQTT broker URL"
+  ZIGBEE_DEVICE:
+    default: "/dev/ttyUSB0"
+    description: "Zigbee adapter device path"
+
+config_files:
+  - path: "config/configuration.yaml"
+    content: |
+      # Zigbee2MQTT Configuration
+      # https://www.zigbee2mqtt.io/guide/configuration/
+
+      homeassistant: true
+
+      permit_join: false
+
+      mqtt:
+        base_topic: zigbee2mqtt
+        server: mqtt://mosquitto:1883
+        # user: your_mqtt_user
+        # password: your_mqtt_password
+
+      serial:
+        port: /dev/ttyUSB0
+        # adapter: auto
+
+      frontend:
+        port: 8080
+        host: 0.0.0.0
+
+      advanced:
+        log_level: info
+        log_output:
+          - console
+          - file
+        log_directory: /app/data/log
+        homeassistant_legacy_entity_attributes: false
+        legacy_api: false
+        legacy_availability_payload: false
+
+      # Device specific configuration
+      device_options:
+        legacy: false
+
+compose: |
+  zigbee2mqtt:
+    image: koenkk/zigbee2mqtt:latest
+    container_name: zigbee2mqtt
+    restart: unless-stopped
+    ports:
+      - "${ZIGBEE2MQTT_PORT:-8088}:8080"
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_ROOT}/zigbee2mqtt/config:/app/data
+      - /run/udev:/run/udev:ro
+    devices:
+      - ${ZIGBEE_DEVICE:-/dev/ttyUSB0}:/dev/ttyUSB0
+    depends_on:
+      - mosquitto
