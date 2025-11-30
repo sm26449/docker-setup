@@ -42,6 +42,16 @@ variables:
     description: "Victron Venus OS MQTT URL (ssl:// for TLS)"
     prompt: true
 
+  TELEGRAF_MQTT_USERNAME:
+    default: ""
+    description: "MQTT username (leave empty if not required)"
+    prompt: true
+
+  TELEGRAF_MQTT_PASSWORD:
+    default: ""
+    description: "MQTT password"
+    prompt: true
+
   TELEGRAF_MQTT_INSECURE:
     default: "true"
     description: "Skip TLS verification (Venus uses self-signed certs)"
@@ -125,6 +135,10 @@ config_files:
         qos = 0
         connection_timeout = "30s"
         client_id = "telegraf-victron"
+
+        # Authentication (if required by your MQTT broker)
+        username = "${TELEGRAF_MQTT_USERNAME}"
+        password = "${TELEGRAF_MQTT_PASSWORD}"
 
         # TLS configuration for Venus OS (self-signed certs)
         insecure_skip_verify = true
