@@ -339,9 +339,9 @@ Anumite template-uri necesită clonarea repository-urilor externe înainte de ut
 Monitorizare invertoare și smart meter-e Fronius via Modbus TCP.
 
 ```bash
-cd /opt/docker-setup/templates
-rm -rf fronius  # Șterge folderul gol dacă există
-git clone https://github.com/sm26449/fronius-modbus-mqtt.git fronius
+cd /opt/
+git clone https://github.com/sm26449/fronius-modbus-mqtt.git
+cp -r fronius-modbus-mqtt/* docker-setup/templates/fronius/
 ```
 
 **Variante disponibile:**
@@ -356,9 +356,9 @@ Vezi `templates/fronius/INTEGRATION.md` pentru detalii.
 Monitorizare baterii Seplos BMS V3 via RS485.
 
 ```bash
-cd /opt/docker-setup/templates
-rm -rf seplos-modbus-mqtt  # Șterge folderul gol dacă există
-git clone https://github.com/sm26449/seplos-modbus-mqtt.git seplos-modbus-mqtt
+cd /opt/
+git clone https://github.com/sm26449/seplos-modbus-mqtt.git
+cp -r seplos-modbus-mqtt/* docker-setup/templates/seplos-modbus-mqtt/
 ```
 
 **Cerințe hardware:**
