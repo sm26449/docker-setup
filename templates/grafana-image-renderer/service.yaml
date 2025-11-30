@@ -1,11 +1,9 @@
 name: grafana-image-renderer
 description: "Grafana Image Renderer - Generate PNG images from panels and dashboards"
 
-# Dependencies - requires Grafana to be useful
-dependencies:
-  - name: grafana
-    variables:
-      GF_RENDERING_CALLBACK_URL: "http://${CONTAINER}:3000/"
+# Note: No dependency on grafana to avoid circular dependency
+# Grafana has the dependency on this service and will configure itself
+# This service is a standalone renderer that grafana calls via HTTP
 
 variables:
   RENDERING_PORT:
