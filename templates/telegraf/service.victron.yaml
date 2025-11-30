@@ -132,7 +132,9 @@ config_files:
       # Victron Energy MQTT Input
       [[inputs.mqtt_consumer]]
         servers = ["${TELEGRAF_MQTT_SERVER}"]
+
         qos = 0
+
         connection_timeout = "30s"
         client_id = "telegraf-victron"
 
