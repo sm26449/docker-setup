@@ -9,18 +9,6 @@ variables:
   RENDERING_PORT:
     default: "8081"
     description: "Image renderer HTTP port"
-  RENDERING_MODE:
-    default: "clustered"
-    description: "Rendering mode (default or clustered)"
-  RENDERING_CLUSTERING_MODE:
-    default: "context"
-    description: "Clustering mode (browser or context)"
-  RENDERING_CLUSTERING_MAX_CONCURRENCY:
-    default: "5"
-    description: "Max concurrent render requests"
-  RENDERING_VERBOSE_LOGGING:
-    default: "false"
-    description: "Enable verbose logging (true/false)"
 
 compose: |
   grafana-image-renderer:
@@ -29,20 +17,3 @@ compose: |
     restart: unless-stopped
     ports:
       - "${RENDERING_PORT:-8081}:8081"
-    environment:
-      - ENABLE_METRICS=true
-      - RENDERING_MODE=${RENDERING_MODE:-clustered}
-      - RENDERING_CLUSTERING_MODE=${RENDERING_CLUSTERING_MODE:-context}
-      - RENDERING_CLUSTERING_MAX_CONCURRENCY=${RENDERING_CLUSTERING_MAX_CONCURRENCY:-5}
-      - RENDERING_VERBOSE_LOGGING=${RENDERING_VERBOSE_LOGGING:-false}
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:8081/"]
-      interval: 30s
-      timeout: 10s
-      start_period: 10s
-      retries: 3
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "10m"
-        max-file: "3"

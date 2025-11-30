@@ -1511,6 +1511,15 @@ write_config_file() {
     final_content=$(echo "$final_content" | sed "s|\${PGID}|$(get_env_var PGID)|g")
     final_content=$(echo "$final_content" | sed "s|\${TZ}|$(get_env_var TZ)|g")
 
+    # Replace all other ${VAR} patterns with values from .env
+    while [[ "$final_content" =~ \$\{([A-Za-z_][A-Za-z0-9_]*)\} ]]; do
+        local var_name="${BASH_REMATCH[1]}"
+        local var_value=$(get_env_var "$var_name")
+        # Escape special characters in value for sed
+        var_value=$(printf '%s\n' "$var_value" | sed 's/[&/\]/\\&/g')
+        final_content=$(echo "$final_content" | sed "s|\${${var_name}}|${var_value}|g")
+    done
+
     # Write the file
     echo "$final_content" > "$full_path"
     print_success "  Created: ${rel_path}"
