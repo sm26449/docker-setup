@@ -37,7 +37,7 @@ hooks:
     - "chown -R 1883:1883 ${SERVICE_DATA} 2>/dev/null || true"
   post_deploy:
     - "sleep 3"
-    - "docker exec ${CONTAINER_NAME} mosquitto_passwd -b /mosquitto/config/pwfile ${MQTT_USERNAME} ${MQTT_PASSWORD} 2>/dev/null || echo 'Note: Add MQTT user manually with Credentials menu'"
+    - "docker exec ${CONTAINER_NAME} mosquitto_passwd -b /mosquitto/config/pwfile ${MQTT_USERNAME} ${MQTT_PASSWORD} 2>/dev/null && docker exec ${CONTAINER_NAME} kill -HUP 1 2>/dev/null && echo '✓ MQTT user created and config reloaded' || echo 'Note: Add MQTT user manually with Credentials menu'"
     - "docker logs ${CONTAINER_NAME} 2>&1 | tail -3 || true"
 
 compose: |
