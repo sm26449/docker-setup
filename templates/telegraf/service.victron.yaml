@@ -95,6 +95,11 @@ variables:
     default: "true"
     description: "Monitor temperature sensors"
 
+hooks:
+  post_deploy:
+    # Create InfluxDB bucket for Victron data
+    - "docker exec ${STACK}-influxdb influx bucket create -n '${TELEGRAF_INFLUXDB_BUCKET}' -o '${TELEGRAF_INFLUXDB_ORG}' 2>/dev/null && echo '✓ InfluxDB bucket ${TELEGRAF_INFLUXDB_BUCKET} created' || true"
+
 config_files:
   - path: "config/telegraf.conf"
     content: |
