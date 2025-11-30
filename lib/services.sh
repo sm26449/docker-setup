@@ -2157,16 +2157,37 @@ add_service_to_compose() {
         rm -f "$transformed_snippet"
     fi
 
-    # Check if we need to add depends_on for created dependencies
+    # Check if we need to add depends_on for dependencies in same stack
     local deps_to_add=()
     local template_deps=$(parse_yaml_array "$template" "dependencies")
 
     for dep in $template_deps; do
-        # Check if this dependency was created as new (not an existing container)
-        # Use base_service for key lookup (matches how check_dependencies stores it)
+        # Check if this dependency is being installed in the same stack
+        # Either: 1) was created as new via prompt_dependency_choice, or
+        #         2) is in the current SELECTED_SERVICES list for this stack
         local suffix_key="${base_service}_${dep}_suffix"
+        local dep_in_stack=false
+
+        # Check if created via prompt
         if [[ -n "${DEPENDENCY_CONNECTIONS[$suffix_key]}" ]]; then
-            # New container was created - add to depends_on
+            dep_in_stack=true
+        fi
+
+        # Check if in SELECTED_SERVICES (installed together in same session)
+        for selected in "${SELECTED_SERVICES[@]}"; do
+            local selected_base=$(get_base_service_name "$selected")
+            if [[ "$selected_base" == "$dep" ]]; then
+                dep_in_stack=true
+                break
+            fi
+        done
+
+        # Check if service already exists in this compose file
+        if [[ -f "$compose_file" ]] && grep -q "^  ${dep}:" "$compose_file" 2>/dev/null; then
+            dep_in_stack=true
+        fi
+
+        if $dep_in_stack; then
             deps_to_add+=("$dep")
         fi
     done

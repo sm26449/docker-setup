@@ -23,9 +23,18 @@ variables:
     default: "default"
     description: "Default bucket"
     prompt: true
+  DOCKER_INFLUXDB_INIT_ADMIN_TOKEN:
+    default: ""
+    description: "Admin API token (auto-generated if empty)"
+    generate: random
   DOCKER_INFLUXDB_INIT_MODE:
     default: "setup"
     description: "Init mode"
+
+hooks:
+  post_deploy:
+    - "echo 'InfluxDB deployed. API Token for other services:'"
+    - "echo '  INFLUXDB_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}'"
 
 compose: |
   influxdb:
@@ -40,6 +49,7 @@ compose: |
       - DOCKER_INFLUXDB_INIT_PASSWORD=${DOCKER_INFLUXDB_INIT_PASSWORD}
       - DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG:-homelab}
       - DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET:-default}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
     volumes:
       - ${DOCKER_ROOT}/influxdb/data/data:/var/lib/influxdb2
       - ${DOCKER_ROOT}/influxdb/config:/etc/influxdb2
