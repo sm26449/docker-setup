@@ -1707,11 +1707,8 @@ run_service_hooks() {
         # Collect commands (lines starting with "    - ")
         if $in_target_hook && [[ "$line" == "    - "* ]]; then
             local cmd="${line#    - }"
-            # Remove surrounding quotes (double or single)
             cmd="${cmd#\"}"
             cmd="${cmd%\"}"
-            cmd="${cmd#\'}"
-            cmd="${cmd%\'}"
             commands+=("$cmd")
         fi
     done < "$template"
