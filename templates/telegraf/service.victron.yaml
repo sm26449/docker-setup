@@ -103,22 +103,34 @@ hooks:
 config_files:
   - path: "config/telegraf.conf"
     content: |
-      # Telegraf Configuration - Victron Energy Mode
-      # Collects data from Venus OS via MQTT
+      # Telegraf Configuration - Victron Energy
+      # Optimized for easy InfluxDB queries
+      #
+      # Structure:
+      #   measurement = device_type (battery, grid, vebus, system, pvinverter, temperature)
+      #   tags:
+      #     - instance: device instance ID (512, 274, 0, etc.)
+      #     - metric: full path as underscore-separated (Ac_L1_Power, Dc_0_Current, etc.)
+      #   field:
+      #     - value: the actual measurement value
+      #
+      # Query examples:
+      #   SELECT value FROM grid WHERE metric = 'Ac_L1_Power'
+      #   SELECT value FROM battery WHERE instance = '512' AND metric = 'Soc'
+      #   SELECT value FROM pvinverter WHERE metric =~ /Ac_L.*_Power/
 
       [global_tags]
+        source = "victron"
+        portal_id = "${VICTRON_PORTAL_ID}"
 
       [agent]
         interval = "${TELEGRAF_INTERVAL}"
         round_interval = true
         metric_batch_size = 1000
         metric_buffer_limit = 10000
-        collection_jitter = "0s"
         flush_interval = "10s"
-        flush_jitter = "0s"
-        precision = ""
         hostname = ""
-        omit_hostname = false
+        omit_hostname = true
 
       ###############################################################################
       #                            OUTPUT PLUGINS                                   #
@@ -134,48 +146,107 @@ config_files:
       #                            INPUT PLUGINS                                    #
       ###############################################################################
 
-      # Victron Energy MQTT Input
+      # Main Victron MQTT Consumer
       [[inputs.mqtt_consumer]]
         servers = ["${TELEGRAF_MQTT_SERVER}"]
-
-        qos = 0
-
-        connection_timeout = "30s"
         client_id = "telegraf-victron"
+        qos = 0
+        connection_timeout = "30s"
+        persistent_session = true
 
-        # Authentication (if required by your MQTT broker)
         username = "${TELEGRAF_MQTT_USERNAME}"
         password = "${TELEGRAF_MQTT_PASSWORD}"
-
-        # TLS configuration for Venus OS (self-signed certs)
         insecure_skip_verify = true
 
-        # Topics to subscribe - Victron Venus OS structure
-        # N/<portal_id>/<device_type>/<device_id>/<path>
+        # Subscribe to important device types only (skip settings, platform, etc.)
         topics = [
           "N/${VICTRON_PORTAL_ID}/battery/#",
           "N/${VICTRON_PORTAL_ID}/grid/#",
-          "N/${VICTRON_PORTAL_ID}/pvinverter/#",
           "N/${VICTRON_PORTAL_ID}/vebus/#",
           "N/${VICTRON_PORTAL_ID}/system/#",
-          "N/${VICTRON_PORTAL_ID}/solarcharger/#",
-          "N/${VICTRON_PORTAL_ID}/temperature/#"
+          "N/${VICTRON_PORTAL_ID}/pvinverter/#",
+          "N/${VICTRON_PORTAL_ID}/temperature/#",
+          "N/${VICTRON_PORTAL_ID}/hub4/#",
         ]
 
-        # Data format - Victron uses JSON
+        # Victron sends {"value": X}
         data_format = "json"
 
-        # Extract device_type as measurement name for simpler queries
-        # Topic: N/<portal_id>/<device_type>/<instance>/<path...>
+        # 5 parts: N/portal/type/instance/metric
+        # Example: N/xxx/battery/512/Soc -> battery, instance=512, metric=Soc
         [[inputs.mqtt_consumer.topic_parsing]]
           topic = "N/+/+/+/+"
           measurement = "_/_/measurement/_/_"
-          tags = "_/portal_id/_/instance/path"
+          tags = "_/_/_/instance/metric"
 
+        # 6 parts: N/portal/type/instance/p1/p2
+        # Example: N/xxx/grid/0/Ac/Power -> grid, instance=0, metric=Ac_Power
         [[inputs.mqtt_consumer.topic_parsing]]
           topic = "N/+/+/+/+/+"
           measurement = "_/_/measurement/_/_/_"
-          tags = "_/portal_id/_/instance/path/subpath"
+          tags = "_/_/_/instance/p1/p2"
+
+        # 7 parts: N/portal/type/instance/p1/p2/p3
+        # Example: N/xxx/grid/0/Ac/L1/Power -> grid, instance=0, metric=Ac_L1_Power
+        [[inputs.mqtt_consumer.topic_parsing]]
+          topic = "N/+/+/+/+/+/+"
+          measurement = "_/_/measurement/_/_/_/_"
+          tags = "_/_/_/instance/p1/p2/p3"
+
+        # 8 parts: N/portal/type/instance/p1/p2/p3/p4
+        # Example: N/xxx/vebus/274/Ac/Out/L1/P -> vebus, instance=274, metric=Ac_Out_L1_P
+        [[inputs.mqtt_consumer.topic_parsing]]
+          topic = "N/+/+/+/+/+/+/+"
+          measurement = "_/_/measurement/_/_/_/_/_"
+          tags = "_/_/_/instance/p1/p2/p3/p4"
+
+        # 9 parts: N/portal/type/instance/p1/p2/p3/p4/p5
+        [[inputs.mqtt_consumer.topic_parsing]]
+          topic = "N/+/+/+/+/+/+/+/+"
+          measurement = "_/_/measurement/_/_/_/_/_/_"
+          tags = "_/_/_/instance/p1/p2/p3/p4/p5"
+
+        # 10 parts
+        [[inputs.mqtt_consumer.topic_parsing]]
+          topic = "N/+/+/+/+/+/+/+/+/+"
+          measurement = "_/_/measurement/_/_/_/_/_/_/_"
+          tags = "_/_/_/instance/p1/p2/p3/p4/p5/p6"
+
+      ###############################################################################
+      #                          PROCESSOR PLUGINS                                  #
+      ###############################################################################
+
+      # Combine path parts into single 'metric' tag
+      [[processors.starlark]]
+        namepass = ["battery", "grid", "vebus", "system", "pvinverter", "temperature", "hub4"]
+
+        source = '''
+      def apply(metric):
+          # Collect path parts
+          parts = []
+          for key in ["p1", "p2", "p3", "p4", "p5", "p6"]:
+              val = metric.tags.get(key)
+              if val:
+                  parts.append(val)
+                  metric.tags.pop(key)
+
+          # If we have path parts, create combined metric tag
+          if parts:
+              # Check if there's already a 'metric' tag (from 5-part topics)
+              existing = metric.tags.get("metric")
+              if existing:
+                  parts.insert(0, existing)
+              metric.tags["metric"] = "_".join(parts)
+
+          return metric
+      '''
+
+      # Filter out non-numeric values (strings like "Connected", "ProductName", etc.)
+      [[processors.converter]]
+        namepass = ["battery", "grid", "vebus", "system", "pvinverter", "temperature", "hub4"]
+
+        [processors.converter.fields]
+          float = ["value"]
 
 compose: |
   telegraf-victron:
