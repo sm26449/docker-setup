@@ -1,0 +1,123 @@
+name: mosquitto_bridge
+description: "MQTT Bridge - Connect remote MQTT broker to local broker"
+
+variables:
+  # Local broker settings
+  MQTT_PORT:
+    default: "1883"
+    description: "Local MQTT port"
+    prompt: true
+  MQTT_WS_PORT:
+    default: "9001"
+    description: "Local MQTT WebSocket port"
+    prompt: true
+  MQTT_USERNAME:
+    default: "mqtt"
+    description: "Local MQTT username"
+    prompt: true
+  MQTT_PASSWORD:
+    default: ""
+    description: "Local MQTT password"
+    generate: password
+    prompt: true
+
+  # Remote broker connection
+  REMOTE_MQTT_HOST:
+    default: ""
+    description: "Remote MQTT broker hostname or IP"
+    prompt: true
+  REMOTE_MQTT_PORT:
+    default: "1883"
+    description: "Remote MQTT port (8883 for SSL, 1883 for plain)"
+    prompt: true
+  REMOTE_MQTT_USE_SSL:
+    default: "false"
+    description: "Use SSL/TLS for remote connection (true/false)"
+    prompt: true
+  REMOTE_MQTT_USERNAME:
+    default: ""
+    description: "Remote MQTT username (leave empty if not required)"
+    prompt: true
+  REMOTE_MQTT_PASSWORD:
+    default: ""
+    description: "Remote MQTT password"
+    prompt: true
+  REMOTE_MQTT_INSECURE:
+    default: "true"
+    description: "Skip SSL certificate verification (true for self-signed certs)"
+
+  # Bridge settings
+  BRIDGE_NAME:
+    default: "remote"
+    description: "Bridge connection name (used in status topic)"
+    prompt: true
+  BRIDGE_TOPICS_IN:
+    default: "#"
+    description: "Topics to subscribe from remote (e.g., 'N/+/#' or 'sensors/#')"
+    prompt: true
+  BRIDGE_TOPICS_OUT:
+    default: ""
+    description: "Topics to publish to remote (e.g., 'W/+/#' or 'commands/#', leave empty for read-only)"
+    prompt: true
+  BRIDGE_LOCAL_PREFIX:
+    default: ""
+    description: "Prefix to add to local topics (e.g., 'remote/' makes 'sensors/temp' -> 'remote/sensors/temp')"
+  BRIDGE_KEEPALIVE:
+    default: "60"
+    description: "Bridge keepalive interval (seconds)"
+  BRIDGE_RESTART_TIMEOUT:
+    default: "30"
+    description: "Restart delay after connection loss (seconds)"
+  BRIDGE_QOS:
+    default: "1"
+    description: "Bridge QoS level (0, 1, or 2)"
+
+copy_files:
+  - src: mosquitto-bridge.conf
+    dest: config/mosquitto.conf
+  - src: pwfile
+    dest: config/pwfile
+
+hooks:
+  pre_deploy:
+    - "mkdir -p ${SERVICE_DATA}/config ${SERVICE_DATA}/data ${SERVICE_DATA}/logs"
+    - "chmod 755 ${SERVICE_DATA}/config ${SERVICE_DATA}/data ${SERVICE_DATA}/logs"
+    - "chmod 644 ${SERVICE_DATA}/config/mosquitto.conf 2>/dev/null || true"
+    - "chmod 600 ${SERVICE_DATA}/config/pwfile 2>/dev/null || true"
+    - "chown -R 1883:1883 ${SERVICE_DATA} 2>/dev/null || true"
+  post_deploy:
+    - "sleep 3"
+    - "docker exec ${CONTAINER_NAME} mosquitto_passwd -b /mosquitto/config/pwfile ${MQTT_USERNAME} ${MQTT_PASSWORD} 2>/dev/null && docker exec ${CONTAINER_NAME} kill -HUP 1 2>/dev/null && echo '✓ MQTT user ${MQTT_USERNAME} created' || true"
+    - "echo ''"
+    - "echo '═══════════════════════════════════════════════════════════════'"
+    - "echo 'MQTT Bridge configured:'"
+    - "echo '  Remote: ${REMOTE_MQTT_HOST}:${REMOTE_MQTT_PORT} (SSL: ${REMOTE_MQTT_USE_SSL})'"
+    - "echo '  Topics IN:  ${BRIDGE_TOPICS_IN} (from remote to local)'"
+    - "echo '  Topics OUT: ${BRIDGE_TOPICS_OUT} (from local to remote)'"
+    - "echo '  Status:     bridge/${BRIDGE_NAME}/status (online/offline)'"
+    - "echo '═══════════════════════════════════════════════════════════════'"
+    - "docker logs ${CONTAINER_NAME} 2>&1 | tail -5 || true"
+
+compose: |
+  mosquitto-bridge:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto-bridge
+    restart: unless-stopped
+    ports:
+      - "${MQTT_PORT:-1883}:1883"
+      - "${MQTT_WS_PORT:-9001}:9001"
+    volumes:
+      - ${DOCKER_ROOT}/mosquitto-bridge/config:/mosquitto/config
+      - ${DOCKER_ROOT}/mosquitto-bridge/data:/mosquitto/data
+      - ${DOCKER_ROOT}/mosquitto-bridge/logs:/mosquitto/log
+    healthcheck:
+      test: ["CMD", "mosquitto_sub", "-h", "localhost", "-p", "1883", "-u", "${MQTT_USERNAME}", "-P", "${MQTT_PASSWORD}", "-t", "$$SYS/broker/uptime", "-C", "1", "-W", "3"]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
