@@ -65,7 +65,9 @@ detect_running_containers() {
             local host_port=$(echo "$ports" | grep -oE '0\.0\.0\.0:[0-9]+' | head -1 | cut -d: -f2)
             [[ -z "$host_port" ]] && host_port=$(echo "$ports" | grep -oE '[0-9]+/tcp' | head -1 | cut -d/ -f1)
 
-            echo "${name}|${image}|localhost|${host_port:-N/A}"
+            # Use container name as host (for Docker network communication)
+            # This allows services to communicate via container name instead of localhost
+            echo "${name}|${image}|${name}|${host_port:-N/A}"
         fi
     done
 }

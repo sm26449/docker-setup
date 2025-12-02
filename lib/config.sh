@@ -63,6 +63,14 @@ else
     AUTO_TZ="Europe/Bucharest"
 fi
 
+# Auto-detect server IP (first non-localhost IP)
+AUTO_SERVER_IP=$(hostname -I 2>/dev/null | awk '{print $1}')
+if [[ -z "$AUTO_SERVER_IP" ]]; then
+    # Fallback: try ip command
+    AUTO_SERVER_IP=$(ip -4 route get 1 2>/dev/null | awk '{print $7; exit}')
+fi
+AUTO_SERVER_IP=${AUTO_SERVER_IP:-"127.0.0.1"}
+
 #######################################
 # Service Port Defaults
 # Easy to customize per deployment
@@ -219,8 +227,26 @@ run_initial_setup() {
 
     echo ""
 
+    # Server IP
+    echo -e "${BOLD}4. Server IP Address${NC}"
+    echo -e "   ${YELLOW}Used as default for service URLs (InfluxDB, MQTT, etc.)${NC}"
+    echo ""
+
+    local current_ip=$(get_env_var "SERVER_IP")
+    current_ip=${current_ip:-$AUTO_SERVER_IP}
+
+    echo -e "   Detected: ${GREEN}${AUTO_SERVER_IP}${NC}"
+    if confirm "   Use detected IP?" "Y"; then
+        SERVER_IP=$AUTO_SERVER_IP
+    else
+        read -p "   Server IP [${current_ip}]: " input_ip
+        SERVER_IP="${input_ip:-$current_ip}"
+    fi
+
+    echo ""
+
     # Network configuration
-    echo -e "${BOLD}4. Docker Network${NC}"
+    echo -e "${BOLD}5. Docker Network${NC}"
     echo -e "   ${YELLOW}Containers will communicate over this network.${NC}"
     echo ""
 
@@ -256,6 +282,9 @@ PGID=${PGID}
 
 # Timezone
 TZ=${TZ}
+
+# Server IP (used as default for service URLs)
+SERVER_IP=${SERVER_IP}
 
 # Network configuration
 DOCKER_NETWORK=${DOCKER_NETWORK}
