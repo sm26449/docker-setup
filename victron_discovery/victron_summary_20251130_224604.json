@@ -1,0 +1,500 @@
+{
+  "portal_id": "c0619ab7d12b",
+  "server": "192.168.88.250",
+  "port": 8883,
+  "discovered_at": "2025-11-30T22:46:04.668092",
+  "total_messages": 7073,
+  "total_topics": 170,
+  "device_types": {
+    "system": [
+      "0"
+    ],
+    "grid": [
+      "0"
+    ],
+    "vebus": [
+      "274"
+    ],
+    "battery": [
+      "288",
+      "512"
+    ],
+    "vecan": [
+      "vecan1"
+    ],
+    "hub4": [
+      "0"
+    ],
+    "temperature": [
+      "22",
+      "24",
+      "23"
+    ],
+    "pvinverter": [
+      "24",
+      "21",
+      "23",
+      "25"
+    ],
+    "platform": [
+      "0"
+    ]
+  },
+  "measurements": {
+    "system": {
+      "Serial": [
+        "str"
+      ],
+      "Dc/Vebus/Current": [
+        "float"
+      ],
+      "Dc/InverterCharger/Power": [
+        "int"
+      ],
+      "Ac/ActiveIn/L3/Power": [
+        "float"
+      ],
+      "Ac/ActiveIn/L3/Current": [
+        "float"
+      ],
+      "Ac/ActiveIn/L2/Power": [
+        "float"
+      ],
+      "Dc/Battery/Current": [
+        "float"
+      ],
+      "Ac/Consumption/L3/Current": [
+        "float"
+      ],
+      "Ac/Consumption/L3/Power": [
+        "float"
+      ],
+      "Ac/Consumption/L2/Power": [
+        "float"
+      ],
+      "Ac/Grid/L1/Power": [
+        "float"
+      ],
+      "Ac/Grid/L2/Power": [
+        "float"
+      ],
+      "Ac/Grid/L3/Power": [
+        "float"
+      ],
+      "Ac/ActiveIn/L1/Power": [
+        "float"
+      ],
+      "Ac/Grid/L3/Current": [
+        "float"
+      ],
+      "Dc/InverterCharger/Current": [
+        "float"
+      ],
+      "Ac/ConsumptionOnOutput/L1/Power": [
+        "int"
+      ],
+      "Ac/ConsumptionOnInput/L3/Power": [
+        "float"
+      ],
+      "Dc/Vebus/Power": [
+        "int"
+      ],
+      "Ac/Consumption/L1/Power": [
+        "float"
+      ],
+      "Ac/ConsumptionOnOutput/L2/Power": [
+        "int"
+      ],
+      "Ac/ConsumptionOnOutput/L3/Power": [
+        "int"
+      ],
+      "Dc/Battery/Power": [
+        "int"
+      ],
+      "Ac/ConsumptionOnOutput/L3/Current": [
+        "float"
+      ],
+      "Ac/ConsumptionOnInput/L1/Power": [
+        "float"
+      ],
+      "Ac/ConsumptionOnInput/L2/Power": [
+        "float"
+      ],
+      "Ac/ConsumptionOnInput/L3/Current": [
+        "float",
+        "int"
+      ],
+      "Batteries": [
+        "list"
+      ],
+      "Ac/Grid/L2/Current": [
+        "float"
+      ],
+      "Ac/Grid/L1/Current": [
+        "float"
+      ],
+      "Ac/ActiveIn/L1/Current": [
+        "float"
+      ],
+      "Ac/ActiveIn/L2/Current": [
+        "float"
+      ],
+      "Ac/Consumption/L1/Current": [
+        "float",
+        "int"
+      ],
+      "Ac/ConsumptionOnInput/L1/Current": [
+        "float",
+        "int"
+      ],
+      "Ac/ConsumptionOnInput/L2/Current": [
+        "float",
+        "int"
+      ],
+      "Ac/Consumption/L2/Current": [
+        "float",
+        "int"
+      ],
+      "Timers/TimeOnGrid": [
+        "int"
+      ],
+      "Ac/ConsumptionOnOutput/L1/Current": [
+        "float",
+        "int"
+      ],
+      "Dc/Battery/Voltage": [
+        "float"
+      ],
+      "Ac/ConsumptionOnOutput/L2/Current": [
+        "float",
+        "int"
+      ]
+    },
+    "grid": {
+      "Ac/Power": [
+        "float"
+      ],
+      "Ac/L3/Power": [
+        "float"
+      ],
+      "Ac/L2/Power": [
+        "float"
+      ],
+      "Ac/L1/Power": [
+        "float"
+      ],
+      "Ac/L1/Voltage": [
+        "float"
+      ],
+      "Ac/L1/VoltageLineToLine": [
+        "float"
+      ],
+      "Ac/PowerFactor": [
+        "float"
+      ],
+      "Ac/L3/PowerFactor": [
+        "float"
+      ],
+      "Ac/L3/Current": [
+        "float"
+      ],
+      "Ac/L3/VoltageLineToLine": [
+        "float"
+      ],
+      "Ac/L3/Voltage": [
+        "float"
+      ],
+      "Ac/L2/PowerFactor": [
+        "float"
+      ],
+      "Ac/L2/Voltage": [
+        "float"
+      ],
+      "Ac/L2/VoltageLineToLine": [
+        "float"
+      ],
+      "Ac/L1/PowerFactor": [
+        "float"
+      ],
+      "Ac/L1/Current": [
+        "float"
+      ],
+      "Ac/N/Current": [
+        "float"
+      ],
+      "Ac/L2/Current": [
+        "float"
+      ],
+      "Ac/PENVoltage": [
+        "float"
+      ],
+      "Ac/Frequency": [
+        "float"
+      ]
+    },
+    "vebus": {
+      "Ac/Out/L3/P": [
+        "int"
+      ],
+      "Ac/Out/L2/P": [
+        "int"
+      ],
+      "Ac/Out/L1/S": [
+        "int"
+      ],
+      "Ac/Out/L1/P": [
+        "int"
+      ],
+      "Ac/Out/L1/I": [
+        "float"
+      ],
+      "Ac/Out/S": [
+        "int"
+      ],
+      "Ac/ActiveIn/L1/I": [
+        "float"
+      ],
+      "Ac/ActiveIn/P": [
+        "int"
+      ],
+      "Ac/ActiveIn/L3/P": [
+        "int"
+      ],
+      "Hub4/L1/AcPowerSetpoint": [
+        "int"
+      ],
+      "Devices/0/Ac/Out/P": [
+        "int"
+      ],
+      "Ac/ActiveIn/S": [
+        "int"
+      ],
+      "Hub4/L3/AcPowerSetpoint": [
+        "int"
+      ],
+      "Ac/Out/L3/S": [
+        "int"
+      ],
+      "Dc/0/Current": [
+        "float"
+      ],
+      "Ac/ActiveIn/L2/P": [
+        "int"
+      ],
+      "Devices/0/Ac/Inverter/P": [
+        "int"
+      ],
+      "Devices/2/Ac/In/P": [
+        "int"
+      ],
+      "Devices/2/Ac/Out/P": [
+        "int"
+      ],
+      "Devices/0/Ac/In/P": [
+        "int"
+      ],
+      "Ac/ActiveIn/L1/S": [
+        "int"
+      ],
+      "Devices/2/Ac/Inverter/P": [
+        "int"
+      ],
+      "Ac/ActiveIn/L1/P": [
+        "int"
+      ],
+      "Devices/1/Ac/In/P": [
+        "int"
+      ],
+      "Dc/0/Power": [
+        "int"
+      ],
+      "Devices/1/Ac/Inverter/P": [
+        "int"
+      ],
+      "Ac/Out/L3/I": [
+        "float"
+      ],
+      "Ac/Out/P": [
+        "int"
+      ],
+      "Devices/1/Ac/Out/P": [
+        "int"
+      ],
+      "Hub4/L2/AcPowerSetpoint": [
+        "int"
+      ],
+      "Ac/ActiveIn/L3/S": [
+        "int"
+      ],
+      "Ac/ActiveIn/L3/V": [
+        "float"
+      ],
+      "Ac/Out/L3/V": [
+        "float"
+      ],
+      "Dc/0/Voltage": [
+        "float"
+      ],
+      "Ac/Out/L3/F": [
+        "float"
+      ],
+      "Ac/Out/L2/S": [
+        "int"
+      ],
+      "Ac/Out/L2/F": [
+        "float"
+      ],
+      "Ac/Out/L2/I": [
+        "float"
+      ],
+      "Ac/Out/L1/F": [
+        "float"
+      ],
+      "BatterySense/Temperature": [
+        "float"
+      ],
+      "Dc/0/Temperature": [
+        "float"
+      ],
+      "Ac/ActiveIn/L3/I": [
+        "float"
+      ],
+      "Devices/0/Diagnostics/UBatVSense": [
+        "float"
+      ],
+      "BatterySense/Voltage": [
+        "float"
+      ],
+      "Ac/Out/L1/V": [
+        "float"
+      ],
+      "Ac/ActiveIn/L1/V": [
+        "float"
+      ],
+      "Ac/ActiveIn/L2/S": [
+        "int"
+      ],
+      "Ac/ActiveIn/L2/I": [
+        "float"
+      ],
+      "Ac/Out/L2/V": [
+        "float"
+      ],
+      "Ac/ActiveIn/L2/V": [
+        "float"
+      ],
+      "Devices/0/UpTime": [
+        "int"
+      ],
+      "Devices/2/Diagnostics/UBatRipple": [
+        "float"
+      ],
+      "Devices/2/UpTime": [
+        "int"
+      ],
+      "Devices/2/Diagnostics/UBatTerminal": [
+        "float"
+      ],
+      "Devices/1/UpTime": [
+        "int"
+      ]
+    },
+    "battery": {
+      "History/TimeSinceLastFullCharge": [
+        "int"
+      ],
+      "TimeToGo": [
+        "float"
+      ],
+      "System/MinVoltageCellId": [
+        "str"
+      ],
+      "Dc/0/Power": [
+        "float",
+        "int"
+      ],
+      "Dc/0/Current": [
+        "float"
+      ],
+      "ConsumedAmphours": [
+        "float"
+      ],
+      "Dc/0/Voltage": [
+        "float"
+      ],
+      "History/LastDischarge": [
+        "float"
+      ],
+      "History/TotalAhDrawn": [
+        "float"
+      ],
+      "History/DischargedEnergy": [
+        "float"
+      ],
+      "System/MinCellVoltage": [
+        "float"
+      ],
+      "System/MaxCellVoltage": [
+        "float"
+      ]
+    },
+    "vecan": {
+      "Link/ExtraBatteryCurrent": [
+        "float"
+      ],
+      "Link/VoltageSense": [
+        "float"
+      ],
+      "Link/TemperatureSense": [
+        "float"
+      ]
+    },
+    "hub4": {
+      "MaxDischargePower": [
+        "float"
+      ]
+    },
+    "temperature": {
+      "AccelZ": [
+        "float"
+      ],
+      "SeqNo": [
+        "int"
+      ],
+      "Pressure": [
+        "float"
+      ],
+      "Humidity": [
+        "float"
+      ],
+      "Temperature": [
+        "float"
+      ],
+      "BatteryVoltage": [
+        "float"
+      ],
+      "AccelY": [
+        "float"
+      ],
+      "AccelX": [
+        "float"
+      ]
+    },
+    "pvinverter": {
+      "StatusCode": [
+        "int"
+      ],
+      "Mgmt/Connection": [
+        "str"
+      ]
+    },
+    "platform": {
+      "Device/Time": [
+        "int"
+      ],
+      "CanBus/Interface/vecan1/SpiRetryPercentage": [
+        "float"
+      ]
+    }
+  }
+}

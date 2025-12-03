@@ -1,5 +1,6 @@
 # Docker Services Manager v2.2
 
+
 Script interactiv profesional pentru gestionarea serviciilor Docker pe Ubuntu/CentOS/Rocky/Alma Linux.
 
 **Nou în v2.2:** Sistem de variante pentru template-uri, suport Fronius Modbus MQTT.

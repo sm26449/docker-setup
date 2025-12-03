@@ -1,0 +1,6187 @@
+{
+  "portal_id": "c0619ab7d12b",
+  "server": "192.168.88.250",
+  "port": 8883,
+  "discovered_at": "2025-12-01T07:44:15.900433",
+  "total_messages": 26445,
+  "total_topics": 2198,
+  "device_types": {
+    "system": [
+      "0"
+    ],
+    "vebus": [
+      "274"
+    ],
+    "grid": [
+      "0"
+    ],
+    "battery": [
+      "288",
+      "512"
+    ],
+    "pvinverter": [
+      "24",
+      "21",
+      "23",
+      "25"
+    ],
+    "vecan": [
+      "vecan1"
+    ],
+    "temperature": [
+      "24",
+      "23",
+      "22"
+    ],
+    "logger": [
+      "0"
+    ],
+    "settings": [
+      "0"
+    ],
+    "platform": [
+      "0"
+    ],
+    "hub4": [
+      "0"
+    ],
+    "modbustcp": [
+      "0"
+    ],
+    "digitalinputs": [
+      "0"
+    ],
+    "modbusclient": [
+      "0"
+    ],
+    "ble": [
+      "0"
+    ],
+    "adc": [
+      "0"
+    ],
+    "fronius": [
+      "0"
+    ]
+  },
+  "measurements": {
+    "system": {
+      "Serial": [
+        "str"
+      ],
+      "Ac/PvOnGrid/L3/Current": [
+        "float"
+      ],
+      "Ac/PvOnGrid/L2/Current": [
+        "float"
+      ],
+      "Ac/PvOnGrid/L3/Power": [
+        "float"
+      ],
+      "Ac/PvOnGrid/L1/Power": [
+        "float"
+      ],
+      "Dc/Vebus/Power": [
+        "int"
+      ],
+      "Ac/ActiveIn/L3/Current": [
+        "float"
+      ],
+      "Ac/ConsumptionOnInput/L1/Power": [
+        "float"
+      ],
+      "Ac/ConsumptionOnOutput/L3/Current": [
+        "float"
+      ],
+      "Ac/ConsumptionOnOutput/L1/Current": [
+        "int",
+        "float"
+      ],
+      "Ac/PvOnGrid/L2/Power": [
+        "float"
+      ],
+      "Dc/Battery/Power": [
+        "int"
+      ],
+      "Ac/ConsumptionOnOutput/L3/Power": [
+        "int"
+      ],
+      "Ac/ConsumptionOnOutput/L1/Power": [
+        "int"
+      ],
+      "Ac/Consumption/L1/Current": [
+        "int",
+        "float"
+      ],
+      "Dc/InverterCharger/Power": [
+        "int"
+      ],
+      "Dc/Vebus/Current": [
+        "float"
+      ],
+      "Ac/Grid/L3/Current": [
+        "float"
+      ],
+      "Ac/Grid/L2/Current": [
+        "float"
+      ],
+      "Ac/ActiveIn/L1/Power": [
+        "float"
+      ],
+      "Ac/ConsumptionOnOutput/L2/Current": [
+        "int",
+        "float"
+      ],
+      "Ac/Grid/L1/Power": [
+        "float"
+      ],
+      "Ac/Consumption/L2/Power": [
+        "int",
+        "float"
+      ],
+      "Ac/Grid/L3/Power": [
+        "float"
+      ],
+      "Ac/Grid/L1/Current": [
+        "float"
+      ],
+      "Dc/InverterCharger/Current": [
+        "float"
+      ],
+      "Ac/ConsumptionOnOutput/L2/Power": [
+        "int"
+      ],
+      "Ac/Grid/L2/Power": [
+        "float"
+      ],
+      "Ac/ConsumptionOnInput/L2/Power": [
+        "int",
+        "float"
+      ],
+      "Ac/ConsumptionOnInput/L3/Power": [
+        "float"
+      ],
+      "Ac/ActiveIn/L2/Current": [
+        "float"
+      ],
+      "Ac/ConsumptionOnInput/L1/Current": [
+        "int",
+        "float"
+      ],
+      "Ac/ConsumptionOnInput/L3/Current": [
+        "int",
+        "float"
+      ],
+      "Ac/ActiveIn/L1/Current": [
+        "float"
+      ],
+      "Ac/Consumption/L1/Power": [
+        "float"
+      ],
+      "Ac/Consumption/L3/Power": [
+        "float"
+      ],
+      "Ac/Consumption/L2/Current": [
+        "int",
+        "float"
+      ],
+      "Ac/Consumption/L3/Current": [
+        "float"
+      ],
+      "Dc/Battery/Current": [
+        "float"
+      ],
+      "Ac/ActiveIn/L2/Power": [
+        "float"
+      ],
+      "Ac/ActiveIn/L3/Power": [
+        "float"
+      ],
+      "Batteries": [
+        "list"
+      ],
+      "Dc/Battery/Temperature": [
+        "float"
+      ],
+      "Ac/PvOnGrid/L1/Current": [
+        "float"
+      ],
+      "Timers/TimeOnGrid": [
+        "int"
+      ],
+      "Ac/ConsumptionOnInput/L2/Current": [
+        "int",
+        "float"
+      ],
+      "Dc/Battery/TimeToGo": [
+        "NoneType"
+      ],
+      "Dc/Charger/Power": [
+        "NoneType"
+      ],
+      "Dc/Battery/State": [
+        "int"
+      ],
+      "Dc/Battery/VoltageService": [
+        "str"
+      ],
+      "Dc/Pv/Power": [
+        "NoneType"
+      ],
+      "Dc/Battery/ConsumedAmphours": [
+        "NoneType"
+      ],
+      "Dc/Battery/Voltage": [
+        "float"
+      ],
+      "Dc/Battery/BatteryService": [
+        "str"
+      ],
+      "AutoSelectedTemperatureService": [
+        "str"
+      ],
+      "Ac/PvOnOutput/L1/Power": [
+        "NoneType"
+      ],
+      "Control/ScheduledCharge": [
+        "int"
+      ],
+      "Ac/In/0/DeviceInstance": [
+        "int"
+      ],
+      "ProductId": [
+        "NoneType"
+      ],
+      "Ac/Genset/L2/Power": [
+        "NoneType"
+      ],
+      "Buzzer/State": [
+        "int"
+      ],
+      "Ac/Grid/NumberOfPhases": [
+        "int"
+      ],
+      "GpsService": [
+        "NoneType"
+      ],
+      "Ac/ConsumptionOnInput/NumberOfPhases": [
+        "int"
+      ],
+      "DynamicEss/Active": [
+        "int"
+      ],
+      "LoadShedding/Active": [
+        "int"
+      ],
+      "Dc/Alternator/Power": [
+        "NoneType"
+      ],
+      "AutoSelectedBatteryMeasurement": [
+        "str"
+      ],
+      "AutoSelectedBatteryService": [
+        "NoneType"
+      ],
+      "Ac/Genset/L3/Power": [
+        "NoneType"
+      ],
+      "AvailableBatteryServices": [
+        "str"
+      ],
+      "VebusInstance": [
+        "int"
+      ],
+      "Ac/In/0/ServiceType": [
+        "str"
+      ],
+      "DynamicEss/LastScheduledEnd": [
+        "NoneType"
+      ],
+      "Debug/BatteryOperationalLimits/VebusVoltageOffset": [
+        "int"
+      ],
+      "LoadShedding/NextDisconnect": [
+        "NoneType"
+      ],
+      "Dc/Battery/Alarms/CircuitBreakerTripped": [
+        "NoneType"
+      ],
+      "Ac/Grid/ProductId": [
+        "int"
+      ],
+      "DynamicEss/ReactiveStrategy": [
+        "int"
+      ],
+      "Ac/Genset/RunningByConditionCode": [
+        "NoneType"
+      ],
+      "Ac/Genset/L1/Power": [
+        "NoneType"
+      ],
+      "ProductName": [
+        "NoneType"
+      ],
+      "DynamicEss/Flags": [
+        "NoneType"
+      ],
+      "DynamicEss/AllowGridFeedIn": [
+        "NoneType"
+      ],
+      "SystemState/SlowCharge": [
+        "int"
+      ],
+      "Ac/PvOnOutput/L3/Current": [
+        "NoneType"
+      ],
+      "DynamicEss/Strategy": [
+        "NoneType"
+      ],
+      "ServiceMapping/com_victronenergy_battery_512": [
+        "str"
+      ],
+      "DynamicEss/ChargeRate": [
+        "int"
+      ],
+      "VebusService": [
+        "str"
+      ],
+      "Ac/Genset/L3/Current": [
+        "NoneType"
+      ],
+      "Dvcc/Alarms/MultipleBatteries": [
+        "int"
+      ],
+      "Debug/BatteryOperationalLimits/SolarVoltageOffset": [
+        "int"
+      ],
+      "Ac/ConsumptionOnOutput/NumberOfPhases": [
+        "int"
+      ],
+      "Dc/System/Power": [
+        "NoneType"
+      ],
+      "AvailableBatteries": [
+        "str"
+      ],
+      "LoadShedding/ErrorCode": [
+        "int"
+      ],
+      "Dc/Battery/ProductId": [
+        "int"
+      ],
+      "ActiveBatteryService": [
+        "str"
+      ],
+      "Control/BatteryVoltageSense": [
+        "int"
+      ],
+      "Ac/PvOnGenset/NumberOfPhases": [
+        "NoneType"
+      ],
+      "Ac/Genset/L2/Current": [
+        "NoneType"
+      ],
+      "DynamicEss/TargetSoc": [
+        "int"
+      ],
+      "AvailableBmsServices": [
+        "list"
+      ],
+      "Dc/System/MeasurementType": [
+        "NoneType"
+      ],
+      "Control/SolarChargerVoltageSense": [
+        "int"
+      ],
+      "DynamicEss/MinimumSoc": [
+        "NoneType"
+      ],
+      "Devices/NumberOfVebusDevices": [
+        "int"
+      ],
+      "Ac/PvOnOutput/L3/Power": [
+        "NoneType"
+      ],
+      "Ac/PvOnOutput/L2/Power": [
+        "NoneType"
+      ],
+      "DynamicEss/Capabilities": [
+        "int"
+      ],
+      "SystemType": [
+        "str"
+      ],
+      "Control/ExtraBatteryCurrent": [
+        "int"
+      ],
+      "SystemState/State": [
+        "int"
+      ],
+      "Ac/Grid/DeviceType": [
+        "int"
+      ],
+      "SystemState/LowSoc": [
+        "int"
+      ],
+      "Ac/ActiveIn/FeedbackEnabled": [
+        "int"
+      ],
+      "SystemState/BatteryLife": [
+        "int"
+      ],
+      "SystemState/DischargeDisabled": [
+        "int"
+      ],
+      "PvInvertersProductIds": [
+        "list"
+      ],
+      "Timers/TimeOff": [
+        "int"
+      ],
+      "DeviceInstance": [
+        "int"
+      ],
+      "Ac/PvOnGenset/L2/Power": [
+        "NoneType"
+      ],
+      "SystemState/ChargeDisabled": [
+        "int"
+      ],
+      "ActiveBmsService": [
+        "str"
+      ],
+      "Dc/Battery/Soc": [
+        "float"
+      ],
+      "Dc/Battery/TemperatureService": [
+        "str"
+      ],
+      "Ac/In/NumberOfAcInputs": [
+        "int"
+      ],
+      "AvailableBatteryMeasurements": [
+        "dict"
+      ],
+      "FirmwareVersion": [
+        "int"
+      ],
+      "Ac/In/1/VrmDeviceInstance": [
+        "NoneType"
+      ],
+      "Ac/Genset/NumberOfPhases": [
+        "NoneType"
+      ],
+      "Ac/PvOnGenset/L2/Current": [
+        "NoneType"
+      ],
+      "GpsSpeed": [
+        "NoneType"
+      ],
+      "DynamicEss/NumberOfSchedules": [
+        "int"
+      ],
+      "Ac/PvOnGenset/L3/Current": [
+        "NoneType"
+      ],
+      "Ac/ActiveIn/NumberOfPhases": [
+        "int"
+      ],
+      "DynamicEss/ErrorCode": [
+        "int"
+      ],
+      "Ac/PvOnGenset/L1/Power": [
+        "NoneType"
+      ],
+      "Ac/In/0/Connected": [
+        "int"
+      ],
+      "Ac/In/0/Source": [
+        "int"
+      ],
+      "DynamicEss/Restrictions": [
+        "NoneType"
+      ],
+      "Control/SolarChargeCurrent": [
+        "int"
+      ],
+      "Ac/Genset/L1/Current": [
+        "NoneType"
+      ],
+      "Ac/ActiveIn/Source": [
+        "int"
+      ],
+      "Ac/PvOnOutput/L1/Current": [
+        "NoneType"
+      ],
+      "Ac/ActiveIn/GridParallel": [
+        "int"
+      ],
+      "LoadShedding/Available": [
+        "int"
+      ],
+      "DynamicEss/Available": [
+        "int"
+      ],
+      "Ac/PvOnGenset/L1/Current": [
+        "NoneType"
+      ],
+      "Dc/System/Current": [
+        "NoneType"
+      ],
+      "Ac/ActiveIn/ServiceType": [
+        "str"
+      ],
+      "ServiceMapping/com_victronenergy_grid_0": [
+        "str"
+      ],
+      "Control/BmsParameters": [
+        "int"
+      ],
+      "Ac/PvOnOutput/L2/Current": [
+        "NoneType"
+      ],
+      "SystemState/UserChargeLimited": [
+        "int"
+      ],
+      "MotorDrive/Current": [
+        "NoneType"
+      ],
+      "ServiceMapping/com_victronenergy_settings_0": [
+        "str"
+      ],
+      "Control/VebusSoc": [
+        "int"
+      ],
+      "MotorDrive/0/Service": [
+        "NoneType"
+      ],
+      "ServiceMapping/com_victronenergy_vecan_0": [
+        "str"
+      ],
+      "Ac/Genset/Runtime": [
+        "NoneType"
+      ],
+      "Ac/In/0/ServiceName": [
+        "str"
+      ],
+      "Ac/PvOnOutput/NumberOfPhases": [
+        "NoneType"
+      ],
+      "MotorDrive/Power": [
+        "NoneType"
+      ],
+      "Ac/In/1/ServiceName": [
+        "NoneType"
+      ],
+      "Dc/FuelCell/Power": [
+        "NoneType"
+      ],
+      "Ac/Genset/LastStartTime": [
+        "NoneType"
+      ],
+      "MotorDrive/Voltage": [
+        "NoneType"
+      ],
+      "Control/SolarChargeVoltage": [
+        "int"
+      ],
+      "Timers/TimeOnGenerator": [
+        "int"
+      ],
+      "Control/ActiveSocLimit": [
+        "float"
+      ],
+      "Dvcc/Alarms/FirmwareInsufficient": [
+        "int"
+      ],
+      "Ac/PvOnGenset/L3/Power": [
+        "NoneType"
+      ],
+      "Ac/Genset/DeviceType": [
+        "NoneType"
+      ],
+      "MotorDrive/0/RPM": [
+        "NoneType"
+      ],
+      "Ac/In/0/VrmDeviceInstance": [
+        "int"
+      ],
+      "Control/SolarChargerTemperatureSense": [
+        "int"
+      ],
+      "Debug/DisableBatterySense": [
+        "int"
+      ],
+      "Control/ScheduledChargeStatus": [
+        "int"
+      ],
+      "Control/BatteryCurrentSense": [
+        "int"
+      ],
+      "Control/EffectiveChargeVoltage": [
+        "float"
+      ],
+      "LoadShedding/Capabilities": [
+        "int"
+      ],
+      "FirmwareBuild": [
+        "str"
+      ],
+      "Hub": [
+        "int"
+      ],
+      "AvailableTemperatureServices": [
+        "dict"
+      ],
+      "Mgmt/Connection": [
+        "str"
+      ],
+      "Connected": [
+        "int"
+      ],
+      "Relay/1/State": [
+        "int"
+      ],
+      "Timers/TimeOnInverter": [
+        "int"
+      ],
+      "Mgmt/ProcessName": [
+        "str"
+      ],
+      "Ac/In/1/DeviceInstance": [
+        "NoneType"
+      ],
+      "Debug/BatteryOperationalLimits/CurrentOffset": [
+        "int"
+      ],
+      "Relay/0/State": [
+        "int"
+      ],
+      "Ac/Consumption/NumberOfPhases": [
+        "int"
+      ],
+      "Ac/PvOnGrid/NumberOfPhases": [
+        "int"
+      ],
+      "Ac/In/1/ServiceType": [
+        "NoneType"
+      ],
+      "Dc/Battery/ChargeVoltage": [
+        "float"
+      ],
+      "Control/ScheduledSoc": [
+        "NoneType"
+      ],
+      "Control/Dvcc": [
+        "int"
+      ],
+      "DynamicEss/LastScheduledStart": [
+        "NoneType"
+      ],
+      "Ac/Genset/ProductId": [
+        "NoneType"
+      ],
+      "Dc/Pv/Current": [
+        "NoneType"
+      ],
+      "ActiveBmsInstance": [
+        "int"
+      ],
+      "Mgmt/ProcessVersion": [
+        "str"
+      ],
+      "SystemState/UserDischargeLimited": [
+        "int"
+      ],
+      "HardwareVersion": [
+        "NoneType"
+      ],
+      "DynamicEss/AvailableOverhead": [
+        "NoneType"
+      ],
+      "Ac/In/1/Connected": [
+        "NoneType"
+      ],
+      "Ac/In/1/Source": [
+        "NoneType"
+      ],
+      "Control/MaxChargeCurrent": [
+        "bool"
+      ]
+    },
+    "vebus": {
+      "Ac/Out/L3/P": [
+        "int"
+      ],
+      "Ac/Out/L2/P": [
+        "int"
+      ],
+      "Ac/Out/L2/I": [
+        "float"
+      ],
+      "Ac/Out/L2/V": [
+        "float"
+      ],
+      "Ac/Out/L2/S": [
+        "int"
+      ],
+      "Ac/Out/L1/S": [
+        "int"
+      ],
+      "Ac/Out/L1/P": [
+        "int"
+      ],
+      "Ac/Out/L1/I": [
+        "float"
+      ],
+      "Ac/Out/S": [
+        "int"
+      ],
+      "Ac/ActiveIn/L3/P": [
+        "int"
+      ],
+      "Ac/ActiveIn/L2/P": [
+        "int"
+      ],
+      "Devices/0/Ac/Inverter/P": [
+        "int"
+      ],
+      "Ac/ActiveIn/L2/S": [
+        "int"
+      ],
+      "Devices/2/Ac/In/P": [
+        "int"
+      ],
+      "Devices/2/Ac/Out/P": [
+        "int"
+      ],
+      "Devices/0/Ac/In/P": [
+        "int"
+      ],
+      "Devices/0/Ac/Out/P": [
+        "int"
+      ],
+      "Ac/Out/L3/S": [
+        "int"
+      ],
+      "Ac/ActiveIn/L2/V": [
+        "float"
+      ],
+      "Devices/2/Ac/Inverter/P": [
+        "int"
+      ],
+      "Devices/1/Ac/Inverter/P": [
+        "int"
+      ],
+      "Devices/1/Ac/In/P": [
+        "int"
+      ],
+      "Ac/ActiveIn/L1/P": [
+        "int"
+      ],
+      "Ac/Out/L3/I": [
+        "float"
+      ],
+      "Ac/Out/P": [
+        "int"
+      ],
+      "Devices/1/Ac/Out/P": [
+        "int"
+      ],
+      "Ac/ActiveIn/P": [
+        "int"
+      ],
+      "Ac/ActiveIn/S": [
+        "int"
+      ],
+      "Dc/0/Power": [
+        "int"
+      ],
+      "Dc/0/Current": [
+        "float"
+      ],
+      "Hub4/L3/AcPowerSetpoint": [
+        "int"
+      ],
+      "Hub4/L1/AcPowerSetpoint": [
+        "int"
+      ],
+      "Ac/Out/L3/F": [
+        "float"
+      ],
+      "Ac/Out/L1/F": [
+        "float"
+      ],
+      "Ac/Out/L3/V": [
+        "float"
+      ],
+      "Ac/Out/L2/F": [
+        "float"
+      ],
+      "Ac/ActiveIn/L3/I": [
+        "float"
+      ],
+      "Ac/ActiveIn/L2/I": [
+        "float"
+      ],
+      "Ac/ActiveIn/L3/V": [
+        "float"
+      ],
+      "Ac/ActiveIn/L3/S": [
+        "int"
+      ],
+      "Hub4/L2/AcPowerSetpoint": [
+        "int"
+      ],
+      "Dc/0/Voltage": [
+        "float"
+      ],
+      "Ac/ActiveIn/L1/V": [
+        "float"
+      ],
+      "Ac/ActiveIn/L1/S": [
+        "int"
+      ],
+      "Ac/Out/L1/V": [
+        "float"
+      ],
+      "Ac/ActiveIn/L1/I": [
+        "float"
+      ],
+      "Devices/2/UpTime": [
+        "int"
+      ],
+      "Devices/0/UpTime": [
+        "int"
+      ],
+      "Devices/1/UpTime": [
+        "int"
+      ],
+      "Energy/AcIn1ToInverter": [
+        "float"
+      ],
+      "Devices/0/Diagnostics/UBatVSense": [
+        "float"
+      ],
+      "BatteryOperationalLimits/MaxChargeCurrent": [
+        "float"
+      ],
+      "Devices/1/SerialNumber": [
+        "str"
+      ],
+      "Settings/AssistCurrentBoostFactor": [
+        "float"
+      ],
+      "Devices/1/Settings/PowerAssistEnabled": [
+        "bool"
+      ],
+      "Settings/UpsFunction": [
+        "bool"
+      ],
+      "Devices/2/SerialNumber": [
+        "str"
+      ],
+      "Devices/0/Settings/PowerAssistEnabled": [
+        "bool"
+      ],
+      "Devices/2/Diagnostics/UBatRipple": [
+        "float"
+      ],
+      "Devices/2/ErrorAndWarningFlags/NSErrConnectFrustratedByRelayTest": [
+        "int"
+      ],
+      "Devices/2/InterfaceProtectionLog/2/ErrorFlags": [
+        "int"
+      ],
+      "Devices/2/InterfaceProtectionLog/1/ErrorFlags": [
+        "int"
+      ],
+      "BatterySense/Voltage": [
+        "float"
+      ],
+      "Devices/2/ErrorAndWarningFlags/WarnRelayTestRecentlyFailed": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/IgnoreAcIn1": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/SocTooLowToInvert": [
+        "int"
+      ],
+      "Devices/0/Diagnostics/UBatRipple": [
+        "float"
+      ],
+      "Devices/2/FirmwareSubVersion": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/VeBusNetworkQualityCounter": [
+        "int"
+      ],
+      "Devices/2/Info/MaximumRelayCurrentAC1": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/SustainMode": [
+        "int"
+      ],
+      "Devices/1/FirmwareVersion": [
+        "int"
+      ],
+      "Devices/2/Assistants": [
+        "list"
+      ],
+      "Devices/2/InterfaceProtectionLog/4/ErrorFlags": [
+        "int"
+      ],
+      "Ac/Control/RemoteGeneratorSelected": [
+        "int"
+      ],
+      "Devices/2/Diagnostics/UBatTerminal": [
+        "float"
+      ],
+      "Devices/2/ErrorAndWarningFlags/RawFlags": [
+        "int"
+      ],
+      "Devices/0/ProductId": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/SocTooLowToInvert": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/TemperatureHighForceBypass": [
+        "int"
+      ],
+      "Devices/0/InterfaceProtectionLog/4/Time": [
+        "int"
+      ],
+      "Devices/2/ErrorAndWarningFlags/NSErrRelayTestKeepsFailing": [
+        "int"
+      ],
+      "Devices/0/FirmwareVersion": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/ExternalBackfeedRelaySystem": [
+        "int"
+      ],
+      "Devices/0/InterfaceProtectionLog/2/ErrorFlags": [
+        "int"
+      ],
+      "Devices/0/InterfaceProtectionLog/1/ErrorFlags": [
+        "int"
+      ],
+      "Devices/0/InterfaceProtectionLog/1/Time": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/HighDcVoltage": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/PowerPackPreOverload": [
+        "int"
+      ],
+      "Ac/Out/NominalInverterPower": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/GridRelayReport/Count": [
+        "NoneType"
+      ],
+      "Devices/0/Settings/InverterOutputVoltage": [
+        "float"
+      ],
+      "Devices/2/Settings/PowerAssistEnabled": [
+        "bool"
+      ],
+      "Devices/0/SerialNumber": [
+        "str"
+      ],
+      "Devices/0/InterfaceProtectionLog/0/ErrorFlags": [
+        "int"
+      ],
+      "Devices/1/ErrorAndWarningFlags/WarnRelayTestRecentlyFailed": [
+        "int"
+      ],
+      "FirmwareFeatures/NewPanelFrame": [
+        "int"
+      ],
+      "Devices/1/Info/MaximumRelayCurrentAC1": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/WaitingForRelayTest": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/RawFlags0": [
+        "int"
+      ],
+      "Devices/1/Info/DeltaTBatNominalTBatMinimum": [
+        "int"
+      ],
+      "Devices/0/Settings/ReadProgress": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/RawFlags0": [
+        "int"
+      ],
+      "Devices/1/Assistants": [
+        "list"
+      ],
+      "Devices/2/Info/MaximumRelayCurrentAC2": [
+        "int"
+      ],
+      "Devices/0/Assistants": [
+        "list"
+      ],
+      "Devices/1/InterfaceProtectionLog/1/Time": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/TemperatureHighForceBypass": [
+        "int"
+      ],
+      "Devices/0/ErrorAndWarningFlags/NSErrConnectFrustratedByRelayTest": [
+        "int"
+      ],
+      "Ac/Out/L1/NominalInverterPower": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/IgnoreAcIn1AssistantsVs": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/RelayTestOk": [
+        "int"
+      ],
+      "Devices/2/Settings/InverterOutputVoltage": [
+        "float"
+      ],
+      "Devices/0/Settings/AssistCurrentBoostFactor": [
+        "float"
+      ],
+      "Devices/0/Info/MaximumRelayCurrentAC1": [
+        "int"
+      ],
+      "Devices/0/ErrorAndWarningFlags/NSErrRelayTestKeepsFailing": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/GridRelayReport/Code": [
+        "NoneType"
+      ],
+      "Devices/0/Diagnostics/UBatTerminal": [
+        "float"
+      ],
+      "Devices/0/InterfaceProtectionLog/0/Time": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/ExternalBackfeedRelaySystem": [
+        "int"
+      ],
+      "Devices/2/InterfaceProtectionLog/1/Time": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/AcIn1Available": [
+        "int"
+      ],
+      "Devices/1/Info/MaximumRelayCurrentAC2": [
+        "int"
+      ],
+      "Devices/1/Settings/ResetRequired": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/NPFGeneratorSelected": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/MainsPllLocked": [
+        "int"
+      ],
+      "Devices/2/FirmwareVersion": [
+        "int"
+      ],
+      "FirmwareFeatures/CommandWriteViaId": [
+        "int"
+      ],
+      "Devices/0/Ac/In/L2/P": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/GridRelayReport/Reset": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/RawFlags0": [
+        "int"
+      ],
+      "Devices/2/CNBFirmwareVersion": [
+        "int"
+      ],
+      "Devices/0/InterfaceProtectionLog/3/ErrorFlags": [
+        "int"
+      ],
+      "Devices/0/ErrorAndWarningFlags/WarnRelayTestRecentlyFailed": [
+        "int"
+      ],
+      "FirmwareFeatures/BolUBatAndTBatSense": [
+        "int"
+      ],
+      "Devices/0/Settings/ResetRequired": [
+        "int"
+      ],
+      "Devices/2/Info/DeltaTBatNominalTBatMinimum": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/WaitingForRelayTest": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/MainsPllLocked": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/PcvPotmeterOnZero": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/AcIn1Available": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/PowerPackPreOverload": [
+        "int"
+      ],
+      "Devices/2/InterfaceProtectionLog/2/Time": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/BolTimeoutOccured": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/SwitchoverInfo/Delay": [
+        "int"
+      ],
+      "Devices/1/ErrorAndWarningFlags/NSErrRelayTestKeepsFailing": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/ChargeDisabledDueToLowTemp": [
+        "int"
+      ],
+      "Ac/State/AcIn1Available": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/PreferRenewableEnergyActive": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/HighDcCurrent": [
+        "int"
+      ],
+      "Devices/1/InterfaceProtectionLog/3/Time": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/TemperatureHighForceBypass": [
+        "int"
+      ],
+      "Devices/1/Settings/InverterOutputVoltage": [
+        "float"
+      ],
+      "Devices/2/ExtendStatus/GridRelayReport/Count": [
+        "NoneType"
+      ],
+      "Devices/2/InterfaceProtectionLog/4/Time": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/DMCGeneratorSelected": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/RelayTestOk": [
+        "int"
+      ],
+      "Devices/2/Settings/ReadProgress": [
+        "int"
+      ],
+      "BatteryOperationalLimits/MaxDischargeCurrent": [
+        "float"
+      ],
+      "Devices/2/Ac/In/L2/P": [
+        "int"
+      ],
+      "Devices/0/ErrorAndWarningFlags/RawFlags": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/GridRelayReport/Count": [
+        "NoneType"
+      ],
+      "Devices/1/ExtendStatus/VeBusNetworkQualityCounter": [
+        "int"
+      ],
+      "Devices/1/Settings/ReadProgress": [
+        "int"
+      ],
+      "Devices/0/FirmwareSubVersion": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/SocTooLowToInvert": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/SustainMode": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/MainsPllLocked": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/GridRelayReport/Code": [
+        "NoneType"
+      ],
+      "AcSensor/2/Energy": [
+        "NoneType"
+      ],
+      "ShortIds": [
+        "int"
+      ],
+      "AcSensor/0/Power": [
+        "NoneType"
+      ],
+      "Bms/AllowToChargeRate": [
+        "int"
+      ],
+      "Settings/PowerAssistEnabled": [
+        "bool"
+      ],
+      "Devices/2/InterfaceProtectionLog/3/Time": [
+        "int"
+      ],
+      "AcSensor/6/Location": [
+        "NoneType"
+      ],
+      "Ac/In/2/CurrentLimitIsAdjustable": [
+        "NoneType"
+      ],
+      "AcSensor/1/Voltage": [
+        "NoneType"
+      ],
+      "AcSensor/8/Location": [
+        "NoneType"
+      ],
+      "AcSensor/8/Phase": [
+        "NoneType"
+      ],
+      "Hub4/L1/OverruledShoreLimit": [
+        "NoneType"
+      ],
+      "Devices/0/ExtendStatus/SwitchoverInfo/Connecting": [
+        "int"
+      ],
+      "Soc": [
+        "float"
+      ],
+      "Leds/Absorption": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/VeBusNetworkQualityCounter": [
+        "int"
+      ],
+      "Alarms/Ripple": [
+        "int"
+      ],
+      "Ac/Control/IgnoreAcIn1": [
+        "int"
+      ],
+      "VebusMainState": [
+        "int"
+      ],
+      "AcSensor/3/Current": [
+        "NoneType"
+      ],
+      "State": [
+        "int"
+      ],
+      "AcSensor/2/Power": [
+        "NoneType"
+      ],
+      "Mode": [
+        "int"
+      ],
+      "Settings/SystemSetup/AcInput2": [
+        "int"
+      ],
+      "AcSensor/1/Location": [
+        "NoneType"
+      ],
+      "Devices/0/ExtendStatus/PreferRenewableEnergy": [
+        "int"
+      ],
+      "Service": [
+        "NoneType"
+      ],
+      "CustomName": [
+        "str"
+      ],
+      "Alarms/L2/MainsImbalance": [
+        "int"
+      ],
+      "Alarms/PhaseRotation": [
+        "int"
+      ],
+      "Devices/0/Settings/WriteProgress": [
+        "int"
+      ],
+      "VebusChargeState": [
+        "int"
+      ],
+      "Interfaces/Mk2/Version": [
+        "int"
+      ],
+      "Devices/2/Ac/Out/L2/P": [
+        "int"
+      ],
+      "AcSensor/6/Power": [
+        "NoneType"
+      ],
+      "Hub4/L3/FrequencyVariationOccurred": [
+        "int"
+      ],
+      "Devices/2/InterfaceProtectionLog/0/Time": [
+        "int"
+      ],
+      "Devices/1/InterfaceProtectionLog/0/ErrorFlags": [
+        "int"
+      ],
+      "AcSensor/4/Power": [
+        "NoneType"
+      ],
+      "AcSensor/6/Energy": [
+        "NoneType"
+      ],
+      "Devices/2/ExtendStatus/HighDcVoltage": [
+        "int"
+      ],
+      "AcSensor/3/Phase": [
+        "NoneType"
+      ],
+      "AcSensor/5/Energy": [
+        "NoneType"
+      ],
+      "Mgmt/ProcessName": [
+        "str"
+      ],
+      "Connected": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/ExternalBackfeedRelaySystem": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/SwitchoverInfo/Delay": [
+        "int"
+      ],
+      "Settings/SystemSetup/AcInput1": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/HighDcCurrent": [
+        "int"
+      ],
+      "Energy/AcOutToAcIn2": [
+        "float"
+      ],
+      "Alarms/L2/HighTemperature": [
+        "int"
+      ],
+      "RedetectSystem": [
+        "int"
+      ],
+      "AcSensor/6/Voltage": [
+        "NoneType"
+      ],
+      "AcSensor/3/Location": [
+        "NoneType"
+      ],
+      "Quirks": [
+        "int"
+      ],
+      "AcSensor/3/Voltage": [
+        "NoneType"
+      ],
+      "Alarms/L1/HighTemperature": [
+        "int"
+      ],
+      "Devices/1/FirmwareSubVersion": [
+        "int"
+      ],
+      "Alarms/VoltageSensor": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/BolTimeoutOccured": [
+        "int"
+      ],
+      "Devices/0/Info/MaximumRelayCurrentAC2": [
+        "int"
+      ],
+      "AcSensor/7/Current": [
+        "NoneType"
+      ],
+      "Devices/1/ExtendStatus/SwitchoverInfo/Connecting": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/IgnoreAcIn1": [
+        "int"
+      ],
+      "Alarms/HighDcCurrent": [
+        "int"
+      ],
+      "ProductName": [
+        "str"
+      ],
+      "Devices/1/InterfaceProtectionLog/3/ErrorFlags": [
+        "int"
+      ],
+      "Alarms/L3/LowBattery": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/SwitchoverInfo/ErrorFlags": [
+        "int"
+      ],
+      "Alarms/L3/MainsImbalance": [
+        "int"
+      ],
+      "AcSensor/5/Power": [
+        "NoneType"
+      ],
+      "Devices/Bms/Version": [
+        "NoneType"
+      ],
+      "Devices/0/Version": [
+        "int"
+      ],
+      "Mgmt/Connection": [
+        "str"
+      ],
+      "Leds/Bulk": [
+        "int"
+      ],
+      "AcSensor/2/Voltage": [
+        "NoneType"
+      ],
+      "Devices/0/InterfaceProtectionLog/3/Time": [
+        "int"
+      ],
+      "Alarms/HighDcVoltage": [
+        "int"
+      ],
+      "AcSensor/5/Voltage": [
+        "NoneType"
+      ],
+      "Devices/1/ErrorAndWarningFlags/RawFlags": [
+        "int"
+      ],
+      "Mgmt/ProcessVersion": [
+        "str"
+      ],
+      "Alarms/L2/InverterImbalance": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/GridRelayReport/Code": [
+        "NoneType"
+      ],
+      "Hub4/L3/OffsetAddedToVoltageSetpoint": [
+        "int"
+      ],
+      "Alarms/L1/Overload": [
+        "int"
+      ],
+      "Alarms/L3/HighTemperature": [
+        "int"
+      ],
+      "BatteryOperationalLimits/BatteryLowVoltage": [
+        "float"
+      ],
+      "Alarms/LowBattery": [
+        "int"
+      ],
+      "Devices/1/CNBFirmwareVersion": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/RelayTestOk": [
+        "int"
+      ],
+      "Interfaces/Mk2/ProductId": [
+        "int"
+      ],
+      "Alarms/HighTemperature": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/SwitchoverInfo/ErrorFlags": [
+        "int"
+      ],
+      "Leds/Inverter": [
+        "int"
+      ],
+      "Alarms/L3/Ripple": [
+        "int"
+      ],
+      "Alarms/L1/LowBattery": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/HighDcCurrent": [
+        "int"
+      ],
+      "AcSensor/8/Power": [
+        "NoneType"
+      ],
+      "Alarms/TemperatureSensor": [
+        "int"
+      ],
+      "Alarms/L2/Ripple": [
+        "int"
+      ],
+      "Devices/1/InterfaceProtectionLog/4/ErrorFlags": [
+        "int"
+      ],
+      "Ac/ActiveIn/ActiveInput": [
+        "int"
+      ],
+      "Alarms/L3/Overload": [
+        "int"
+      ],
+      "Devices/2/Settings/UpsFunction": [
+        "bool"
+      ],
+      "Alarms/L2/Overload": [
+        "int"
+      ],
+      "Alarms/L2/LowBattery": [
+        "int"
+      ],
+      "Hub4/L1/OffsetAddedToVoltageSetpoint": [
+        "int"
+      ],
+      "AcSensor/5/Phase": [
+        "NoneType"
+      ],
+      "Devices/2/ExtendStatus/RawFlags1": [
+        "NoneType"
+      ],
+      "Alarms/L3/InverterImbalance": [
+        "int"
+      ],
+      "Devices/2/Settings/ResetRequired": [
+        "int"
+      ],
+      "Alarms/BmsConnectionLost": [
+        "int"
+      ],
+      "AcSensor/6/Phase": [
+        "NoneType"
+      ],
+      "AcSensor/4/Voltage": [
+        "NoneType"
+      ],
+      "Devices/0/ExtendStatus/SustainMode": [
+        "int"
+      ],
+      "Energy/InverterToAcIn1": [
+        "float"
+      ],
+      "Devices/1/ExtendStatus/IgnoreAcIn1AssistantsVs": [
+        "int"
+      ],
+      "Alarms/L1/Ripple": [
+        "int"
+      ],
+      "Hub4/L2/OverruledShoreLimit": [
+        "NoneType"
+      ],
+      "Alarms/GridLost": [
+        "int"
+      ],
+      "VebusSetChargeState": [
+        "int"
+      ],
+      "Ac/State/SplitPhaseL2Passthru": [
+        "NoneType"
+      ],
+      "Bms/PreAlarm": [
+        "NoneType"
+      ],
+      "Alarms/Overload": [
+        "int"
+      ],
+      "Energy/InverterToAcOut": [
+        "float"
+      ],
+      "AcSensor/8/Energy": [
+        "NoneType"
+      ],
+      "AcSensor/3/Power": [
+        "NoneType"
+      ],
+      "Interfaces/Mk2/Status/BusFreeMode": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/RawFlags1": [
+        "NoneType"
+      ],
+      "Hub4/Sustain": [
+        "int"
+      ],
+      "Devices/2/ProductId": [
+        "int"
+      ],
+      "Devices/2/InterfaceProtectionLog/0/ErrorFlags": [
+        "int"
+      ],
+      "Ac/Out/L3/NominalInverterPower": [
+        "int"
+      ],
+      "Devices/1/Settings/UpsFunction": [
+        "bool"
+      ],
+      "Devices/1/ExtendStatus/AcIn1Available": [
+        "int"
+      ],
+      "AcSensor/8/Current": [
+        "NoneType"
+      ],
+      "AcSensor/4/Current": [
+        "NoneType"
+      ],
+      "Devices/0/ExtendStatus/IgnoreAcIn1": [
+        "int"
+      ],
+      "AcSensor/2/Phase": [
+        "NoneType"
+      ],
+      "AcSensor/4/Location": [
+        "NoneType"
+      ],
+      "Devices/2/InterfaceProtectionLog/3/ErrorFlags": [
+        "int"
+      ],
+      "AcSensor/3/Energy": [
+        "NoneType"
+      ],
+      "AcSensor/4/Phase": [
+        "NoneType"
+      ],
+      "Devices/0/CNBFirmwareVersion": [
+        "int"
+      ],
+      "AcSensor/5/Current": [
+        "NoneType"
+      ],
+      "AcSensor/5/Location": [
+        "NoneType"
+      ],
+      "AcSensor/1/Energy": [
+        "NoneType"
+      ],
+      "ProductId": [
+        "int"
+      ],
+      "AcSensor/7/Location": [
+        "NoneType"
+      ],
+      "Ac/State/RemoteGeneratorSelected": [
+        "int"
+      ],
+      "Alarms/BmsPreAlarm": [
+        "NoneType"
+      ],
+      "AcSensor/1/Power": [
+        "NoneType"
+      ],
+      "Interfaces/Mk2/Connection": [
+        "str"
+      ],
+      "AcSensor/4/Energy": [
+        "NoneType"
+      ],
+      "Devices/2/ExtendStatus/IgnoreAcIn1AssistantsVs": [
+        "int"
+      ],
+      "AcSensor/1/Current": [
+        "NoneType"
+      ],
+      "Devices/1/InterfaceProtectionLog/2/Time": [
+        "int"
+      ],
+      "AcSensor/0/Phase": [
+        "NoneType"
+      ],
+      "Devices/0/Info/DeltaTBatNominalTBatMinimum": [
+        "int"
+      ],
+      "Ac/NumberOfPhases": [
+        "int"
+      ],
+      "AcSensor/0/Voltage": [
+        "NoneType"
+      ],
+      "Devices/0/Settings/UpsFunction": [
+        "bool"
+      ],
+      "AcSensor/0/Location": [
+        "NoneType"
+      ],
+      "Devices/0/InterfaceProtectionLog/2/Time": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/RawFlags1": [
+        "NoneType"
+      ],
+      "Devices/1/ExtendStatus/SwitchoverInfo/ErrorFlags": [
+        "int"
+      ],
+      "AcSensor/0/Energy": [
+        "NoneType"
+      ],
+      "ModeIsAdjustable": [
+        "int"
+      ],
+      "AcSensor/Count": [
+        "NoneType"
+      ],
+      "Leds/Float": [
+        "int"
+      ],
+      "AcSensor/7/Phase": [
+        "NoneType"
+      ],
+      "FirmwareSubVersion": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/BolTimeoutOccured": [
+        "int"
+      ],
+      "Hub4/L3/MaxFeedInPower": [
+        "int"
+      ],
+      "Energy/InverterToAcIn2": [
+        "float"
+      ],
+      "AcSensor/1/Phase": [
+        "NoneType"
+      ],
+      "AcSensor/6/Current": [
+        "NoneType"
+      ],
+      "Ac/ActiveIn/CurrentLimit": [
+        "float"
+      ],
+      "Ac/State/IgnoreAcIn1": [
+        "int"
+      ],
+      "Energy/AcIn1ToAcOut": [
+        "float"
+      ],
+      "FirmwareVersion": [
+        "int"
+      ],
+      "Devices/1/InterfaceProtectionLog/2/ErrorFlags": [
+        "int"
+      ],
+      "Energy/AcIn2ToAcOut": [
+        "float"
+      ],
+      "Ac/In/1/CurrentLimitIsAdjustable": [
+        "int"
+      ],
+      "AcSensor/2/Location": [
+        "NoneType"
+      ],
+      "FirmwareFeatures/SetChargeState": [
+        "int"
+      ],
+      "Interfaces/Mk2/ProductName": [
+        "str"
+      ],
+      "Devices/0/ExtendStatus/PowerPackPreOverload": [
+        "int"
+      ],
+      "Settings/InverterOutputVoltage": [
+        "float"
+      ],
+      "Energy/AcOutToAcIn1": [
+        "float"
+      ],
+      "AcSensor/7/Energy": [
+        "NoneType"
+      ],
+      "Leds/Mains": [
+        "int"
+      ],
+      "AcSensor/7/Voltage": [
+        "NoneType"
+      ],
+      "Alarms/L1/MainsImbalance": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/GridRelayReport/Reset": [
+        "int"
+      ],
+      "SystemReset": [
+        "NoneType"
+      ],
+      "Devices/1/Diagnostics/UBatTerminal": [
+        "float"
+      ],
+      "AcSensor/7/Power": [
+        "NoneType"
+      ],
+      "Alarms/BatteryOvervoltageProtection": [
+        "NoneType"
+      ],
+      "Hub4/DisableFeedIn": [
+        "int"
+      ],
+      "FirmwareFeatures/IBatSOCBroadcast": [
+        "int"
+      ],
+      "Devices/1/ProductId": [
+        "int"
+      ],
+      "Settings/GridCode": [
+        "int"
+      ],
+      "Devices/0/InterfaceProtectionLog/4/ErrorFlags": [
+        "int"
+      ],
+      "Alarms/L1/InverterImbalance": [
+        "int"
+      ],
+      "Ac/ActiveIn/L3/F": [
+        "float"
+      ],
+      "Devices/Dmc/Version": [
+        "NoneType"
+      ],
+      "FirmwareFeatures/BolFrame": [
+        "int"
+      ],
+      "Ac/State/SplitPhaseL2L1OutSummed": [
+        "NoneType"
+      ],
+      "DeviceInstance": [
+        "int"
+      ],
+      "Ac/ActiveIn/L2/F": [
+        "float"
+      ],
+      "Devices/0/Ac/Out/L2/P": [
+        "int"
+      ],
+      "Leds/LowBattery": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/SwitchoverInfo/Delay": [
+        "int"
+      ],
+      "VebusError": [
+        "int"
+      ],
+      "AcSensor/8/Voltage": [
+        "NoneType"
+      ],
+      "Ac/ActiveIn/L1/F": [
+        "float"
+      ],
+      "Bms/BmsExpected": [
+        "int"
+      ],
+      "Ac/NumberOfAcInputs": [
+        "int"
+      ],
+      "Leds/Overload": [
+        "int"
+      ],
+      "Dc/0/MaxChargeCurrent": [
+        "float"
+      ],
+      "Bms/BmsType": [
+        "int"
+      ],
+      "Devices/0/ExtendStatus/ChargeIsDisabled": [
+        "int"
+      ],
+      "Bms/AllowToCharge": [
+        "int"
+      ],
+      "Hub4/L1/FrequencyVariationOccurred": [
+        "int"
+      ],
+      "Devices/1/Ac/Out/L2/P": [
+        "int"
+      ],
+      "PvInverter/Disable": [
+        "int"
+      ],
+      "Energy/OutToInverter": [
+        "float"
+      ],
+      "Bms/Error": [
+        "int"
+      ],
+      "Hub4/DoNotFeedInOvervoltage": [
+        "int"
+      ],
+      "Ac/In/1/CurrentLimit": [
+        "float"
+      ],
+      "Ac/ActiveIn/Connected": [
+        "int"
+      ],
+      "AcSensor/0/Current": [
+        "NoneType"
+      ],
+      "Hub4/L2/FrequencyVariationOccurred": [
+        "int"
+      ],
+      "Hub4/TargetPowerIsMaxFeedIn": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/SwitchoverInfo/Connecting": [
+        "int"
+      ],
+      "Hub4/L1/CurrentLimitedDueToHighTemp": [
+        "int"
+      ],
+      "Dc/0/PreferRenewableEnergy": [
+        "NoneType"
+      ],
+      "Devices/1/InterfaceProtectionLog/1/ErrorFlags": [
+        "int"
+      ],
+      "Bms/AllowToDischarge": [
+        "int"
+      ],
+      "ExtraBatteryCurrent": [
+        "float"
+      ],
+      "Devices/1/ExtendStatus/GridRelayReport/Reset": [
+        "int"
+      ],
+      "Settings/Alarm/System/GridLost": [
+        "int"
+      ],
+      "Hub4/AssistantId": [
+        "int"
+      ],
+      "Hub4/DisableCharge": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/WaitingForRelayTest": [
+        "int"
+      ],
+      "Dc/0/Temperature": [
+        "float"
+      ],
+      "Hub4/L1/MaxFeedInPower": [
+        "int"
+      ],
+      "Hub4/FixSolarOffsetTo100mV": [
+        "int"
+      ],
+      "Hub4/L3/CurrentLimitedDueToHighTemp": [
+        "int"
+      ],
+      "Ac/In/2/CurrentLimit": [
+        "NoneType"
+      ],
+      "Hub4/L3/OverruledShoreLimit": [
+        "NoneType"
+      ],
+      "BatteryOperationalLimits/MaxChargeVoltage": [
+        "float"
+      ],
+      "Hub4/L2/OffsetAddedToVoltageSetpoint": [
+        "int"
+      ],
+      "Ac/ActiveIn/CurrentLimitIsAdjustable": [
+        "int"
+      ],
+      "Hub4/L2/CurrentLimitedDueToHighTemp": [
+        "int"
+      ],
+      "Devices/2/Settings/AssistCurrentBoostFactor": [
+        "float"
+      ],
+      "BatterySense/Temperature": [
+        "float"
+      ],
+      "Interfaces/Mk2/Status/Baudrate": [
+        "int"
+      ],
+      "Ac/Out/L2/NominalInverterPower": [
+        "int"
+      ],
+      "Devices/2/ExtendStatus/PcvPotmeterOnZero": [
+        "int"
+      ],
+      "Devices/NumberOfMultis": [
+        "int"
+      ],
+      "Devices/1/Ac/In/L2/P": [
+        "int"
+      ],
+      "Ac/PowerMeasurementType": [
+        "int"
+      ],
+      "Leds/Temperature": [
+        "int"
+      ],
+      "AcSensor/2/Current": [
+        "NoneType"
+      ],
+      "Devices/1/Diagnostics/UBatRipple": [
+        "float"
+      ],
+      "Devices/1/Settings/AssistCurrentBoostFactor": [
+        "float"
+      ],
+      "Devices/1/InterfaceProtectionLog/4/Time": [
+        "int"
+      ],
+      "Hub4/L2/MaxFeedInPower": [
+        "int"
+      ],
+      "Devices/1/InterfaceProtectionLog/0/Time": [
+        "int"
+      ],
+      "Hub/ChargeVoltage": [
+        "float"
+      ],
+      "Energy/AcIn2ToInverter": [
+        "float"
+      ],
+      "Devices/1/ErrorAndWarningFlags/NSErrConnectFrustratedByRelayTest": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/HighDcVoltage": [
+        "int"
+      ],
+      "Devices/1/ExtendStatus/PcvPotmeterOnZero": [
+        "int"
+      ]
+    },
+    "grid": {
+      "Ac/Power": [
+        "float"
+      ],
+      "Ac/L3/Power": [
+        "float"
+      ],
+      "Ac/L2/Power": [
+        "float"
+      ],
+      "Ac/L1/Power": [
+        "float"
+      ],
+      "Ac/PowerFactor": [
+        "float"
+      ],
+      "Ac/L1/Voltage": [
+        "float"
+      ],
+      "Ac/L2/PowerFactor": [
+        "float"
+      ],
+      "Ac/PENVoltage": [
+        "float"
+      ],
+      "Ac/L1/PowerFactor": [
+        "float"
+      ],
+      "Ac/L2/Voltage": [
+        "float"
+      ],
+      "Ac/L1/Current": [
+        "float"
+      ],
+      "Ac/L2/Current": [
+        "float"
+      ],
+      "Ac/L3/Voltage": [
+        "float"
+      ],
+      "Ac/L3/VoltageLineToLine": [
+        "float"
+      ],
+      "Ac/L3/Current": [
+        "float"
+      ],
+      "Ac/L1/VoltageLineToLine": [
+        "float"
+      ],
+      "Ac/L3/PowerFactor": [
+        "float"
+      ],
+      "Ac/N/Current": [
+        "float"
+      ],
+      "Ac/L2/VoltageLineToLine": [
+        "float"
+      ],
+      "Ac/Frequency": [
+        "float"
+      ],
+      "RefreshTime": [
+        "int"
+      ],
+      "N2kSystemInstance": [
+        "int"
+      ],
+      "HardwareVersion": [
+        "NoneType"
+      ],
+      "Devices/0/VregLink": [
+        "NoneType"
+      ],
+      "PhaseSequence": [
+        "int"
+      ],
+      "Alarms/PhaseRotation": [
+        "int"
+      ],
+      "Ac/L2/Energy/Forward": [
+        "float"
+      ],
+      "Mgmt/ProcessName": [
+        "str"
+      ],
+      "ErrorCode": [
+        "int"
+      ],
+      "Devices/0/CustomName": [
+        "str"
+      ],
+      "ProductId": [
+        "int"
+      ],
+      "Ac/L1/Energy/Reverse": [
+        "float"
+      ],
+      "Mgmt/Connection": [
+        "str"
+      ],
+      "Mgmt/ProcessVersion": [
+        "str"
+      ],
+      "FirmwareVersion": [
+        "int"
+      ],
+      "Ac/L1/Energy/Forward": [
+        "float"
+      ],
+      "DeviceInstance": [
+        "int"
+      ],
+      "Connected": [
+        "int"
+      ],
+      "Ac/L3/Energy/Forward": [
+        "float"
+      ],
+      "CustomName": [
+        "str"
+      ],
+      "Devices/0/DeviceInstance": [
+        "int"
+      ],
+      "N2kDeviceInstance": [
+        "int"
+      ],
+      "N2kUniqueNumber": [
+        "int"
+      ],
+      "NrOfPhases": [
+        "int"
+      ],
+      "Ac/Energy/Forward": [
+        "float"
+      ],
+      "Devices/0/ProductName": [
+        "str"
+      ],
+      "RequestPowerSnapshot": [
+        "int"
+      ],
+      "Devices/0/FirmwareVersion": [
+        "int"
+      ],
+      "Devices/0/ServiceName": [
+        "str"
+      ],
+      "Ac/Energy/Reverse": [
+        "float"
+      ],
+      "Ac/L3/Energy/Reverse": [
+        "float"
+      ],
+      "Serial": [
+        "str"
+      ],
+      "Devices/0/ProductId": [
+        "int"
+      ],
+      "Devices/0/Nad": [
+        "int"
+      ],
+      "Devices/0/Gateway": [
+        "str"
+      ],
+      "ProductName": [
+        "str"
+      ],
+      "Ac/L2/Energy/Reverse": [
+        "float"
+      ]
+    },
+    "battery": {
+      "Dc/0/Current": [
+        "float"
+      ],
+      "Dc/0/Power": [
+        "int",
+        "float"
+      ],
+      "Dc/0/Temperature": [
+        "NoneType",
+        "float"
+      ],
+      "System/MaxCellVoltage": [
+        "float"
+      ],
+      "System/MinCellVoltage": [
+        "float"
+      ],
+      "Dc/0/Voltage": [
+        "float"
+      ],
+      "System/MaxVoltageCellId": [
+        "str"
+      ],
+      "History/ChargedEnergy": [
+        "float"
+      ],
+      "GroupId": [
+        "NoneType"
+      ],
+      "Dc/0/MidVoltageDeviation": [
+        "NoneType"
+      ],
+      "Devices/0/DeviceInstance": [
+        "int"
+      ],
+      "Mgmt/ProcessVersion": [
+        "str"
+      ],
+      "Devices/0/VregLink": [
+        "NoneType"
+      ],
+      "VEDirect/HexInvalidCharacterErrors": [
+        "int"
+      ],
+      "Alarms/LowVoltage": [
+        "int"
+      ],
+      "History/MinimumStarterVoltage": [
+        "float"
+      ],
+      "History/ChargeCycles": [
+        "int"
+      ],
+      "History/MaximumVoltage": [
+        "float"
+      ],
+      "History/DischargedEnergy": [
+        "float"
+      ],
+      "Dc/0/MidVoltage": [
+        "NoneType"
+      ],
+      "History/LowStarterVoltageAlarms": [
+        "NoneType"
+      ],
+      "FirmwareVersion": [
+        "int"
+      ],
+      "Settings/RelayMode": [
+        "NoneType"
+      ],
+      "Mgmt/Connection": [
+        "str"
+      ],
+      "ProductName": [
+        "str"
+      ],
+      "Alarms/MidVoltage": [
+        "int"
+      ],
+      "HardwareVersion": [
+        "NoneType"
+      ],
+      "Mgmt/ProcessName": [
+        "str"
+      ],
+      "Connected": [
+        "int"
+      ],
+      "DeviceInstance": [
+        "int"
+      ],
+      "History/AverageDischarge": [
+        "float"
+      ],
+      "Serial": [
+        "NoneType",
+        "str"
+      ],
+      "CustomName": [
+        "str"
+      ],
+      "History/AutomaticSyncs": [
+        "int"
+      ],
+      "Relay/0/State": [
+        "NoneType"
+      ],
+      "History/MinimumVoltage": [
+        "float"
+      ],
+      "History/LowVoltageAlarms": [
+        "int"
+      ],
+      "History/HighStarterVoltageAlarms": [
+        "NoneType"
+      ],
+      "ConsumedAmphours": [
+        "float"
+      ],
+      "History/LastDischarge": [
+        "float"
+      ],
+      "Dc/1/Voltage": [
+        "NoneType"
+      ],
+      "History/HighVoltageAlarms": [
+        "int"
+      ],
+      "Devices/0/FirmwareVersion": [
+        "int"
+      ],
+      "History/MaximumStarterVoltage": [
+        "float"
+      ],
+      "VEDirect/HexUnfinishedErrors": [
+        "int"
+      ],
+      "Devices/0/ProductId": [
+        "int"
+      ],
+      "Soc": [
+        "float"
+      ],
+      "History/TimeSinceLastFullCharge": [
+        "int"
+      ],
+      "Devices/0/ServiceName": [
+        "str"
+      ],
+      "ProductId": [
+        "int"
+      ],
+      "VEDirect/TextChecksumErrors": [
+        "int"
+      ],
+      "TimeToGo": [
+        "NoneType"
+      ],
+      "Settings/HasMidVoltage": [
+        "int"
+      ],
+      "Devices/0/CustomName": [
+        "str"
+      ],
+      "History/FullDischarges": [
+        "int"
+      ],
+      "Settings/HasTemperature": [
+        "int"
+      ],
+      "Alarms/LowTemperature": [
+        "int"
+      ],
+      "Devices/0/ProductName": [
+        "str"
+      ],
+      "VEDirect/HexChecksumErrors": [
+        "int"
+      ],
+      "VEDirect/TextUnfinishedErrors": [
+        "int"
+      ],
+      "Alarms/HighStarterVoltage": [
+        "int"
+      ],
+      "Alarms/HighTemperature": [
+        "int"
+      ],
+      "Alarms/LowStarterVoltage": [
+        "int"
+      ],
+      "History/TotalAhDrawn": [
+        "float"
+      ],
+      "History/DeepestDischarge": [
+        "float"
+      ],
+      "Alarms/HighVoltage": [
+        "int"
+      ],
+      "Alarms/LowSoc": [
+        "int"
+      ],
+      "Alarms/Alarm": [
+        "int"
+      ],
+      "VEDirect/TextParseError": [
+        "int"
+      ],
+      "Settings/HasStarterVoltage": [
+        "int"
+      ],
+      "Diagnostics/Module0/Alarms/LowVoltage": [
+        "NoneType"
+      ],
+      "Info/MaxDischargeCurrent": [
+        "float"
+      ],
+      "Info/MaxChargeCurrent": [
+        "float"
+      ],
+      "Diagnostics/Module0/Alarms/LowTemperature": [
+        "NoneType"
+      ],
+      "Diagnostics/Module0/Alarms/HighChargeCurrent": [
+        "NoneType"
+      ],
+      "System/MinVoltageCellId": [
+        "str"
+      ],
+      "Alarms/ChargeBlocked": [
+        "int"
+      ],
+      "Diagnostics/Module0/Alarms/CellImbalance": [
+        "NoneType"
+      ],
+      "Diagnostics/Module1/Alarms/LowVoltage": [
+        "NoneType"
+      ],
+      "Diagnostics/Module1/Alarms/InternalFailure": [
+        "NoneType"
+      ],
+      "Diagnostics/Module0/Alarms/HighCellVoltage": [
+        "NoneType"
+      ],
+      "Diagnostics/Module1/Alarms/LowTemperature": [
+        "NoneType"
+      ],
+      "Diagnostics/Module1/Alarms/HighTemperature": [
+        "NoneType"
+      ],
+      "Diagnostics/Module0/Alarms/LowChargeTemperature": [
+        "NoneType"
+      ],
+      "Diagnostics/Module1/Alarms/HighChargeCurrent": [
+        "NoneType"
+      ],
+      "Diagnostics/Module1/Alarms/CellImbalance": [
+        "NoneType"
+      ],
+      "Diagnostics/Module0/Alarms/InternalFailure": [
+        "NoneType"
+      ],
+      "Diagnostics/Module2/Id": [
+        "NoneType"
+      ],
+      "Diagnostics/Module2/Alarms/LowVoltage": [
+        "NoneType"
+      ],
+      "Diagnostics/Module2/Alarms/HighCellVoltage": [
+        "NoneType"
+      ],
+      "Diagnostics/Module0/Alarms/HighDischargeCurrent": [
+        "NoneType"
+      ],
+      "Info/ChargeRequest": [
+        "NoneType"
+      ],
+      "Diagnostics/Module2/Alarms/LowTemperature": [
+        "NoneType"
+      ],
+      "Diagnostics/Module2/Alarms/HighDischargeCurrent": [
+        "NoneType"
+      ],
+      "System/MaxCellTemperature": [
+        "float"
+      ],
+      "Diagnostics/Module0/Id": [
+        "NoneType"
+      ],
+      "System/NrOfModulesBlockingCharge": [
+        "int"
+      ],
+      "Sense/Soc": [
+        "NoneType"
+      ],
+      "Alarms/HighChargeTemperature": [
+        "int"
+      ],
+      "Alarms/HighDischargeCurrent": [
+        "int"
+      ],
+      "Info/FullChargeRequest": [
+        "NoneType"
+      ],
+      "Diagnostics/Module0/Alarms/HighChargeTemperature": [
+        "NoneType"
+      ],
+      "System/MinCellTemperature": [
+        "float"
+      ],
+      "Info/BatteryLowVoltage": [
+        "float"
+      ],
+      "Alarms/CellImbalance": [
+        "int"
+      ],
+      "Alarms/InternalFailure": [
+        "int"
+      ],
+      "Capacity": [
+        "int"
+      ],
+      "Diagnostics/Module1/Alarms/HighDischargeCurrent": [
+        "NoneType"
+      ],
+      "Sense/Current": [
+        "NoneType"
+      ],
+      "Diagnostics/Module2/Alarms/InternalFailure": [
+        "NoneType"
+      ],
+      "Soh": [
+        "float"
+      ],
+      "Id": [
+        "NoneType"
+      ],
+      "Diagnostics/Module2/Alarms/HighChargeCurrent": [
+        "NoneType"
+      ],
+      "Diagnostics/Module1/Alarms/HighCellVoltage": [
+        "NoneType"
+      ],
+      "Alarms/HighChargeCurrent": [
+        "int"
+      ],
+      "Manufacturer": [
+        "str"
+      ],
+      "Family": [
+        "NoneType"
+      ],
+      "Redetect": [
+        "int"
+      ],
+      "Sense/Temperature": [
+        "NoneType"
+      ],
+      "System/NrOfModulesBlockingDischarge": [
+        "int"
+      ],
+      "System/NrOfModulesOnline": [
+        "int"
+      ],
+      "Diagnostics/Module2/Alarms/CellImbalance": [
+        "NoneType"
+      ],
+      "Diagnostics/Module1/Alarms/LowChargeTemperature": [
+        "NoneType"
+      ],
+      "Alarms/LowChargeTemperature": [
+        "int"
+      ],
+      "Diagnostics/Module1/Id": [
+        "NoneType"
+      ],
+      "Diagnostics/Module2/Alarms/HighTemperature": [
+        "NoneType"
+      ],
+      "Diagnostics/Module0/Alarms/HighTemperature": [
+        "NoneType"
+      ],
+      "Alarms/DischargeBlocked": [
+        "int"
+      ],
+      "Diagnostics/Module2/Alarms/HighChargeTemperature": [
+        "NoneType"
+      ],
+      "Diagnostics/Module2/Alarms/LowChargeTemperature": [
+        "NoneType"
+      ],
+      "InstalledCapacity": [
+        "int"
+      ],
+      "System/NrOfModulesOffline": [
+        "int"
+      ],
+      "Diagnostics/Module1/Alarms/HighChargeTemperature": [
+        "NoneType"
+      ],
+      "Alarms/HighCellVoltage": [
+        "int"
+      ],
+      "ConnectionInformation": [
+        "NoneType"
+      ],
+      "Sense/Voltage": [
+        "NoneType"
+      ],
+      "System/MinTemperatureCellId": [
+        "str"
+      ],
+      "System/MaxTemperatureCellId": [
+        "str"
+      ],
+      "Info/MaxChargeVoltage": [
+        "float"
+      ]
+    },
+    "pvinverter": {
+      "Ac/L3/Power": [
+        "float"
+      ],
+      "Ac/L3/Voltage": [
+        "float"
+      ],
+      "Ac/L3/Energy/Forward": [
+        "float"
+      ],
+      "Ac/L3/Current": [
+        "float"
+      ],
+      "Ac/L2/Voltage": [
+        "float"
+      ],
+      "Ac/L2/Energy/Forward": [
+        "float"
+      ],
+      "Ac/L1/Voltage": [
+        "float"
+      ],
+      "Ac/L1/Power": [
+        "float"
+      ],
+      "Ac/L1/Energy/Forward": [
+        "float"
+      ],
+      "Ac/L2/Power": [
+        "float"
+      ],
+      "Ac/Energy/Forward": [
+        "float"
+      ],
+      "Ac/Power": [
+        "float"
+      ],
+      "Ac/L2/Current": [
+        "float"
+      ],
+      "Ac/L1/Current": [
+        "float"
+      ],
+      "Mgmt/Connection": [
+        "str"
+      ],
+      "Mgmt/ProcessVersion": [
+        "str"
+      ],
+      "FroniusDeviceType": [
+        "int"
+      ],
+      "Mgmt/ProcessName": [
+        "str"
+      ],
+      "Ac/MaxPower": [
+        "float"
+      ],
+      "CustomName": [
+        "str"
+      ],
+      "Position": [
+        "int"
+      ],
+      "ProductName": [
+        "str"
+      ],
+      "ProductId": [
+        "int"
+      ],
+      "ErrorCode": [
+        "NoneType"
+      ],
+      "Serial": [
+        "str"
+      ],
+      "StatusCode": [
+        "int"
+      ],
+      "DeviceInstance": [
+        "int"
+      ],
+      "Ac/NumberOfPhases": [
+        "int"
+      ],
+      "Connected": [
+        "int"
+      ],
+      "Ac/PowerLimit": [
+        "float"
+      ],
+      "DataManagerVersion": [
+        "str"
+      ],
+      "Info/LimiterModel": [
+        "int"
+      ],
+      "FirmwareVersion": [
+        "str"
+      ],
+      "Info/MeasurementModel": [
+        "int"
+      ]
+    },
+    "vecan": {
+      "Link/ExtraBatteryCurrent": [
+        "float"
+      ],
+      "Link/VoltageSense": [
+        "float"
+      ],
+      "Devices/00002CC71883/N2kUniqueNumber": [
+        "int"
+      ],
+      "Devices/00002CC71883/CustomName": [
+        "str"
+      ],
+      "Devices/00002CC001F4/N2kUniqueNumber": [
+        "int"
+      ],
+      "Link/ChargeVoltage": [
+        "float"
+      ],
+      "Link/TemperatureSense": [
+        "float"
+      ],
+      "Link/BatteryCurrent": [
+        "float"
+      ],
+      "Devices/00002CC71883/Nad": [
+        "int"
+      ],
+      "Devices/00002CC001F4/Nad": [
+        "int"
+      ],
+      "Identifier": [
+        "str"
+      ],
+      "Link/ChargeVoltageSolarOffset": [
+        "NoneType"
+      ],
+      "Devices/00002CC71883/DeviceInstance": [
+        "int"
+      ],
+      "Devices/00002CC001F4/DeviceInstance": [
+        "int"
+      ],
+      "Devices/00002CC71883/Manufacturer": [
+        "int"
+      ],
+      "Devices/00002CC001F4/ModelName": [
+        "str"
+      ],
+      "Devices/00002CC001F4/Manufacturer": [
+        "int"
+      ],
+      "Link/Soc": [
+        "float"
+      ],
+      "Devices/00002CC001F4/Serial": [
+        "str"
+      ],
+      "Devices/00002CC001F4/FirmwareVersion": [
+        "str"
+      ],
+      "Devices/00002CC001F4/CustomName": [
+        "str"
+      ],
+      "Devices/00002CC71883/ModelName": [
+        "str"
+      ],
+      "Devices/00002CC71883/Serial": [
+        "str"
+      ],
+      "Devices/00002CC71883/FirmwareVersion": [
+        "str"
+      ],
+      "Alarms/SameUniqueNameUsed": [
+        "int"
+      ],
+      "Link/NetworkMode": [
+        "int"
+      ]
+    },
+    "temperature": {
+      "AccelZ": [
+        "float"
+      ],
+      "AccelY": [
+        "float"
+      ],
+      "AccelX": [
+        "float"
+      ],
+      "SeqNo": [
+        "int"
+      ],
+      "Pressure": [
+        "float"
+      ],
+      "Humidity": [
+        "float"
+      ],
+      "Temperature": [
+        "float"
+      ],
+      "BatteryVoltage": [
+        "float"
+      ],
+      "Alarms/LowBattery": [
+        "int"
+      ],
+      "Mgmt/ProcessVersion": [
+        "str"
+      ],
+      "Devices/0/ProductId": [
+        "int"
+      ],
+      "Mgmt/Connection": [
+        "str"
+      ],
+      "TemperatureType": [
+        "int"
+      ],
+      "Connected": [
+        "int"
+      ],
+      "Devices/0/DeviceInstance": [
+        "int"
+      ],
+      "Mgmt/ProcessName": [
+        "str"
+      ],
+      "CustomName": [
+        "str"
+      ],
+      "ProductId": [
+        "int"
+      ],
+      "ProductName": [
+        "str"
+      ],
+      "Status": [
+        "int"
+      ],
+      "TxPower": [
+        "float"
+      ],
+      "DeviceName": [
+        "str"
+      ],
+      "DeviceInstance": [
+        "int"
+      ]
+    },
+    "logger": {
+      "Buffer/FreeDiskSpace": [
+        "int"
+      ],
+      "Vrm/TimeLastContact": [
+        "int"
+      ],
+      "Buffer/Location": [
+        "int"
+      ],
+      "Vrm/ConnectionError": [
+        "int"
+      ],
+      "Vrm/ConnectionErrorMessage": [
+        "NoneType"
+      ],
+      "Buffer/Count": [
+        "int"
+      ],
+      "Buffer/OldestTimestamp": [
+        "NoneType"
+      ],
+      "Storage/MountState": [
+        "int"
+      ],
+      "Buffer/ErrorState": [
+        "int"
+      ]
+    },
+    "settings": {
+      "Settings/SystemSetup/MaxChargeCurrent": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1465160/Phase": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1465160/L1Energy": [
+        "float"
+      ],
+      "Settings/Fronius/Inverters/I114_1779967/EnableLimiter": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1465160/IsActive": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1445127/L3Energy": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/19/Flags": [
+        "int"
+      ],
+      "Settings/Devices/vebus_ttyS2/CustomName": [
+        "str"
+      ],
+      "Settings/Fronius/Inverters/I114_1445127/SerialNumber": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/4/Strategy": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1445127/Phase": [
+        "int"
+      ],
+      "Settings/CanBms/SocketcanVecan1/CustomName": [
+        "str"
+      ],
+      "Settings/Fronius/Inverters/I114_1445127/L2Energy": [
+        "float"
+      ],
+      "Settings/Fronius/Inverters/I114_1445127/L1Energy": [
+        "float"
+      ],
+      "Settings/Fronius/Inverters/I114_1445127/IsActive": [
+        "int"
+      ],
+      "Settings/Fronius/KnownIPAddresses": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/8/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/13/Duration": [
+        "int"
+      ],
+      "Settings/Fronius/AutoScan": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/9/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/8/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/28/Strategy": [
+        "int"
+      ],
+      "Settings/Vebus/AllowMk3Fw212Update": [
+        "int"
+      ],
+      "Settings/Vrmlogger/ExternalStorageDir": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/8/Duration": [
+        "int"
+      ],
+      "Settings/DigitalInput/2/InvertTranslation": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/7/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/7/Restrictions": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Alarms/Low/Enable": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1445127/EnableLimiter": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/7/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_vebus/274/Name": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/6/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/6/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DigitalInput/1/CustomName": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/5/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/5/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/32/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/2/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/47/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/47/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/27/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/31/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/46/Strategy": [
+        "int"
+      ],
+      "Settings/Generator0/QuietHours/EndTime": [
+        "int"
+      ],
+      "Settings/System/SecurityProfile": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/7/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/46/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/32/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Generator0/AcLoad/Measurement": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/46/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Gui/Gauges/MotorDrive/Power/Max": [
+        "float"
+      ],
+      "Settings/VenusApp/LockButtonState": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/45/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/2/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/45/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/45/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/44/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/9/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/46/Duration": [
+        "int"
+      ],
+      "Settings/SystemSetup/HasAcOutSystem": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/44/Restrictions": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Function": [
+        "int"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_vebus/274/Service": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/44/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/44/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/7/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/43/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/17/Soc": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1465160/EnableLimiter": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/25/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/43/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/42/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/42/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Vecan/vecan1/MainInterface/SystemInstance": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/41/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/41/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/41/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/37/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/40/Start": [
+        "int"
+      ],
+      "Settings/Generator1/MinimumRuntime": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/40/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/4/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/22/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/21/Strategy": [
+        "int"
+      ],
+      "Settings/Generator0/InverterOverload/StartTimer": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/4/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/4/Duration": [
+        "int"
+      ],
+      "Settings/CGwacs/PvPowerSetpointOffset": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/0/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/39/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/45/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/34/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/39/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1465160/L3Energy": [
+        "float"
+      ],
+      "Settings/CGwacs/RunWithoutGridMeter": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/38/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/38/Flags": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/4/AllowDischarge": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/37/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/37/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/36/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/17/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/8/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/36/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/26/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/27/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/36/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/36/Duration": [
+        "int"
+      ],
+      "Settings/Fronius/ModbusSlaveAddress": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/34/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/35/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/35/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/35/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/35/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/37/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/13/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Generator0/StopWhenAc2Available": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/35/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1465160/CustomName": [
+        "str"
+      ],
+      "Settings/Services/InsecureDbusOverTcp": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/34/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/3/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/9/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/38/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Generator0/AcLoad/Enabled": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/34/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/4/Flags": [
+        "int"
+      ],
+      "Settings/Devices/ruuvi_f9680a0d60cc/CustomName": [
+        "str"
+      ],
+      "Settings/Generator1/AcLoad/QuietHoursStartValue": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/34/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/17/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/33/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/38/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/33/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/33/Soc": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Alarms/High/Active": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/33/Restrictions": [
+        "int"
+      ],
+      "Settings/Generator1/Soc/StartValue": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/33/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/23/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/32/Start": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/3/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/14/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/8/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/30/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/32/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/9/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/40/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/41/Start": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/FluidType2": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/ruuvi_c47f34622b10/1/Relay": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/32/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/32/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/31/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/4/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/31/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/31/Restrictions": [
+        "int"
+      ],
+      "Settings/Gui/Language": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/31/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/20/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/31/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/31/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2270698/Phase": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/30/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/5/Soc": [
+        "int"
+      ],
+      "Settings/SystemSetup/TemperatureService": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/3/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/14/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/9/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/3/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/3/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/29/Start": [
+        "int"
+      ],
+      "Settings/Devices/ruuvi_e21f3b45c2d3/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/29/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/43/Restrictions": [
+        "int"
+      ],
+      "Settings/Devices/ruuvi_e21f3b45c2d3/Enabled": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/28/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/25/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/28/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/28/Flags": [
+        "int"
+      ],
+      "Settings/Devices/I43_2270698/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/39/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/28/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/27/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/27/Flags": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Alarms/High/Delay": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/47/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/26/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/14/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/26/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/23/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/39/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/9/Flags": [
+        "int"
+      ],
+      "Settings/Vecan/vecan0/MainInterface/IdentityNumber": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/25/Start": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1779967/L1Energy": [
+        "float"
+      ],
+      "Settings/System/Units/Altitude": [
+        "str"
+      ],
+      "Settings/Vrmlogger/LogInterval": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/30/Strategy": [
+        "int"
+      ],
+      "Settings/Generator0/AcLoad/QuietHoursStopValue": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/25/Soc": [
+        "int"
+      ],
+      "Settings/Generator0/OnLossCommunication": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/25/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/25/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/5/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/25/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/27/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/24/Strategy": [
+        "int"
+      ],
+      "Settings/Alarm/Vebus/VeBusError": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/24/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/24/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/3/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/24/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/0/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/23/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/23/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/22/Soc": [
+        "int"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/512/1/Enabled": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/41/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/9/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/22/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/41/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/38/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/21/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/21/Duration": [
+        "int"
+      ],
+      "Settings/Generator1/Soc/StopValue": [
+        "int"
+      ],
+      "Settings/Gui2/BriefView/Level/1": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/20/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/20/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/2/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/10/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/2/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/42/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/2/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/15/Duration": [
+        "int"
+      ],
+      "Settings/Devices/ruuvi_e21f3b45c2d3/CustomName": [
+        "str"
+      ],
+      "Settings/Generator0/Soc/StartTimer": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/2/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/43/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/19/Restrictions": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Alarms/Low/Active": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/3/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/41/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/20/Duration": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/2/Duration": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/4/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/8/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/22/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/7/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/1/Restrictions": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/SocLimit": [
+        "float"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/2/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/13/Flags": [
+        "int"
+      ],
+      "Settings/Services/Modbus": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/5/Restrictions": [
+        "int"
+      ],
+      "Settings/Generator0/BatteryCurrent/StopTimer": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/36/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/1/Strategy": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/DischargedTime": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Shape": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/37/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/11/Duration": [
+        "int"
+      ],
+      "Settings/CGwacs/OvervoltageFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/21/Flags": [
+        "int"
+      ],
+      "Settings/Vecan/vecan1/N2kGatewayEnabled": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_2/CustomName": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/40/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I44_2247854/CustomName": [
+        "str"
+      ],
+      "Settings/Generator0/BatteryVoltage/StartTimer": [
+        "int"
+      ],
+      "Settings/CGwacs/Hub4Mode": [
+        "int"
+      ],
+      "Settings/Generator1/TestRun/StartTime": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/44/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/24/Flags": [
+        "int"
+      ],
+      "Settings/CGwacs/MaxChargePercentage": [
+        "float"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/FluidType2": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/34/Restrictions": [
+        "int"
+      ],
+      "Settings/Canbus/vecan1/Profile": [
+        "int"
+      ],
+      "Settings/DynamicEss/GridImportLimit": [
+        "float"
+      ],
+      "Settings/Generator1/StopWhenAc2Available": [
+        "int"
+      ],
+      "Settings/CGwacs/AcInputLimit": [
+        "int"
+      ],
+      "Settings/Devices/vecan_socketcan_vecan1_C04698002CC71883/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/TempSensorRelay/ruuvi_c47f34622b10/0/ClearValue": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/27/Soc": [
+        "int"
+      ],
+      "Settings/LoadSheddingApi/Schedule/3/Start": [
+        "int"
+      ],
+      "Settings/CGwacs/AcExportLimit": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryUse": [
+        "int"
+      ],
+      "Settings/Devices/ruuvi_c47f34622b10/CustomName": [
+        "str"
+      ],
+      "Settings/Fronius/Inverters/I114_1465160/LimiterSupported": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/FilterLength": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/39/Duration": [
+        "int"
+      ],
+      "Settings/Alarm/Vebus/VoltageSenseError": [
+        "int"
+      ],
+      "Settings/Devices/digital_input_2/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/10/Flags": [
+        "int"
+      ],
+      "Settings/DigitalInput/1/Type": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/44/Strategy": [
+        "int"
+      ],
+      "Settings/Ble/Service/Pincode": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/8/Flags": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2270698/SerialNumber": [
+        "str"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_vebus/274/Enabled": [
+        "int"
+      ],
+      "Settings/Alarm/Vebus/TemperatureSenseError": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/18/Flags": [
+        "int"
+      ],
+      "Settings/Devices/I114_1465160/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/Gui/DemoMode": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/CustomName": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/42/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/39/Strategy": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1779967/Position": [
+        "int"
+      ],
+      "Settings/Alarm/Vebus/HighDcCurrent": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/FluidType2": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/22/Restrictions": [
+        "int"
+      ],
+      "Settings/Generator0/AcLoad/StartValue": [
+        "int"
+      ],
+      "Settings/Gui/TanksOverview": [
+        "int"
+      ],
+      "Settings/Alarm/Audible": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Alarms/Low/Enable": [
+        "int"
+      ],
+      "Settings/DigitalInput/2/InvertAlarm": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/42/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/29/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/13/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/14/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/34/Duration": [
+        "int"
+      ],
+      "Settings/Devices/vedirect_HQ2239ZH2P2/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/Gui/Gauges/Dc/Input/Power/Max": [
+        "float"
+      ],
+      "Settings/Alarm/Vebus/HighDcRipple": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Standard2": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Shape": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/29/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/23/Strategy": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Alarms/Low/Active": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/5/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/29/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Alarm/Vebus/LowBattery": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/42/Soc": [
+        "int"
+      ],
+      "Settings/Generator0/Alarms/NoGeneratorAtAcIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/32/Strategy": [
+        "int"
+      ],
+      "Settings/CanBms/SocketcanVecan0/CustomName": [
+        "str"
+      ],
+      "Settings/Devices/ruuvi_c47f34622b10/TemperatureType": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_0/TemperatureType2": [
+        "int"
+      ],
+      "Settings/Devices/ruuvi_f9680a0d60cc/TemperatureType": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/38/Duration": [
+        "int"
+      ],
+      "Settings/Generator0/InverterHighTemp/StopTimer": [
+        "int"
+      ],
+      "Settings/Generator1/AcLoad/Measurement": [
+        "int"
+      ],
+      "Settings/Alarm/Vebus/InverterOverload": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/19/Start": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/ruuvi_c47f34622b10/1/ClearValue": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/16/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/4/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/43/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/16/Start": [
+        "int"
+      ],
+      "Settings/SystemSetup/CanBmsSense": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/ruuvi_f9680a0d60cc/1/ClearValue": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/33/Flags": [
+        "int"
+      ],
+      "Settings/Gui/Gauges/MotorDrive/RPM/Max": [
+        "float"
+      ],
+      "Settings/LoadSheddingApi/PreparationTime": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/16/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/14/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/BatteryChargeLimit": [
+        "float"
+      ],
+      "Settings/Relay/Polarity": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/17/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/35/Start": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2288458/SerialNumber": [
+        "str"
+      ],
+      "Settings/CGwacs/BatteryLife/MinimumSocLimit": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/18/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/30/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1779967/CustomName": [
+        "str"
+      ],
+      "Settings/Fronius/Inverters/I43_2270698/CustomName": [
+        "str"
+      ],
+      "Settings/Generator0/TestRun/Duration": [
+        "int"
+      ],
+      "Settings/Devices/ruuvi_c47f34622b10/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/Fronius/Inverters/I43_2270698/L2Energy": [
+        "float"
+      ],
+      "Settings/Fronius/Inverters/I43_2288458/L2Energy": [
+        "float"
+      ],
+      "Settings/Gui/BriefView/Unit": [
+        "int"
+      ],
+      "Settings/Generator1/GeneratorStopTime": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I44_2247854/L2Energy": [
+        "float"
+      ],
+      "Settings/Fronius/Inverters/I44_2247854/PhaseCount": [
+        "int"
+      ],
+      "Settings/Generator0/AccumulatedTotal": [
+        "int"
+      ],
+      "Settings/Generator0/AutoStartEnabled": [
+        "int"
+      ],
+      "Settings/Generator0/LastServiceReset": [
+        "int"
+      ],
+      "Settings/Generator1/ServiceInterval": [
+        "int"
+      ],
+      "Settings/Generator0/MinimumRuntime": [
+        "int"
+      ],
+      "Settings/Generator0/WarmUpTime": [
+        "int"
+      ],
+      "Settings/Generator0/AcLoad/StartTimer": [
+        "int"
+      ],
+      "Settings/System/ModificationChecks/PreviousState/NodeRed": [
+        "int"
+      ],
+      "Settings/Generator0/AcLoad/StopValue": [
+        "int"
+      ],
+      "Settings/Generator0/BatteryCurrent/StartTimer": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/18/Strategy": [
+        "int"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/512/1/Service": [
+        "str"
+      ],
+      "Settings/Generator0/BatteryVoltage/QuietHoursStopValue": [
+        "float"
+      ],
+      "Settings/DigitalInput/2/Count": [
+        "int"
+      ],
+      "Settings/Fronius/PortNumber": [
+        "int"
+      ],
+      "Settings/Generator0/BatteryVoltage/StartValue": [
+        "float"
+      ],
+      "Settings/Generator0/BatteryVoltage/StopValue": [
+        "float"
+      ],
+      "Settings/Generator0/InverterHighTemp/Enabled": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryVoltage/QuietHoursStartValue": [
+        "float"
+      ],
+      "Settings/Generator0/QuietHours/StartTime": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Alarms/High/Enable": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/21/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/17/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Generator1/WarmUpTime": [
+        "int"
+      ],
+      "Settings/System/ImageType": [
+        "int"
+      ],
+      "Settings/Generator1/InverterHighTemp/StartTimer": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/20/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/22/Strategy": [
+        "int"
+      ],
+      "Settings/Generator0/Soc/QuietHoursStartValue": [
+        "int"
+      ],
+      "Settings/Generator0/Soc/StartValue": [
+        "int"
+      ],
+      "Settings/Generator0/TestRun/RunTillBatteryFull": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Capacity": [
+        "float"
+      ],
+      "Settings/Generator0/CoolDownTime": [
+        "int"
+      ],
+      "Settings/Generator0/TestRun/StartDate": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Alarms/High/Active": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/35/Soc": [
+        "int"
+      ],
+      "Settings/Generator1/AutoStartEnabled": [
+        "int"
+      ],
+      "Settings/LoadSheddingApi/Schedule/0/Start": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryService": [
+        "str"
+      ],
+      "Settings/System/VncInternet": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/11/Start": [
+        "int"
+      ],
+      "Settings/DigitalInput/1/Multiplier": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/47/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Alarms/Low/Delay": [
+        "int"
+      ],
+      "Settings/Generator1/CoolDownTime": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2270698/LimiterSupported": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/socketcan_vecan0/1/SetValue": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2288458/CustomName": [
+        "str"
+      ],
+      "Settings/Generator1/BatteryCurrent/StopValue": [
+        "float"
+      ],
+      "Settings/Generator1/AcLoad/Enabled": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/socketcan_vecan0/0/Relay": [
+        "int"
+      ],
+      "Settings/Generator1/AcLoad/QuietHoursStopValue": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2288458/L1Energy": [
+        "float"
+      ],
+      "Settings/Generator0/BatteryCurrent/StopValue": [
+        "float"
+      ],
+      "Settings/Generator0/BatteryService": [
+        "str"
+      ],
+      "Settings/Generator1/AcLoad/StartTimer": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I44_2247854/Phase": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/11/Restrictions": [
+        "int"
+      ],
+      "Settings/Generator1/AcLoad/StartValue": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/15/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/26/Duration": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1779967/IsActive": [
+        "int"
+      ],
+      "Settings/Generator1/AccumulatedDaily": [
+        "str"
+      ],
+      "Settings/System/ModificationChecks/AllModificationsEnabled": [
+        "int"
+      ],
+      "Settings/Services/AccessPoint": [
+        "int"
+      ],
+      "Settings/Generator0/Soc/Enabled": [
+        "int"
+      ],
+      "Settings/Services/Evcc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/0/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/5/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/40/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/23/Start": [
+        "int"
+      ],
+      "Settings/Generator0/StopWhenAc1Available": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/1/AllowDischarge": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/37/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/10/Start": [
+        "int"
+      ],
+      "Settings/Vecan/vecan1/VenusUniqueId": [
+        "int"
+      ],
+      "Settings/SystemSetup/MaxChargeVoltage": [
+        "float"
+      ],
+      "Settings/ModbusClient/tcp/Devices": [
+        "str"
+      ],
+      "Settings/Network/VrmPortal": [
+        "int"
+      ],
+      "Settings/System/LogLevel": [
+        "int"
+      ],
+      "Settings/Gui/Gauges/Ac/NoAcIn/Consumption/Current/Max": [
+        "float"
+      ],
+      "Settings/Gui/DefaultOverview": [
+        "str"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/512/Name": [
+        "str"
+      ],
+      "Settings/System/SSHLocal": [
+        "int"
+      ],
+      "Settings/Gui/AutoBrightness": [
+        "int"
+      ],
+      "Settings/Gui2/StartPageTimeout": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1779967/L2Energy": [
+        "float"
+      ],
+      "Settings/SystemSetup/SharedTemperatureSense": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/17/Start": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/ruuvi_c47f34622b10/0/SetValue": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/10/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/Mode": [
+        "int"
+      ],
+      "Settings/System/VolumeUnit": [
+        "int"
+      ],
+      "Settings/SystemSetup/HasDcSystem": [
+        "int"
+      ],
+      "Settings/System/ModificationChecks/PreviousState/SignalK": [
+        "int"
+      ],
+      "Settings/Gui/Gauges/Speed/Max": [
+        "float"
+      ],
+      "Settings/LoadSheddingApi/Schedule/1/Duration": [
+        "int"
+      ],
+      "Settings/Generator1/Alarms/AutoStartDisabled": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I44_2247854/EnableLimiter": [
+        "int"
+      ],
+      "Settings/Generator1/TestRun/RunTillBatteryFull": [
+        "int"
+      ],
+      "Settings/Generator1/InverterOverload/StartTimer": [
+        "int"
+      ],
+      "Settings/System/ActiveNetworkConnection": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryCurrent/QuietHoursStopValue": [
+        "float"
+      ],
+      "Settings/Fronius/Inverters/I43_2288458/LimiterSupported": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2288458/PhaseCount": [
+        "int"
+      ],
+      "Settings/Generator0/BatteryCurrent/Enabled": [
+        "int"
+      ],
+      "Settings/SystemSetup/BmsInstance": [
+        "int"
+      ],
+      "Settings/Relay/1/InitialState": [
+        "int"
+      ],
+      "Settings/Generator0/BatteryVoltage/Enabled": [
+        "int"
+      ],
+      "Settings/SystemSetup/DvccControlAllMultis": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I44_2247854/Position": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/18/Duration": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2270698/EnableLimiter": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I44_2247854/L3Energy": [
+        "float"
+      ],
+      "Settings/Fronius/Inverters/I114_1445127/CustomName": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/11/Flags": [
+        "int"
+      ],
+      "Settings/SystemSetup/HasAcInLoads": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1779967/SerialNumber": [
+        "str"
+      ],
+      "Settings/System/RemoteSupportIpAndPort": [
+        "str"
+      ],
+      "Settings/SystemSetup/SystemName": [
+        "str"
+      ],
+      "Settings/Devices/adc_builtin_temp_2/TemperatureType2": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/21/Soc": [
+        "int"
+      ],
+      "Settings/Generator1/InverterOverload/Enabled": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Capacity": [
+        "float"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/288/Enabled": [
+        "int"
+      ],
+      "Settings/System/ReleaseType": [
+        "int"
+      ],
+      "Settings/Vecan/vecan1/MainInterface/IdentityNumber": [
+        "int"
+      ],
+      "Settings/Devices/I44_2247854/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/Generator1/QuietHours/Enabled": [
+        "int"
+      ],
+      "Settings/Generator1/InverterHighTemp/Enabled": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2288458/Position": [
+        "int"
+      ],
+      "Settings/Vecan/vecan0/MainInterface/Instance": [
+        "int"
+      ],
+      "Settings/Generator1/TestRun/SkipRuntime": [
+        "int"
+      ],
+      "Settings/DynamicEss/BatteryCapacity": [
+        "float"
+      ],
+      "Settings/Gui/RunningVersion": [
+        "int"
+      ],
+      "Settings/Services/MqttLocal": [
+        "int"
+      ],
+      "Settings/Generator0/Soc/StopValue": [
+        "int"
+      ],
+      "Settings/Generator1/QuietHours/EndTime": [
+        "int"
+      ],
+      "Settings/Vecan/vecan0/MainInterface/Nad": [
+        "int"
+      ],
+      "Settings/Gui/Brightness": [
+        "int"
+      ],
+      "Settings/Gps/SpeedUnit": [
+        "str"
+      ],
+      "Settings/Gui/Gauges/Ac/In/0/Current/Min": [
+        "float"
+      ],
+      "Settings/Vecan/vecan1/FreeIdentityNumber": [
+        "int"
+      ],
+      "Settings/Gui/TouchEnabled": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2288458/Phase": [
+        "int"
+      ],
+      "Settings/Generator0/BatteryVoltage/StopTimer": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/12/Duration": [
+        "int"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/512/Enabled": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/ruuvi_c47f34622b10/1/SetValue": [
+        "int"
+      ],
+      "Settings/Generator0/BatteryCurrent/QuietHoursStopValue": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/12/Soc": [
+        "int"
+      ],
+      "Settings/Vrmlogger/Url": [
+        "str"
+      ],
+      "Settings/Gui2/BriefView/CenterService": [
+        "str"
+      ],
+      "Settings/Vecan/vecan0/MainInterface/SystemInstance": [
+        "int"
+      ],
+      "Settings/System/AccessLevel": [
+        "int"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/512/1/Name": [
+        "str"
+      ],
+      "Settings/Generator0/TestRun/StartTime": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/46/Flags": [
+        "int"
+      ],
+      "Settings/Services/Socketcand": [
+        "int"
+      ],
+      "Settings/Vecan/vecan0/FreeIdentityNumber": [
+        "int"
+      ],
+      "Settings/Vecan/vecan0/N2kGatewayEnabled": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/1/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/40/Duration": [
+        "int"
+      ],
+      "Settings/Gui/BriefView/ShowPercentages": [
+        "int"
+      ],
+      "Settings/LoadSheddingApi/ReconnectMargin": [
+        "int"
+      ],
+      "Settings/Gui/ColorScheme": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2288458/IsActive": [
+        "int"
+      ],
+      "Settings/DigitalInput/2/Type": [
+        "int"
+      ],
+      "Settings/Generator0/InverterHighTemp/StartTimer": [
+        "int"
+      ],
+      "Settings/LoadSheddingApi/Schedule/3/Duration": [
+        "int"
+      ],
+      "Settings/Vecan/vecan1/MainInterface/Instance": [
+        "int"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/512/Service": [
+        "str"
+      ],
+      "Settings/Vecan/vecan0/MainInterface/Description2": [
+        "str"
+      ],
+      "Settings/Fronius/Inverters/I43_2288458/EnableLimiter": [
+        "int"
+      ],
+      "Settings/Generator1/TestRun/Interval": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1445127/Position": [
+        "int"
+      ],
+      "Settings/Generator1/OnLossCommunication": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/3/Day": [
+        "int"
+      ],
+      "Settings/Generator1/StopWhenAc1Available": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I44_2247854/SerialNumber": [
+        "str"
+      ],
+      "Settings/Generator0/QuietHours/Enabled": [
+        "int"
+      ],
+      "Settings/Generator1/AcLoad/StopTimer": [
+        "int"
+      ],
+      "Settings/Generator1/AccumulatedTotalOffset": [
+        "int"
+      ],
+      "Settings/Vrmlogger/HttpsEnabled": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/1/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/ruuvi_f9680a0d60cc/0/ClearValue": [
+        "int"
+      ],
+      "Settings/System/Units/Distance": [
+        "str"
+      ],
+      "Settings/LoadSheddingApi/StabilityMargin": [
+        "int"
+      ],
+      "Settings/Generator0/AccumulatedTotalOffset": [
+        "int"
+      ],
+      "Settings/Devices/ruuvi_f9680a0d60cc/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/288/1/Service": [
+        "str"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/1/Duration": [
+        "int"
+      ],
+      "Settings/Vecan/vecan0/VenusUniqueId": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryCurrent/Enabled": [
+        "int"
+      ],
+      "Settings/Relay/0/InitialState": [
+        "int"
+      ],
+      "Settings/Generator0/BatteryCurrent/StartValue": [
+        "float"
+      ],
+      "Settings/Generator0/AcLoad/QuietHoursStartValue": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/2/Start": [
+        "int"
+      ],
+      "Settings/Vrmlogger/Http/Proxy": [
+        "str"
+      ],
+      "Settings/DynamicEss/GridExportLimit": [
+        "float"
+      ],
+      "Settings/Generator1/BatteryVoltage/StopValue": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/28/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Generator1/Soc/QuietHoursStopValue": [
+        "int"
+      ],
+      "Settings/Watchdog/VrmTimeout": [
+        "int"
+      ],
+      "Settings/Gui/MobileOverview": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/socketcan_vecan0/1/Relay": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/ruuvi_f9680a0d60cc/0/Relay": [
+        "int"
+      ],
+      "Settings/Generator1/Alarms/NoGeneratorAtAcIn": [
+        "int"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/288/Name": [
+        "str"
+      ],
+      "Settings/Fronius/Inverters/I44_2247854/LimiterSupported": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/0/Day": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/27/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/23/Duration": [
+        "int"
+      ],
+      "Settings/Generator1/LastServiceReset": [
+        "int"
+      ],
+      "Settings/Relay/1/Function": [
+        "int"
+      ],
+      "Settings/Vrmlogger/RamDiskMode": [
+        "int"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/288/Service": [
+        "str"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Capacity": [
+        "float"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/ModbusClient/tcp/AutoScan": [
+        "int"
+      ],
+      "Settings/LoadSheddingApi/Schedule/2/Duration": [
+        "int"
+      ],
+      "Settings/LoadSheddingApi/Schedule/0/Duration": [
+        "int"
+      ],
+      "Settings/LoadSheddingApi/Mode": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/43/Strategy": [
+        "int"
+      ],
+      "Settings/Generator0/InverterOverload/Enabled": [
+        "int"
+      ],
+      "Settings/Gui2/OnBoarding": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/CustomName": [
+        "str"
+      ],
+      "Settings/LoadSheddingApi/DisconnectMargin": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryVoltage/StartTimer": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/socketcan_vecan0/0/SetValue": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Function": [
+        "int"
+      ],
+      "Settings/Generator0/TestRun/SkipRuntime": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryCurrent/StopTimer": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/45/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Fronius/IPAddresses": [
+        "str"
+      ],
+      "Settings/Services/Bluetooth": [
+        "int"
+      ],
+      "Settings/Vecan/vecan1/MainInterface/Description2": [
+        "str"
+      ],
+      "Settings/Gui2/BriefView/Level/3": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/12/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Devices/digital_input_1/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/Gui2/BriefView/Level/2": [
+        "str"
+      ],
+      "Settings/Gui2/StartPageName": [
+        "str"
+      ],
+      "Settings/Gui/Gauges/Ac/In/1/Current/Max": [
+        "float"
+      ],
+      "Settings/Generator1/TestRun/StartDate": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/CustomName": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/6/Strategy": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2288458/L3Energy": [
+        "float"
+      ],
+      "Settings/LoadSheddingApi/Schedule/1/Start": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/ruuvi_c47f34622b10/0/Relay": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/2/Day": [
+        "int"
+      ],
+      "Settings/Gui/Gauges/Pv/Power/Max": [
+        "float"
+      ],
+      "Settings/System/AutoUpdate": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/16/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Gui/Gauges/Ac/AcIn1/Consumption/Current/Max": [
+        "float"
+      ],
+      "Settings/Vecan/vecan1/MainInterface/Nad": [
+        "int"
+      ],
+      "Settings/DynamicEss/BatteryDischargeLimit": [
+        "float"
+      ],
+      "Settings/Fronius/Inverters/I114_1779967/Phase": [
+        "int"
+      ],
+      "Settings/Generator1/Soc/Enabled": [
+        "int"
+      ],
+      "Settings/Gui/Gauges/Ac/In/1/Current/Min": [
+        "float"
+      ],
+      "Settings/Gps/Format": [
+        "int"
+      ],
+      "Settings/Gui/Gauges/Ac/In/0/Current/Max": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/45/Strategy": [
+        "int"
+      ],
+      "Settings/Gui/Gauges/Ac/AcIn2/Consumption/Current/Max": [
+        "float"
+      ],
+      "Settings/SystemSetup/AcInput2": [
+        "int"
+      ],
+      "Settings/Gui/DisplayOff": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1465160/Position": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I44_2247854/IsActive": [
+        "int"
+      ],
+      "Settings/Gui/ElectricPropulsionUI/Enabled": [
+        "int"
+      ],
+      "Settings/Generator1/TestRun/Enabled": [
+        "int"
+      ],
+      "Settings/DigitalInput/2/AlarmSetting": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Standard2": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1465160/SerialNumber": [
+        "str"
+      ],
+      "Settings/Fronius/Inverters/I114_1779967/LimiterSupported": [
+        "int"
+      ],
+      "Settings/DynamicEss/FullChargeInterval": [
+        "int"
+      ],
+      "Settings/Generator1/InverterOverload/StopTimer": [
+        "int"
+      ],
+      "Settings/Generator0/BatteryCurrent/QuietHoursStartValue": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/18/Restrictions": [
+        "int"
+      ],
+      "Settings/Generator1/TestRun/Duration": [
+        "int"
+      ],
+      "Settings/Services/NodeRed": [
+        "int"
+      ],
+      "Settings/Services/BleSensors": [
+        "int"
+      ],
+      "Settings/Generator1/Soc/StartTimer": [
+        "int"
+      ],
+      "Settings/Generator0/GeneratorStopTime": [
+        "int"
+      ],
+      "Settings/SystemSetup/BatteryCurrentSense": [
+        "int"
+      ],
+      "Settings/Gui/ElectricalPowerIndicator": [
+        "int"
+      ],
+      "Settings/Generator1/InverterHighTemp/StopTimer": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/14/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/7/Soc": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryCurrent/StartTimer": [
+        "int"
+      ],
+      "Settings/DynamicEss/OperatingMode": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryCurrent/QuietHoursStartValue": [
+        "float"
+      ],
+      "Settings/Generator1/BatteryVoltage/StopTimer": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/ruuvi_f9680a0d60cc/Enabled": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/ruuvi_c47f34622b10/Enabled": [
+        "int"
+      ],
+      "Settings/Victron/Products/HQ2239ZH2P2/CustomName": [
+        "str"
+      ],
+      "Settings/TempSensorRelay/ruuvi_f9680a0d60cc/1/SetValue": [
+        "int"
+      ],
+      "Settings/Generator0/Soc/StopTimer": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryCurrent/StartValue": [
+        "float"
+      ],
+      "Settings/Generator1/AcLoad/StopValue": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/15/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/15/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/46/Restrictions": [
+        "int"
+      ],
+      "Settings/Canbus/vecan0/Profile": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/13/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/12/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/24/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/11/Strategy": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/RawValueEmpty": [
+        "float"
+      ],
+      "Settings/Generator1/QuietHours/StartTime": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2270698/L1Energy": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/14/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/43/Flags": [
+        "int"
+      ],
+      "Settings/CGwacs/AlwaysPeakShave": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/36/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Generator0/Alarms/AutoStartDisabled": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Alarms/Low/Restore": [
+        "int"
+      ],
+      "Settings/LoadSheddingApi/MinSoc": [
+        "int"
+      ],
+      "Settings/CanBms/SocketcanVecan1/ProductId": [
+        "int"
+      ],
+      "Settings/DigitalInput/2/Multiplier": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/11/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/1/Start": [
+        "int"
+      ],
+      "Settings/Services/Bol": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/1/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/0/Soc": [
+        "int"
+      ],
+      "Settings/DigitalInput/1/Count": [
+        "int"
+      ],
+      "Settings/DynamicEss/SystemEfficiency": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/2/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/12/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/19/Soc": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Alarms/High/Delay": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/18/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/18/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/19/Strategy": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1445127/PhaseCount": [
+        "int"
+      ],
+      "Settings/DynamicEss/Mode": [
+        "int"
+      ],
+      "Settings/DigitalInput/1/InvertTranslation": [
+        "int"
+      ],
+      "Settings/DigitalInput/1/InvertAlarm": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Alarms/High/Enable": [
+        "int"
+      ],
+      "Settings/Gui/Gauges/AutoMax": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/1/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/30/Flags": [
+        "int"
+      ],
+      "Settings/Generator0/Soc/QuietHoursStopValue": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2270698/Position": [
+        "int"
+      ],
+      "Settings/Fronius/IdentifyBySerialNumber": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/13/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/10/Duration": [
+        "int"
+      ],
+      "Settings/Generator0/TestRun/Enabled": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/3/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/29/Duration": [
+        "int"
+      ],
+      "Settings/CanBms/SocketcanVecan0/ProductId": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/4/Duration": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/3/AllowDischarge": [
+        "int"
+      ],
+      "Settings/Alarm/System/GridLost": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/RawValueFull": [
+        "float"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/4/Day": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/15/Restrictions": [
+        "int"
+      ],
+      "Settings/SystemSetup/BatteryService": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/0/Flags": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/1/Day": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/2/AllowDischarge": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Alarms/Low/Active": [
+        "int"
+      ],
+      "Settings/Generator0/TestRun/Interval": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/26/Strategy": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1779967/L3Energy": [
+        "float"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Alarms/High/Restore": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Alarms/High/Delay": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/47/Strategy": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/26/Flags": [
+        "int"
+      ],
+      "Settings/Generator1/AccumulatedTotal": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/ruuvi_f9680a0d60cc/0/SetValue": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/FilterLength": [
+        "int"
+      ],
+      "Settings/LoadSheddingApi/Token": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/29/Strategy": [
+        "int"
+      ],
+      "Settings/Devices/I114_1445127/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/36/Soc": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1445127/LimiterSupported": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/44/Duration": [
+        "int"
+      ],
+      "Settings/TempSensorRelay/socketcan_vecan0/Enabled": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/0/AllowDischarge": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/26/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/19/Duration": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_0/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/16/Restrictions": [
+        "int"
+      ],
+      "Settings/CGwacs/MaxChargePower": [
+        "float"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/0/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/12/Flags": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2270698/L3Energy": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/21/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/RawValueFull": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/19/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Generator0/ServiceInterval": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/16/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/11/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/20/Soc": [
+        "int"
+      ],
+      "Settings/Gui2/BriefView/Level/0": [
+        "str"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Alarms/Low/Delay": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Alarms/High/Restore": [
+        "int"
+      ],
+      "Settings/System/Units/Temperature": [
+        "str"
+      ],
+      "Settings/Devices/adc_builtin_tank_1/Shape": [
+        "str"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/RawValueEmpty": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/46/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/6/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/45/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/15/Flags": [
+        "int"
+      ],
+      "Settings/Devices/I114_1779967/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/Services/SignalK": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/0/Duration": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryVoltage/StartValue": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/1/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/33/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/22/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/28/Soc": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2270698/PhaseCount": [
+        "int"
+      ],
+      "Settings/CGwacs/AcPowerSetPoint": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/10/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/30/Start": [
+        "int"
+      ],
+      "Settings/SystemSetup/SharedVoltageSense": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/RawValueEmpty": [
+        "float"
+      ],
+      "Settings/Gui2/StartPage": [
+        "int"
+      ],
+      "Settings/System/VncLocal": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/15/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/24/Soc": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/3/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/42/Duration": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/0/Duration": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_2/FilterLength": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Alarms/Low/Enable": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Alarms/High/Restore": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryVoltage/QuietHoursStopValue": [
+        "float"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Alarms/Low/Restore": [
+        "int"
+      ],
+      "Settings/Generator1/BatteryVoltage/Enabled": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/47/Duration": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/30/Duration": [
+        "int"
+      ],
+      "Settings/System/TimeZone": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/0/Restrictions": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I43_2270698/IsActive": [
+        "int"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/288/1/Enabled": [
+        "int"
+      ],
+      "Settings/Relay/Function": [
+        "int"
+      ],
+      "Settings/Alarm/Vebus/HighDcVoltage": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/State": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/12/Strategy": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Alarms/Low/Delay": [
+        "int"
+      ],
+      "Settings/DynamicEss/FullChargeDuration": [
+        "int"
+      ],
+      "Settings/LoadSheddingApi/Schedule/2/Start": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/Generator0/BatteryVoltage/QuietHoursStartValue": [
+        "float"
+      ],
+      "Settings/TempSensorRelay/ruuvi_f9680a0d60cc/1/Relay": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1465160/L2Energy": [
+        "float"
+      ],
+      "Settings/CGwacs/MaxFeedInPower": [
+        "float"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/3/Soc": [
+        "int"
+      ],
+      "Settings/Devices/ruuvi_c47f34622b10/Enabled": [
+        "int"
+      ],
+      "Settings/Devices/I43_2288458/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Function": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_0/CustomName": [
+        "str"
+      ],
+      "Settings/SystemSetup/Batteries/Configuration/com_victronenergy_battery/288/1/Name": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/47/Soc": [
+        "int"
+      ],
+      "Settings/DigitalInput/2/CustomName": [
+        "str"
+      ],
+      "Settings/DynamicEss/Schedule/16/Soc": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1779967/PhaseCount": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/38/Soc": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I114_1465160/PhaseCount": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/6/Flags": [
+        "int"
+      ],
+      "Settings/Vrmlogger/Http/ProxyPort": [
+        "str"
+      ],
+      "Settings/TempSensorRelay/socketcan_vecan0/0/ClearValue": [
+        "int"
+      ],
+      "Settings/Fronius/Inverters/I44_2247854/L1Energy": [
+        "float"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/RawValueFull": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/10/Strategy": [
+        "int"
+      ],
+      "Settings/Generator0/AcLoad/StopTimer": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/Standard2": [
+        "int"
+      ],
+      "Settings/System/RemoteSupport": [
+        "int"
+      ],
+      "Settings/Relay/1/Polarity": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Alarms/High/Active": [
+        "int"
+      ],
+      "Settings/Generator1/Soc/QuietHoursStartValue": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/37/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/13/Restrictions": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/17/Flags": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/1/Soc": [
+        "int"
+      ],
+      "Settings/Gui/Gauges/Dc/System/Power/Max": [
+        "float"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Alarms/High/Enable": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_2/FilterLength": [
+        "int"
+      ],
+      "Settings/Generator1/Soc/StopTimer": [
+        "int"
+      ],
+      "Settings/DigitalInput/1/AlarmSetting": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Flags": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/40/Soc": [
+        "int"
+      ],
+      "Settings/BleSensors/ContinuousScan": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_0/Function": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_tank_0/Alarms/Low/Restore": [
+        "int"
+      ],
+      "Settings/CGwacs/MaxDischargePower": [
+        "float"
+      ],
+      "Settings/SystemSetup/AcInput1": [
+        "int"
+      ],
+      "Settings/Generator0/AccumulatedDaily": [
+        "str"
+      ],
+      "Settings/Devices/adc_builtin_temp_2/ClassAndVrmInstance": [
+        "str"
+      ],
+      "Settings/Devices/ruuvi_f9680a0d60cc/Enabled": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/6/Restrictions": [
+        "int"
+      ],
+      "Settings/Devices/ruuvi_e21f3b45c2d3/TemperatureType": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_0/FilterLength": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/20/Strategy": [
+        "int"
+      ],
+      "Settings/Generator0/InverterOverload/StopTimer": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_0/Offset": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/39/Soc": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_0/Scale": [
+        "float"
+      ],
+      "Settings/Alarm/Vebus/HighTemperature": [
+        "int"
+      ],
+      "Settings/Gui/StartWithMenuView": [
+        "int"
+      ],
+      "Settings/CGwacs/BatteryLife/Schedule/Charge/4/Start": [
+        "int"
+      ],
+      "Settings/DynamicEss/Schedule/0/AllowGridFeedIn": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_2/Function": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_2/Offset": [
+        "float"
+      ],
+      "Settings/CGwacs/PreventFeedback": [
+        "int"
+      ],
+      "Settings/CGwacs/MaxDischargePercentage": [
+        "float"
+      ],
+      "Settings/DynamicEss/Schedule/6/Duration": [
+        "int"
+      ],
+      "Settings/Devices/adc_builtin_temp_2/Scale": [
+        "float"
+      ]
+    },
+    "platform": {
+      "Firmware/Installed/Build": [
+        "str"
+      ],
+      "Device/Time": [
+        "int"
+      ],
+      "Notifications/2/Type": [
+        "int"
+      ],
+      "Notifications/2/Silenced": [
+        "bool"
+      ],
+      "Notifications/2/Value": [
+        "str"
+      ],
+      "Notifications/2/AlarmValue": [
+        "int"
+      ],
+      "Notifications/2/Trigger": [
+        "str"
+      ],
+      "Notifications/2/DeviceName": [
+        "str"
+      ],
+      "Notifications/1/Value": [
+        "str"
+      ],
+      "Notifications/1/Trigger": [
+        "str"
+      ],
+      "Notifications/1/Description": [
+        "str"
+      ],
+      "Notifications/1/AlarmValue": [
+        "int"
+      ],
+      "Notifications/1/DeviceName": [
+        "str"
+      ],
+      "Notifications/0/Value": [
+        "str"
+      ],
+      "Notifications/0/Type": [
+        "int"
+      ],
+      "Notifications/0/DateTime": [
+        "int"
+      ],
+      "Notifications/0/AlarmValue": [
+        "int"
+      ],
+      "Notifications/1/Type": [
+        "int"
+      ],
+      "Notifications/0/Silenced": [
+        "bool"
+      ],
+      "Notifications/0/Trigger": [
+        "str"
+      ],
+      "Notifications/0/Acknowledged": [
+        "bool"
+      ],
+      "Vebus/Interface/ttyS2/AvailableBackups": [
+        "str"
+      ],
+      "Vebus/Interface/ttyS2/File": [
+        "str"
+      ],
+      "Notifications/2/DateTime": [
+        "int"
+      ],
+      "Network/Wifi/State": [
+        "str"
+      ],
+      "Network/Services": [
+        "str"
+      ],
+      "Network/HasBluetoothSupport": [
+        "bool"
+      ],
+      "CanBus/Interface/vecan0/SpiRetryPercentage": [
+        "float"
+      ],
+      "Notifications/0/Active": [
+        "bool"
+      ],
+      "Notifications/AcknowledgeAll": [
+        "int"
+      ],
+      "Network/ConfigChanged": [
+        "int"
+      ],
+      "Notifications/2/Active": [
+        "bool"
+      ],
+      "Mqtt/RegisterOnVrm": [
+        "int"
+      ],
+      "Notifications/NumberOfUnAcknowledgedInformations": [
+        "int"
+      ],
+      "Network/Wifi/Scan": [
+        "int"
+      ],
+      "Mqtt/Bridges/GXrpc/Connected": [
+        "bool"
+      ],
+      "Notifications/2/Service": [
+        "str"
+      ],
+      "ModificationChecks/SystemHooksState": [
+        "int"
+      ],
+      "Firmware/Progress": [
+        "NoneType"
+      ],
+      "Notifications/NumberOfActiveInformations": [
+        "int"
+      ],
+      "Notifications/Alarm": [
+        "bool"
+      ],
+      "ModificationChecks/SshKeyForRootPresent": [
+        "int"
+      ],
+      "Network/SetValue": [
+        "int"
+      ],
+      "Network/Wifi/SignalStrength": [
+        "int"
+      ],
+      "Device/Model": [
+        "str"
+      ],
+      "Device/UniqueId": [
+        "str"
+      ],
+      "DeviceInstance": [
+        "int"
+      ],
+      "Network/Ethernet/LinkLocalIpAddress": [
+        "str"
+      ],
+      "Gui/RunningVersion": [
+        "int"
+      ],
+      "Vebus/Interface/ttyS2/Action": [
+        "int"
+      ],
+      "Firmware/Backup/Activate": [
+        "int"
+      ],
+      "Mqtt/Bridges/GXrpc/ConnectionStatus": [
+        "str"
+      ],
+      "Notifications/NumberOfActiveNotifications": [
+        "int"
+      ],
+      "CanBus/Interface/vecan0/Failed": [
+        "int"
+      ],
+      "Firmware/Backup/AvailableVersion": [
+        "str"
+      ],
+      "Firmware/Offline/Check": [
+        "int"
+      ],
+      "Services/SignalK/Enabled": [
+        "int"
+      ],
+      "Security/Api": [
+        "int"
+      ],
+      "Notifications/0/Description": [
+        "str"
+      ],
+      "Firmware/Release/Install": [
+        "int"
+      ],
+      "Notifications/2/Description": [
+        "str"
+      ],
+      "Services/NodeRed/FactoryReset": [
+        "int"
+      ],
+      "Notifications/2/Acknowledged": [
+        "bool"
+      ],
+      "Firmware/Online/Check": [
+        "int"
+      ],
+      "Services/AccessPoint/Enabled": [
+        "int"
+      ],
+      "Firmware/Installed/Version": [
+        "str"
+      ],
+      "Notifications/0/DeviceName": [
+        "str"
+      ],
+      "ProductName": [
+        "str"
+      ],
+      "Notifications/1/Service": [
+        "str"
+      ],
+      "Notifications/1/Active": [
+        "bool"
+      ],
+      "Device/ProductId": [
+        "str"
+      ],
+      "Notifications/1/Silenced": [
+        "bool"
+      ],
+      "Mqtt/Bridges/GXdbus/ConnectionStatus": [
+        "str"
+      ],
+      "Firmware/Backup/AvailableBuild": [
+        "str"
+      ],
+      "Notifications/Alert": [
+        "bool"
+      ],
+      "Firmware/Online/Install": [
+        "int"
+      ],
+      "Notifications/1/Acknowledged": [
+        "bool"
+      ],
+      "Notifications/NumberOfUnAcknowledgedWarnings": [
+        "int"
+      ],
+      "Notifications/NumberOfUnAcknowledgedAlarms": [
+        "int"
+      ],
+      "Notifications/NumberOfActiveWarnings": [
+        "int"
+      ],
+      "CanBus/Interface/vecan1/Failed": [
+        "int"
+      ],
+      "ConnectVrmTunnel": [
+        "bool"
+      ],
+      "Services/Evcc/Installed": [
+        "bool"
+      ],
+      "Device/DataPartitionFullError": [
+        "int"
+      ],
+      "Firmware/Offline/AvailableVersion": [
+        "NoneType"
+      ],
+      "Vebus/Interface/ttyS2/FirmwareIncompatibleBackups": [
+        "str"
+      ],
+      "Notifications/NumberOfNotifications": [
+        "int"
+      ],
+      "Services/NodeRed/Mode": [
+        "int"
+      ],
+      "CanBus/Interface/vecan1/SpiRetryPercentage": [
+        "float"
+      ],
+      "Firmware/Online/AvailableBuild": [
+        "NoneType"
+      ],
+      "CanBus/Interface/vecan0/Statistics": [
+        "str"
+      ],
+      "Notifications/0/Service": [
+        "str"
+      ],
+      "CanBus/Interfaces": [
+        "list"
+      ],
+      "Firmware/Online/AvailableVersion": [
+        "NoneType"
+      ],
+      "ModificationChecks/StartCheck": [
+        "int"
+      ],
+      "Notifications/1/DateTime": [
+        "int"
+      ],
+      "Firmware/Offline/Install": [
+        "int"
+      ],
+      "Gui/OnScreenGuiv2Supported": [
+        "bool"
+      ],
+      "ModificationChecks/FsModifiedState": [
+        "int"
+      ],
+      "Device/DataPartitionError": [
+        "int"
+      ],
+      "Firmware/Offline/AvailableBuild": [
+        "NoneType"
+      ],
+      "CanBus/Interface/vecan1/Statistics": [
+        "str"
+      ],
+      "Device/HQSerialNumber": [
+        "str"
+      ],
+      "Firmware/Release/AvailableVersion": [
+        "NoneType"
+      ],
+      "Firmware/Release/AvailableBuild": [
+        "NoneType"
+      ],
+      "Notifications/NumberOfActiveAlarms": [
+        "int"
+      ],
+      "Firmware/Release/Check": [
+        "int"
+      ],
+      "Mqtt/Bridges/GXdbus/Connected": [
+        "bool"
+      ],
+      "Firmware/LargeImageSupport": [
+        "int"
+      ],
+      "Firmware/State": [
+        "int"
+      ],
+      "Device/Reboot": [
+        "int"
+      ],
+      "ModificationChecks/DataPartitionFreeSpace": [
+        "str"
+      ]
+    },
+    "hub4": {
+      "Alarms/NoGridMeter": [
+        "int"
+      ],
+      "Debug/FastLoop": [
+        "int"
+      ],
+      "DeviceInstance": [
+        "int"
+      ],
+      "MaxChargePower": [
+        "NoneType"
+      ],
+      "MaxDischargePower": [
+        "float"
+      ],
+      "Overrides/MaxChargePower": [
+        "NoneType"
+      ],
+      "Overrides/Setpoint": [
+        "NoneType"
+      ],
+      "PvPowerLimiterActive": [
+        "int"
+      ],
+      "Overrides/FeedInExcess": [
+        "int"
+      ],
+      "Overrides/MaxDischargePower": [
+        "NoneType"
+      ],
+      "Overrides/ForceCharge": [
+        "int"
+      ],
+      "ProductName": [
+        "str"
+      ]
+    },
+    "modbustcp": {
+      "Services/13/IsActive": [
+        "int"
+      ],
+      "Services/13/ServiceName": [
+        "str"
+      ],
+      "Services/13/UnitId": [
+        "int"
+      ],
+      "Services/12/IsActive": [
+        "int"
+      ],
+      "Services/11/IsActive": [
+        "int"
+      ],
+      "Services/10/IsActive": [
+        "int"
+      ],
+      "Services/9/ServiceName": [
+        "str"
+      ],
+      "Services/9/UnitId": [
+        "int"
+      ],
+      "LastError/Message": [
+        "str"
+      ],
+      "Services/2/IsActive": [
+        "int"
+      ],
+      "Services/1/IsActive": [
+        "int"
+      ],
+      "Services/1/ServiceName": [
+        "str"
+      ],
+      "Services/12/ServiceName": [
+        "str"
+      ],
+      "Services/0/UnitId": [
+        "int"
+      ],
+      "Services/10/UnitId": [
+        "int"
+      ],
+      "Services/0/IsActive": [
+        "int"
+      ],
+      "Services/7/UnitId": [
+        "int"
+      ],
+      "Services/1/UnitId": [
+        "int"
+      ],
+      "LastError/Timestamp": [
+        "int"
+      ],
+      "Services/11/UnitId": [
+        "int"
+      ],
+      "Services/4/UnitId": [
+        "int"
+      ],
+      "Services/3/IsActive": [
+        "int"
+      ],
+      "Services/7/ServiceName": [
+        "str"
+      ],
+      "Services/0/ServiceName": [
+        "str"
+      ],
+      "Services/3/UnitId": [
+        "int"
+      ],
+      "Services/Count": [
+        "int"
+      ],
+      "Services/10/ServiceName": [
+        "str"
+      ],
+      "Services/2/UnitId": [
+        "int"
+      ],
+      "Services/3/ServiceName": [
+        "str"
+      ],
+      "Services/4/IsActive": [
+        "int"
+      ],
+      "Services/7/IsActive": [
+        "int"
+      ],
+      "Services/9/IsActive": [
+        "int"
+      ],
+      "Services/5/ServiceName": [
+        "str"
+      ],
+      "Services/5/UnitId": [
+        "int"
+      ],
+      "Services/6/UnitId": [
+        "int"
+      ],
+      "Services/8/IsActive": [
+        "int"
+      ],
+      "Services/6/IsActive": [
+        "int"
+      ],
+      "Services/12/UnitId": [
+        "int"
+      ],
+      "Services/2/ServiceName": [
+        "str"
+      ],
+      "Services/5/IsActive": [
+        "int"
+      ],
+      "Services/6/ServiceName": [
+        "str"
+      ],
+      "Services/11/ServiceName": [
+        "str"
+      ],
+      "Services/8/UnitId": [
+        "int"
+      ],
+      "Services/4/ServiceName": [
+        "str"
+      ],
+      "Services/8/ServiceName": [
+        "str"
+      ]
+    },
+    "digitalinputs": {
+      "Devices/1/Label": [
+        "str"
+      ],
+      "Devices/1/Type": [
+        "int"
+      ],
+      "Devices/2/Label": [
+        "str"
+      ],
+      "Devices/2/Type": [
+        "int"
+      ]
+    },
+    "modbusclient": {
+      "Scan": [
+        "bool"
+      ],
+      "ScanProgress": [
+        "NoneType"
+      ]
+    },
+    "ble": {
+      "Devices/ruuvi_c47f34622b10/Name": [
+        "str"
+      ],
+      "Devices/ruuvi_e21f3b45c2d3/Name": [
+        "str"
+      ],
+      "Devices/ruuvi_c47f34622b10/Enabled": [
+        "int"
+      ],
+      "Devices/ruuvi_f9680a0d60cc/Name": [
+        "str"
+      ],
+      "Devices/ruuvi_e21f3b45c2d3/Enabled": [
+        "int"
+      ],
+      "Devices/ruuvi_f9680a0d60cc/Enabled": [
+        "int"
+      ],
+      "Interfaces/hci0/Address": [
+        "str"
+      ],
+      "ContinuousScan": [
+        "int"
+      ]
+    },
+    "adc": {
+      "Devices/adc_builtin_temp_2/Label": [
+        "str"
+      ],
+      "Devices/adc_builtin_temp_0/Label": [
+        "str"
+      ],
+      "Devices/adc_builtin_temp_2/Function": [
+        "int"
+      ],
+      "Devices/adc_builtin_tank_2/Label": [
+        "str"
+      ],
+      "Devices/adc_builtin_temp_0/Function": [
+        "int"
+      ],
+      "Devices/adc_builtin_tank_2/Function": [
+        "int"
+      ],
+      "Devices/adc_builtin_tank_0/Function": [
+        "int"
+      ],
+      "Devices/adc_builtin_tank_1/Label": [
+        "str"
+      ],
+      "Devices/adc_builtin_tank_1/Function": [
+        "int"
+      ],
+      "Devices/adc_builtin_tank_0/Label": [
+        "str"
+      ]
+    },
+    "fronius": {
+      "AutoDetect": [
+        "int"
+      ],
+      "ScanProgress": [
+        "float"
+      ]
+    }
+  }
+}

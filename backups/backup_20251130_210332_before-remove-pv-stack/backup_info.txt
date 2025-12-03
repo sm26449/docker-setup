@@ -1,0 +1,4 @@
+Backup created: Sun Nov 30 09:03:32 PM UTC 2025
+Label: before-remove-pv-stack
+Type: auto
+Compose files: docker-compose.pv-stack.yml

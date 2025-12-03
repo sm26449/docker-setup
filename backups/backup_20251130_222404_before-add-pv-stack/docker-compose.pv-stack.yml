@@ -1,0 +1,9 @@
+#######################################
+# Docker Services - Stack: pv-stack
+# Generated: Sun Nov 30 09:40:02 PM EET 2025
+# Network: pv-stack-network
+#######################################
+
+services:
+
+networks:
