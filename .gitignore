@@ -15,7 +15,16 @@ CLAUDE.md
 *.backup
 
 # Generated files
-docker-compose.yml
+docker-compose*.yml
+
+# Backup and discovery directories
+backup/
+backups/
+victron_discovery/
+victron_discovery_full/
+
+# Test files
+test
 
 # Logs
 *.log

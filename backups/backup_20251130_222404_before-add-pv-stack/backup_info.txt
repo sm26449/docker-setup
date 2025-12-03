@@ -1,4 +1,0 @@
-Backup created: Sun Nov 30 10:24:04 PM EET 2025
-Label: before-add-pv-stack
-Type: auto
-Compose files: docker-compose.pv-stack.yml
