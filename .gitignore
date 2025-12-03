@@ -1,6 +1,12 @@
-# Claude Code files
+# AI Tools - Internal use only (not for public repos)
 CLAUDE.md
+INTERNAL.md
 .claude/
+.cursor/
+.copilot/
+*_ai_notes.md
+*_claude_*.md
+*_chatgpt_*.md
 
 # macOS
 .DS_Store

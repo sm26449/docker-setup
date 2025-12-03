@@ -3,16 +3,14 @@ description: "Seplos BMS V3 to MQTT/InfluxDB Bridge with Home Assistant auto-dis
 
 # Dependencies with variable mappings
 # When user selects existing container or creates new one, these variables are auto-set
-# Available placeholders: ${HOST}, ${PORT}, ${CONTAINER}
 # Credentials are copied from the dependency's .env variables when available
+# Available placeholders: ${HOST}, ${PORT}, ${CONTAINER}
 dependencies:
   - name: mosquitto
     variables:
       SEPLOS_MQTT_SERVER: "${HOST}"
       SEPLOS_MQTT_PORT: "${PORT}"
-    credentials:
-      SEPLOS_MQTT_USERNAME: "MQTT_USERNAME"
-      SEPLOS_MQTT_PASSWORD: "MQTT_PASSWORD"
+    # Note: MQTT credentials NOT auto-copied - allows setting separate user for seplos
   - name: influxdb
     variables:
       SEPLOS_INFLUXDB_URL: "http://${HOST}:${PORT}"
@@ -66,12 +64,10 @@ variables:
     prompt: true
   SEPLOS_INFLUXDB_TOKEN:
     default: ""
-    description: "InfluxDB API token"
-    prompt: true
+    description: "InfluxDB API token (auto-filled from InfluxDB if available)"
   SEPLOS_INFLUXDB_ORG:
-    default: "homelab"
-    description: "InfluxDB organization"
-    prompt: true
+    default: ""
+    description: "InfluxDB organization (auto-filled from InfluxDB if available)"
   SEPLOS_INFLUXDB_BUCKET:
     default: "seplos"
     description: "InfluxDB bucket"
@@ -123,22 +119,21 @@ compose: |
     image: seplos-modbus-mqtt:latest
     container_name: seplos-modbus-mqtt
     restart: unless-stopped
-    network_mode: host
     devices:
       - ${SEPLOS_SERIAL_PORT:-/dev/ttyUSB0}:${SEPLOS_SERIAL_PORT:-/dev/ttyUSB0}
     environment:
       - SERIAL_PORT=${SEPLOS_SERIAL_PORT:-/dev/ttyUSB0}
       - SERIAL_BAUDRATE=${SEPLOS_SERIAL_BAUDRATE:-19200}
-      - MQTT_SERVER=${SEPLOS_MQTT_SERVER:-localhost}
+      - MQTT_SERVER=${SEPLOS_MQTT_SERVER:-mosquitto}
       - MQTT_PORT=${SEPLOS_MQTT_PORT:-1883}
       - MQTT_USERNAME=${SEPLOS_MQTT_USERNAME:-}
       - MQTT_PASSWORD=${SEPLOS_MQTT_PASSWORD:-}
       - MQTT_PREFIX=${SEPLOS_MQTT_PREFIX:-seplos}
       - MQTT_PUBLISH_MODE=${SEPLOS_MQTT_PUBLISH_MODE:-changed}
       - INFLUXDB_ENABLED=${SEPLOS_INFLUXDB_ENABLED:-false}
-      - INFLUXDB_URL=${SEPLOS_INFLUXDB_URL:-http://localhost:8086}
+      - INFLUXDB_URL=${SEPLOS_INFLUXDB_URL:-http://influxdb:8086}
       - INFLUXDB_TOKEN=${SEPLOS_INFLUXDB_TOKEN:-}
-      - INFLUXDB_ORG=${SEPLOS_INFLUXDB_ORG:-homelab}
+      - INFLUXDB_ORG=${SEPLOS_INFLUXDB_ORG:-}
       - INFLUXDB_BUCKET=${SEPLOS_INFLUXDB_BUCKET:-seplos}
       - INFLUXDB_WRITE_INTERVAL=${SEPLOS_INFLUXDB_WRITE_INTERVAL:-5}
       - INFLUXDB_PUBLISH_MODE=${SEPLOS_INFLUXDB_PUBLISH_MODE:-changed}

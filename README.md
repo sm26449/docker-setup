@@ -1,9 +1,10 @@
-# Docker Services Manager v2.2
-
+# Docker Services Manager v2.3
 
 Script interactiv profesional pentru gestionarea serviciilor Docker pe Ubuntu/CentOS/Rocky/Alma Linux.
 
-**Nou în v2.2:** Sistem de variante pentru template-uri, suport Fronius Modbus MQTT.
+**Nou în v2.3:** Security fixes, Grafana Image Renderer improvements, SERVER_IP support.
+
+**v2.2:** Sistem de variante pentru template-uri, suport Fronius Modbus MQTT.
 
 **v2.1:** Integrare Victron Energy, configurare modulară Telegraf, suport Modbus/Serial.
 
@@ -381,4 +382,28 @@ Vezi `templates/seplos-modbus-mqtt/INTEGRATION.md` pentru detalii.
 
 ## Licență
 
-MIT License
+MIT License - Free and open source software.
+
+Copyright (c) 2024 Stefan M <sm26449@diysolar.ro>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+**Disclaimer**: This software is provided "as is", without warranty of any kind. Use at your own risk.

@@ -2,22 +2,22 @@ name: mosquitto_bridge
 description: "MQTT Bridge - Connect remote MQTT broker to local broker"
 
 variables:
-  # Local broker settings
-  MQTT_PORT:
-    default: "1883"
-    description: "Local MQTT port"
+  # Bridge broker settings (separate from main mosquitto)
+  MQTT_BRIDGE_PORT:
+    default: "1884"
+    description: "Bridge MQTT port (use different port than main mosquitto)"
     prompt: true
-  MQTT_WS_PORT:
-    default: "9001"
-    description: "Local MQTT WebSocket port"
+  MQTT_BRIDGE_WS_PORT:
+    default: "9002"
+    description: "Bridge MQTT WebSocket port"
     prompt: true
-  MQTT_USERNAME:
-    default: "mqtt"
-    description: "Local MQTT username"
+  MQTT_BRIDGE_USERNAME:
+    default: "bridge"
+    description: "Bridge MQTT username"
     prompt: true
-  MQTT_PASSWORD:
+  MQTT_BRIDGE_PASSWORD:
     default: ""
-    description: "Local MQTT password"
+    description: "Bridge MQTT password"
     generate: password
     prompt: true
 
@@ -73,8 +73,6 @@ variables:
     description: "Bridge QoS level (0, 1, or 2)"
 
 copy_files:
-  - src: mosquitto-bridge.conf
-    dest: config/mosquitto.conf
   - src: pwfile
     dest: config/pwfile
 
@@ -82,15 +80,50 @@ hooks:
   pre_deploy:
     - "mkdir -p ${SERVICE_DATA}/config ${SERVICE_DATA}/data ${SERVICE_DATA}/logs"
     - "chmod 755 ${SERVICE_DATA}/config ${SERVICE_DATA}/data ${SERVICE_DATA}/logs"
+    # Create empty password file with correct permissions (will be populated post-deploy)
+    - "touch ${SERVICE_DATA}/config/pwfile"
+    - "chmod 600 ${SERVICE_DATA}/config/pwfile"
+    - "chown 1883:1883 ${SERVICE_DATA}/config/pwfile 2>/dev/null || true"
+    # Generate mosquitto.conf with all variables substituted
+    - "echo 'allow_anonymous false' > ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'listener 1883' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'listener 9001' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'protocol websockets' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'password_file /mosquitto/config/pwfile' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'persistence true' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'persistence_file mosquitto.db' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'persistence_location /mosquitto/data/' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'log_dest stdout' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'log_type error' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'log_type warning' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'log_type notice' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'max_connections -1' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo '' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo '# Bridge to remote MQTT broker' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'connection ${BRIDGE_NAME}' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "if [ '${REMOTE_MQTT_USE_SSL}' = 'true' ]; then echo 'address ${REMOTE_MQTT_HOST}:8883' >> ${SERVICE_DATA}/config/mosquitto.conf; else echo 'address ${REMOTE_MQTT_HOST}:${REMOTE_MQTT_PORT}' >> ${SERVICE_DATA}/config/mosquitto.conf; fi"
+    - "echo 'remote_username ${REMOTE_MQTT_USERNAME}' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'remote_password ${REMOTE_MQTT_PASSWORD}' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'topic ${BRIDGE_TOPICS_IN} in ${BRIDGE_QOS}' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'bridge_protocol_version mqttv311' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'try_private false' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'cleansession true' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'start_type automatic' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    - "echo 'notifications false' >> ${SERVICE_DATA}/config/mosquitto.conf"
+    # Add SSL settings if enabled
+    - "if [ '${REMOTE_MQTT_USE_SSL}' = 'true' ]; then echo 'bridge_insecure ${REMOTE_MQTT_INSECURE}' >> ${SERVICE_DATA}/config/mosquitto.conf; echo 'bridge_cafile /mosquitto/config/remote-ca.crt' >> ${SERVICE_DATA}/config/mosquitto.conf; fi"
+    # Download SSL certificate if SSL is enabled
+    - "if [ '${REMOTE_MQTT_USE_SSL}' = 'true' ] && [ -n '${REMOTE_MQTT_HOST}' ]; then echo | openssl s_client -connect ${REMOTE_MQTT_HOST}:8883 -servername ${REMOTE_MQTT_HOST} 2>/dev/null | openssl x509 > ${SERVICE_DATA}/config/remote-ca.crt 2>/dev/null && echo '✓ Downloaded SSL certificate from ${REMOTE_MQTT_HOST}:8883' || echo '⚠ Could not download SSL certificate'; fi"
     - "chmod 644 ${SERVICE_DATA}/config/mosquitto.conf 2>/dev/null || true"
-    - "chmod 600 ${SERVICE_DATA}/config/pwfile 2>/dev/null || true"
     - "chown -R 1883:1883 ${SERVICE_DATA} 2>/dev/null || true"
   post_deploy:
     - "sleep 3"
-    - "docker exec ${CONTAINER_NAME} mosquitto_passwd -b /mosquitto/config/pwfile ${MQTT_USERNAME} ${MQTT_PASSWORD} 2>/dev/null && docker exec ${CONTAINER_NAME} kill -HUP 1 2>/dev/null && echo '✓ MQTT user ${MQTT_USERNAME} created' || true"
+    # Create MQTT user in the bridge container
+    - "docker exec ${CONTAINER_NAME} mosquitto_passwd -b /mosquitto/config/pwfile ${MQTT_BRIDGE_USERNAME} ${MQTT_BRIDGE_PASSWORD} 2>/dev/null && docker exec ${CONTAINER_NAME} kill -HUP 1 2>/dev/null && echo '✓ MQTT user ${MQTT_BRIDGE_USERNAME} created' || true"
     - "echo ''"
     - "echo '═══════════════════════════════════════════════════════════════'"
     - "echo 'MQTT Bridge configured:'"
+    - "echo '  Local port: ${MQTT_BRIDGE_PORT}'"
     - "echo '  Remote: ${REMOTE_MQTT_HOST}:${REMOTE_MQTT_PORT} (SSL: ${REMOTE_MQTT_USE_SSL})'"
     - "echo '  Topics IN:  ${BRIDGE_TOPICS_IN} (from remote to local)'"
     - "echo '  Topics OUT: ${BRIDGE_TOPICS_OUT} (from local to remote)'"
@@ -104,14 +137,14 @@ compose: |
     container_name: mosquitto-bridge
     restart: unless-stopped
     ports:
-      - "${MQTT_PORT:-1883}:1883"
-      - "${MQTT_WS_PORT:-9001}:9001"
+      - "${MQTT_BRIDGE_PORT:-1884}:1883"
+      - "${MQTT_BRIDGE_WS_PORT:-9002}:9001"
     volumes:
       - ${DOCKER_ROOT}/mosquitto-bridge/config:/mosquitto/config
       - ${DOCKER_ROOT}/mosquitto-bridge/data:/mosquitto/data
       - ${DOCKER_ROOT}/mosquitto-bridge/logs:/mosquitto/log
     healthcheck:
-      test: ["CMD", "mosquitto_sub", "-h", "localhost", "-p", "1883", "-u", "${MQTT_USERNAME}", "-P", "${MQTT_PASSWORD}", "-t", "$$SYS/broker/uptime", "-C", "1", "-W", "3"]
+      test: ["CMD", "mosquitto_sub", "-h", "localhost", "-p", "1883", "-u", "${MQTT_BRIDGE_USERNAME}", "-P", "${MQTT_BRIDGE_PASSWORD}", "-t", "$$SYS/broker/uptime", "-C", "1", "-W", "3"]
       interval: 30s
       timeout: 10s
       start_period: 10s

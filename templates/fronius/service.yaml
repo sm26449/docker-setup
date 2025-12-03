@@ -75,12 +75,10 @@ variables:
     prompt: true
   FRONIUS_INFLUXDB_TOKEN:
     default: ""
-    description: "InfluxDB API token"
-    prompt: true
+    description: "InfluxDB API token (auto-filled from InfluxDB if available)"
   FRONIUS_INFLUXDB_ORG:
-    default: "homelab"
-    description: "InfluxDB organization"
-    prompt: true
+    default: ""
+    description: "InfluxDB organization (auto-filled from InfluxDB if available)"
   FRONIUS_INFLUXDB_BUCKET:
     default: "fronius"
     description: "InfluxDB bucket"
@@ -140,10 +138,10 @@ compose: |
       - ${DOCKER_ROOT}/fronius-modbus-mqtt/data:/app/data
       - ${DOCKER_ROOT}/fronius-modbus-mqtt/logs:/app/logs
     healthcheck:
-      test: ["CMD", "pgrep", "-f", "fronius_modbus_mqtt.py"]
+      test: ["CMD", "python", "/app/healthcheck.py"]
       interval: 60s
       timeout: 10s
-      start_period: 30s
+      start_period: 60s
       retries: 3
     logging:
       driver: "json-file"

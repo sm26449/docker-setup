@@ -325,28 +325,82 @@ create_docker_network() {
     # Check if network exists
     if docker network ls --format '{{.Name}}' | grep -q "^${network_name}$"; then
         print_info "Network '${network_name}' already exists"
-        return 0
-    fi
-
-    print_info "Creating Docker network: ${network_name}"
-
-    # Use || true to prevent set -e from exiting on failure
-    local result
-    result=$(docker network create \
-        --driver bridge \
-        --subnet "$subnet" \
-        --opt "com.docker.network.bridge.name"="br-${network_name}" \
-        "$network_name" 2>&1) || true
-
-    # Check if network was created successfully
-    if docker network ls --format '{{.Name}}' | grep -q "^${network_name}$"; then
-        print_success "Network '${network_name}' created with subnet ${subnet}"
     else
-        print_warning "Could not create network (may already exist with different config)"
-        print_info "Continuing anyway..."
+        print_info "Creating Docker network: ${network_name}"
+
+        # Use || true to prevent set -e from exiting on failure
+        local result
+        result=$(docker network create \
+            --driver bridge \
+            --subnet "$subnet" \
+            --opt "com.docker.network.bridge.name"="br-${network_name}" \
+            "$network_name" 2>&1) || true
+
+        # Check if network was created successfully
+        if docker network ls --format '{{.Name}}' | grep -q "^${network_name}$"; then
+            print_success "Network '${network_name}' created with subnet ${subnet}"
+        else
+            print_warning "Could not create network (may already exist with different config)"
+            print_info "Continuing anyway..."
+        fi
     fi
+
+    # Ensure containers can access external networks (IP forwarding + masquerade)
+    configure_network_routing "$subnet"
 
     return 0
+}
+
+#######################################
+# Configure network routing for external access
+# Enables IP forwarding and NAT masquerade
+# Arguments:
+#   $1 - Subnet (e.g., 172.20.0.0/16)
+#######################################
+configure_network_routing() {
+    local subnet="${1:-$DEFAULT_NETWORK_SUBNET}"
+
+    print_info "Configuring network routing for external access..."
+
+    # Enable IP forwarding (required for containers to reach external networks)
+    if [[ -f /proc/sys/net/ipv4/ip_forward ]]; then
+        local current_forward=$(cat /proc/sys/net/ipv4/ip_forward)
+        if [[ "$current_forward" != "1" ]]; then
+            echo 1 > /proc/sys/net/ipv4/ip_forward 2>/dev/null || true
+            print_info "Enabled IP forwarding"
+        fi
+    fi
+
+    # Make IP forwarding persistent across reboots
+    if [[ -f /etc/sysctl.conf ]]; then
+        if ! grep -q "^net.ipv4.ip_forward.*=.*1" /etc/sysctl.conf 2>/dev/null; then
+            # Check if line exists but is commented or set to 0
+            if grep -q "net.ipv4.ip_forward" /etc/sysctl.conf 2>/dev/null; then
+                sed -i 's/.*net.ipv4.ip_forward.*/net.ipv4.ip_forward = 1/' /etc/sysctl.conf 2>/dev/null || true
+            else
+                echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf 2>/dev/null || true
+            fi
+            print_info "Made IP forwarding persistent in /etc/sysctl.conf"
+        fi
+    fi
+
+    # Setup NAT masquerade for the Docker subnet (allows containers to reach external IPs)
+    if command_exists iptables; then
+        # Check if masquerade rule already exists
+        if ! iptables -t nat -C POSTROUTING -s "$subnet" ! -o docker0 -j MASQUERADE 2>/dev/null; then
+            iptables -t nat -A POSTROUTING -s "$subnet" ! -o docker0 -j MASQUERADE 2>/dev/null || true
+            print_info "Added NAT masquerade rule for subnet ${subnet}"
+        fi
+    fi
+
+    # Save iptables rules for persistence (if iptables-persistent is installed)
+    if command_exists netfilter-persistent; then
+        netfilter-persistent save 2>/dev/null || true
+    elif [[ -f /etc/iptables/rules.v4 ]]; then
+        iptables-save > /etc/iptables/rules.v4 2>/dev/null || true
+    fi
+
+    print_success "Network routing configured for external access"
 }
 
 #######################################

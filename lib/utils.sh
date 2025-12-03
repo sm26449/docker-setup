@@ -208,17 +208,69 @@ set_env_var() {
     # Create .env if it doesn't exist
     touch "$ENV_FILE"
 
-    # Docker-compose .env files: always quote values to be safe
-    # This prevents issues with shell metacharacters like ; < > & | etc.
-    local final_value="\"${var_value}\""
+    # Docker-compose .env files: quote values only if they contain special chars
+    # Unquoted values work better with bash source and docker-compose
+    local final_value="$var_value"
+    if [[ "$var_value" =~ [[:space:]\;\<\>\&\|\$\`\"\'] ]]; then
+        # Escape existing double quotes and wrap in quotes
+        final_value="\"${var_value//\"/\\\"}\""
+    fi
 
     if env_var_exists "$var_name"; then
-        # Update existing variable - use different delimiter to handle special chars
-        sed -i "s|^${var_name}=.*|${var_name}=${final_value}|" "$ENV_FILE"
+        # Update existing variable using temp file to avoid sed escaping issues
+        # This is safer than sed with special characters in values
+        local temp_file=$(mktemp)
+        while IFS= read -r line || [[ -n "$line" ]]; do
+            if [[ "$line" =~ ^${var_name}= ]]; then
+                echo "${var_name}=${final_value}"
+            else
+                echo "$line"
+            fi
+        done < "$ENV_FILE" > "$temp_file"
+        mv "$temp_file" "$ENV_FILE"
     else
         # Append new variable
         echo "${var_name}=${final_value}" >> "$ENV_FILE"
     fi
+}
+
+#######################################
+# Substitute environment variables in a file
+# Reads from .env and exports all variables before running envsubst
+# Arguments:
+#   $1 - Source file path
+#   $2 - Destination file path
+#######################################
+substitute_env_vars() {
+    local src_file="$1"
+    local dest_file="$2"
+
+    # Create a subshell to avoid polluting current environment
+    (
+        # Export all variables from .env file
+        if [[ -f "$ENV_FILE" ]]; then
+            set -a  # auto-export all variables
+            # Source .env file, handling both quoted and unquoted values
+            while IFS='=' read -r key value || [[ -n "$key" ]]; do
+                # Skip comments and empty lines
+                [[ "$key" =~ ^[[:space:]]*# ]] && continue
+                [[ -z "$key" ]] && continue
+                # Remove leading/trailing whitespace from key
+                key=$(echo "$key" | xargs)
+                # Remove surrounding quotes from value if present
+                value="${value#\"}"
+                value="${value%\"}"
+                value="${value#\'}"
+                value="${value%\'}"
+                # Export the variable
+                export "$key=$value" 2>/dev/null || true
+            done < "$ENV_FILE"
+            set +a
+        fi
+
+        # Run envsubst with all exported variables
+        envsubst < "$src_file" > "$dest_file"
+    )
 }
 
 #######################################

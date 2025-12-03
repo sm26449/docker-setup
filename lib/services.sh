@@ -863,6 +863,30 @@ check_dependencies() {
                     if ! service_in_compose "$dep"; then
                         all_deps+=("$dep:$base_service")
                     fi
+                else
+                    # Dependency is already in SELECTED_SERVICES
+                    # Pre-populate DEPENDENCY_CONNECTIONS with the container name
+                    local stack="${CURRENT_STACK:-default}"
+                    local container_name
+                    if [[ "$stack" == "default" ]]; then
+                        container_name="${dep}"
+                    else
+                        container_name="${stack}-${dep}"
+                    fi
+
+                    # Get port for this dependency
+                    local dep_port=""
+                    case "$dep" in
+                        influxdb) dep_port="8086" ;;
+                        mosquitto) dep_port="1883" ;;
+                        mariadb|mysql) dep_port="3306" ;;
+                        postgres*) dep_port="5432" ;;
+                        redis) dep_port="6379" ;;
+                        *) dep_port="0" ;;
+                    esac
+
+                    # Store connection info
+                    DEPENDENCY_CONNECTIONS["${base_service}_${dep}"]="${container_name}:${container_name}:${dep_port}"
                 fi
             done
         fi
@@ -896,12 +920,40 @@ check_dependencies() {
             1)
                 # User wants to create new container
                 if [[ -d "${TEMPLATES_DIR}/${dep}" ]]; then
-                    # Add with suffix to track relationship
-                    local suffixed_dep="${required_by}-${dep}"
                     SELECTED_SERVICES+=("$dep")
-                    # Store the suffix info for later use in compose generation
-                    DEPENDENCY_CONNECTIONS["${required_by}_${dep}_suffix"]="$suffixed_dep"
-                    print_info "Will create new container: ${suffixed_dep}"
+
+                    # Build container name with stack prefix (matches how compose generates container_name)
+                    local stack="${CURRENT_STACK:-default}"
+                    local container_name
+                    if [[ "$stack" == "default" ]]; then
+                        container_name="${dep}"
+                    else
+                        container_name="${stack}-${dep}"
+                    fi
+
+                    # Get default port from dependency template
+                    local dep_template=$(get_service_template_file "$dep")
+                    local dep_port=""
+                    if [[ -f "$dep_template" ]]; then
+                        # Extract port from template (e.g., INFLUXDB_PORT, MOSQUITTO_PORT)
+                        local port_var=$(echo "${dep^^}_PORT" | tr '-' '_')
+                        dep_port=$(grep -E "^[[:space:]]+${port_var}:" "$dep_template" 2>/dev/null | head -1 | grep -oE 'default:[[:space:]]*"?[0-9]+"?' | grep -oE '[0-9]+')
+                        [[ -z "$dep_port" ]] && dep_port=$(grep -E "^[[:space:]]+default:" "$dep_template" 2>/dev/null | head -1 | grep -oE '[0-9]+' | head -1)
+                    fi
+                    # Use common defaults if not found
+                    case "$dep" in
+                        influxdb) dep_port="${dep_port:-8086}" ;;
+                        mosquitto) dep_port="${dep_port:-1883}" ;;
+                        mariadb|mysql) dep_port="${dep_port:-3306}" ;;
+                        postgres*) dep_port="${dep_port:-5432}" ;;
+                        redis) dep_port="${dep_port:-6379}" ;;
+                        *) dep_port="${dep_port:-0}" ;;
+                    esac
+                    # Store connection with container name as host (for Docker networking)
+                    # Use stack-prefixed name to match actual container_name in compose
+                    DEPENDENCY_CONNECTIONS["${required_by}_${dep}"]="${container_name}:${container_name}:${dep_port}"
+
+                    print_info "Will create new container: ${container_name}"
                 else
                     print_warning "Template for ${dep} not found. You may need to configure manually."
                 fi
@@ -913,8 +965,50 @@ check_dependencies() {
         esac
     done
 
-    # Remove duplicates
-    SELECTED_SERVICES=($(echo "${SELECTED_SERVICES[@]}" | tr ' ' '\n' | sort -u))
+    # Remove duplicates and sort topologically (dependencies before dependents)
+    # This ensures variables like RENDERING_PORT are set before GF_RENDERING_SERVER_URL
+    local unique_services=($(echo "${SELECTED_SERVICES[@]}" | tr ' ' '\n' | sort -u))
+    SELECTED_SERVICES=()
+
+    # First pass: add services that have no dependencies (or all deps are external)
+    local remaining=("${unique_services[@]}")
+    while [[ ${#remaining[@]} -gt 0 ]]; do
+        local added_any=false
+        local new_remaining=()
+
+        for service in "${remaining[@]}"; do
+            local template=$(get_service_template_file "$service")
+            local has_unmet_dep=false
+
+            if [[ -f "$template" ]]; then
+                local deps=$(parse_yaml_array "$template" "dependencies")
+                for dep in $deps; do
+                    # Check if dep is in remaining (unprocessed)
+                    if [[ " ${remaining[*]} " =~ " ${dep} " ]] && [[ ! " ${SELECTED_SERVICES[*]} " =~ " ${dep} " ]]; then
+                        has_unmet_dep=true
+                        break
+                    fi
+                done
+            fi
+
+            if [[ "$has_unmet_dep" == false ]]; then
+                SELECTED_SERVICES+=("$service")
+                added_any=true
+            else
+                new_remaining+=("$service")
+            fi
+        done
+
+        remaining=("${new_remaining[@]}")
+
+        # Safety: if no progress made, likely circular dependency - warn and add remaining
+        if [[ "$added_any" == false ]] && [[ ${#remaining[@]} -gt 0 ]]; then
+            echo -e "    ${YELLOW}⚠ Possible circular dependency detected involving: ${remaining[*]}${NC}"
+            echo -e "    ${YELLOW}  Services may be configured out of optimal order${NC}"
+            SELECTED_SERVICES+=("${remaining[@]}")
+            break
+        fi
+    done
 
     # Suggest Portainer for non-default stacks (for Portainer labels to work)
     suggest_portainer_for_stack
@@ -1341,6 +1435,30 @@ set_variable_value() {
 
     local value="$var_default"
 
+    # Expand environment variable references in default value (e.g., ${SERVER_IP}, ${GRAFANA_PORT})
+    # This allows templates to use variables like: default: "http://${SERVER_IP}:${GRAFANA_PORT}/"
+    if [[ "$value" =~ \$\{[A-Z_]+\} ]]; then
+        # Source current .env to have all variables available
+        if [[ -f "$ENV_FILE" ]]; then
+            set -a
+            source "$ENV_FILE" 2>/dev/null || true
+            set +a
+        fi
+        # Use envsubst if available, otherwise use safe manual substitution
+        if command -v envsubst &>/dev/null; then
+            value=$(echo "$value" | envsubst)
+        else
+            # Safe fallback: manual variable substitution (no eval to avoid code injection)
+            # Only substitute ${VAR_NAME} patterns with uppercase letters and underscores
+            while [[ "$value" =~ \$\{([A-Z_][A-Z0-9_]*)\} ]]; do
+                local ref_var="${BASH_REMATCH[1]}"
+                local ref_value="${!ref_var:-}"
+                # Replace only the first occurrence to handle multiple same vars
+                value="${value/\$\{${ref_var}\}/${ref_value}}"
+            done
+        fi
+    fi
+
     # Auto-generate passwords
     if [[ "$var_generate" == "password" ]]; then
         value=$(generate_password 20)
@@ -1614,8 +1732,8 @@ copy_template_files() {
                     if [[ ! -f "$dest_file" ]]; then
                         # Copy and substitute environment variables
                         if [[ "$src_file" == *.ini ]] || [[ "$src_file" == *.conf ]] || [[ "$src_file" == *.yaml ]] || [[ "$src_file" == *.yml ]]; then
-                            # Text files - substitute env vars
-                            envsubst < "$src_file" > "$dest_file"
+                            # Text files - substitute env vars from .env file
+                            substitute_env_vars "$src_file" "$dest_file"
                         else
                             # Binary or other files - direct copy
                             cp "$src_file" "$dest_file"
@@ -1663,19 +1781,34 @@ run_service_hooks() {
         return 0
     fi
 
-    # Build service data path
+    # Extract compose service name from template (e.g., "mosquitto-bridge" from compose block)
+    local compose_service_name=""
+    local in_compose=false
+    while IFS= read -r line; do
+        if [[ "$line" =~ ^compose:[[:space:]]*\| ]]; then
+            in_compose=true
+            continue
+        fi
+        if $in_compose && [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+): ]]; then
+            compose_service_name="${BASH_REMATCH[1]}"
+            break
+        fi
+    done < "$template"
+    compose_service_name="${compose_service_name:-$base_service}"
+
+    # Build service data path using compose_service_name (matches volume mounts)
     local service_data
     if [[ "$stack" == "default" ]]; then
-        service_data="${docker_root}/${base_service}"
+        service_data="${docker_root}/${compose_service_name}"
     else
-        service_data="${docker_root}/${stack}/${base_service}"
+        service_data="${docker_root}/${stack}/${compose_service_name}"
     fi
 
     local container_name
     if [[ "$stack" == "default" ]]; then
-        container_name="${base_service}"
+        container_name="${compose_service_name}"
     else
-        container_name="${stack}-${base_service}"
+        container_name="${stack}-${compose_service_name}"
     fi
 
     local in_hooks=false

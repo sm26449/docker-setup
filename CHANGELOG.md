@@ -5,6 +5,82 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.4.0] - 2025-12-03
+
+### Added
+- **Mosquitto Bridge Auto-Configuration**
+  - Pre-deploy hooks generate `mosquitto.conf` with all variables substituted
+  - Automatic SSL certificate download from remote broker
+  - Support for self-signed certificates with `bridge_insecure` option
+- **Docker Network Setup Service**
+  - Systemd service (`docker-network-setup.service`) for persistent network config
+  - Automatic IP forwarding and masquerade rules at boot
+  - Works with all Docker network subnets
+- **Environment Variable Substitution Function**
+  - `substitute_env_vars()` in utils.sh for template processing
+
+### Changed
+- **Dependency Resolution Improvements**
+  - Pre-populate `DEPENDENCY_CONNECTIONS` for services already in `SELECTED_SERVICES`
+  - Fixed credential mapping when dependencies are selected simultaneously
+  - InfluxDB token/org now correctly passed to dependent services (seplos, fronius, etc.)
+- **Hook System Improvements**
+  - `run_service_hooks()` now extracts `compose_service_name` from template
+  - Correct path resolution for variant services (e.g., `mosquitto-bridge` vs `mosquitto`)
+  - Proper `SERVICE_DATA` and `CONTAINER_NAME` substitution in hooks
+- **Grafana Template**
+  - Dynamic InfluxDB datasource UID using `GRAFANA_INFLUXDB_UID` variable
+  - Fixes hardcoded datasource references
+
+### Fixed
+- **Seplos MQTT Credentials**
+  - Removed automatic MQTT credential copy from mosquitto dependency
+  - Allows setting separate MQTT user/password for seplos service
+  - Post-deploy hook creates user in mosquitto container
+- **Fronius Example Config**
+  - Changed default InfluxDB URL from `localhost` to `influxdb` (Docker container name)
+- **Fresh Install Variable Population**
+  - `SEPLOS_INFLUXDB_TOKEN`, `SEPLOS_INFLUXDB_ORG` now correctly populated
+  - `SEPLOS_MQTT_SERVER` uses container name instead of `localhost`
+
+## [2.3.0] - 2024-12-03
+
+### Added
+- **SERVER_IP Variable** - Global server IP for service-to-service communication
+  - Required for Grafana Image Renderer to work correctly in browser
+  - Added to `.env` template and service configurations
+
+### Changed
+- **Grafana Template Improvements**
+  - `updateIntervalSeconds: 0` - Allows saving provisioned dashboards from UI
+  - `allowUiUpdates: true` - Enables dashboard modifications in Grafana UI
+  - Renderer URLs now use `${SERVER_IP}` instead of container hostnames
+  - Added `hostname: grafana` for consistent container naming
+- **Grafana Image Renderer Template**
+  - Added rendering configuration variables:
+    - `RENDERING_MODE` (default: clustered)
+    - `RENDERING_CLUSTERING_MODE` (default: context)
+    - `RENDERING_CLUSTERING_MAX_CONCURRENCY` (default: 5)
+  - URLs use `${SERVER_IP}:${RENDERING_PORT}` for browser compatibility
+
+### Fixed
+- **Critical Security Fix in `lib/utils.sh`**
+  - `set_env_var()` function rewritten to avoid sed injection vulnerabilities
+  - Special characters in values (spaces, quotes, semicolons, etc.) now handled safely
+  - Uses while-loop instead of sed for reliable variable updates
+- **Code Injection Prevention in `lib/services.sh`**
+  - Replaced unsafe `eval echo` with manual variable substitution
+  - Pattern: `while [[ "$value" =~ \$\{([A-Z_][A-Z0-9_]*)\} ]]` for safe expansion
+- **Dependency Resolution Warning**
+  - Added circular dependency detection in topological sort
+  - Warns user when service order may not be optimal
+
+### Updated
+- **Seplos Modbus MQTT Template** (synced from seplos-modbus-mqtt v2.5)
+  - Thread safety: Added `threading.Lock()` for battery data access
+  - Config path fix: Added `/app/config/seplos_bms_mqtt.ini` to search paths
+  - Version consistency: All files now report v2.5
+
 ## [2.2.0] - 2024-11-30
 
 ### Added
@@ -118,6 +194,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 2.4.0 | 2025-12-03 | Mosquitto bridge auto-config, dependency resolution fixes, hook improvements |
+| 2.3.0 | 2024-12-03 | Security fixes, Grafana renderer improvements, SERVER_IP support |
 | 2.2.0 | 2024-11-30 | Template variants, Fronius Modbus MQTT, Seplos Modbus MQTT |
 | 2.1.0 | 2024-11-27 | Victron Energy integration, Telegraf modes |
 | 2.0.0 | 2024-11-26 | Complete rewrite, modular architecture |

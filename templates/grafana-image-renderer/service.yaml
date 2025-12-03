@@ -9,11 +9,29 @@ variables:
   RENDERING_PORT:
     default: "8081"
     description: "Image renderer HTTP port"
+  RENDERING_MODE:
+    default: "clustered"
+    description: "Rendering mode (default, clustered, reusable)"
+  RENDERING_CLUSTERING_MODE:
+    default: "context"
+    description: "Clustering mode (browser, context)"
+  RENDERING_CLUSTERING_MAX_CONCURRENCY:
+    default: "5"
+    description: "Max concurrent renders"
+  RENDERING_VERBOSE_LOGGING:
+    default: "false"
+    description: "Enable verbose logging"
 
 compose: |
   grafana-image-renderer:
     image: grafana/grafana-image-renderer:latest
     container_name: grafana-image-renderer
+    hostname: grafana-image-renderer
     restart: unless-stopped
     ports:
       - "${RENDERING_PORT:-8081}:8081"
+    environment:
+      - RENDERING_MODE=${RENDERING_MODE:-clustered}
+      - RENDERING_CLUSTERING_MODE=${RENDERING_CLUSTERING_MODE:-context}
+      - RENDERING_CLUSTERING_MAX_CONCURRENCY=${RENDERING_CLUSTERING_MAX_CONCURRENCY:-5}
+      - RENDERING_VERBOSE_LOGGING=${RENDERING_VERBOSE_LOGGING:-false}

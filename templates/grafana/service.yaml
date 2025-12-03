@@ -5,11 +5,13 @@ dependencies:
   - name: influxdb
     variables:
       GRAFANA_INFLUXDB_URL: "http://${HOST}:${PORT}"
+      GRAFANA_INFLUXDB_HOST: "${HOST}"
+      GRAFANA_INFLUXDB_UID: "${HOST}"
+    credentials:
+      GRAFANA_INFLUXDB_TOKEN: "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"
+      GRAFANA_INFLUXDB_ORG: "DOCKER_INFLUXDB_INIT_ORG"
   - name: grafana-image-renderer
-    variables:
-      GF_RENDERING_SERVER_URL: "http://${CONTAINER}:8081/render"
-      GF_RENDERING_CALLBACK_URL: "http://grafana:3000/"
-      GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE: "true"
+    # Renderer URLs configured via SERVER_IP variables for browser accessibility
 
 variables:
   GRAFANA_PORT:
@@ -26,13 +28,13 @@ variables:
     generate: password
     prompt: true
   GF_RENDERING_SERVER_URL:
-    default: "http://grafana-image-renderer:8081/render"
-    description: "Image renderer URL"
-    prompt: true
+    default: "http://${SERVER_IP}:${RENDERING_PORT}/render"
+    description: "Image renderer URL (uses SERVER_IP for browser accessibility)"
+    prompt: false
   GF_RENDERING_CALLBACK_URL:
-    default: "http://grafana:3000/"
-    description: "Grafana callback URL for renderer"
-    prompt: true
+    default: "http://${SERVER_IP}:${GRAFANA_PORT}/"
+    description: "Grafana callback URL for renderer (uses SERVER_IP for browser accessibility)"
+    prompt: false
   GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE:
     default: "true"
     description: "Enable alert screenshots"
@@ -41,32 +43,50 @@ config_files:
   - path: "provisioning/datasources/influxdb.yaml"
     content: |
       # Grafana InfluxDB Datasource Provisioning
+      # UID fix pentru portabilitate dashboards
       apiVersion: 1
 
       datasources:
         - name: InfluxDB
+          uid: ${GRAFANA_INFLUXDB_UID:-influxdb}
           type: influxdb
           access: proxy
-          url: http://influxdb:8086
-          # For InfluxDB 2.x with Flux
+          url: http://${GRAFANA_INFLUXDB_HOST:-influxdb}:8086
+          editable: false
+          isDefault: true
           jsonData:
             version: Flux
-            organization: docker-services
-            defaultBucket: default
+            organization: ${GRAFANA_INFLUXDB_ORG:-${DOCKER_INFLUXDB_INIT_ORG}}
+            defaultBucket: ${GRAFANA_INFLUXDB_BUCKET:-default}
             tlsSkipVerify: true
           secureJsonData:
-            token: ${INFLUXDB_TOKEN}
-          # Uncomment below for InfluxDB 1.x
-          # database: telegraf
-          # user: admin
-          # secureJsonData:
-          #   password: your_password
+            token: ${GRAFANA_INFLUXDB_TOKEN:-${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}}
+
+  - path: "provisioning/dashboards/dashboards.yaml"
+    content: |
+      # Grafana Dashboard Provisioning
+      apiVersion: 1
+
+      providers:
+        - name: 'PV-Stack'
+          orgId: 1
+          type: file
+          disableDeletion: false
+          updateIntervalSeconds: 0
+          allowUiUpdates: true
+          options:
+            path: /etc/grafana/provisioning/dashboards
+            foldersFromFilesStructure: true
 
 compose: |
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
+    hostname: grafana
     restart: unless-stopped
+    depends_on:
+      - influxdb
+      - grafana-image-renderer
     user: "${PUID}:${PGID}"
     ports:
       - "${GRAFANA_PORT:-3000}:3000"
@@ -76,7 +96,7 @@ compose: |
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_RENDERING_SERVER_URL=${GF_RENDERING_SERVER_URL:-}
       - GF_RENDERING_CALLBACK_URL=${GF_RENDERING_CALLBACK_URL:-}
-      - GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE=${GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE:-false}
+      - GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE=${GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE:-true}
     volumes:
       - ${DOCKER_ROOT}/grafana/data:/var/lib/grafana
       - ${DOCKER_ROOT}/grafana/provisioning:/etc/grafana/provisioning
