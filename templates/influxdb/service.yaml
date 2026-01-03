@@ -53,3 +53,9 @@ compose: |
     volumes:
       - ${DOCKER_ROOT}/influxdb/data/data:/var/lib/influxdb2
       - ${DOCKER_ROOT}/influxdb/config:/etc/influxdb2
+    healthcheck:
+      test: ["CMD", "influx", "ping"]
+      interval: 10s
+      timeout: 5s
+      start_period: 30s
+      retries: 3

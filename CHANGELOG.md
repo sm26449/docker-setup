@@ -5,6 +5,24 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.1] - 2026-01-04
+
+### Added
+- **InfluxDB Healthcheck**
+  - Added healthcheck to influxdb template (`influx ping`)
+  - Enables `condition: service_healthy` for dependent services
+
+### Changed
+- **Service Dependencies with Health Conditions**
+  - Fronius templates now wait for InfluxDB to be healthy before starting
+  - Seplos template now waits for InfluxDB to be healthy before starting
+  - Uses `depends_on` with `condition: service_healthy` for influxdb
+  - Uses `condition: service_started` for mosquitto (no healthcheck needed)
+
+### Fixed
+- Services no longer fail to connect to InfluxDB on stack restart
+- Proper startup order ensures InfluxDB is ready before dependent services start
+
 ## [2.5.0] - 2026-01-03
 
 ### Added

@@ -115,6 +115,11 @@ compose: |
     image: fronius-modbus-mqtt:latest
     container_name: fronius-modbus-mqtt
     restart: unless-stopped
+    depends_on:
+      mosquitto:
+        condition: service_started
+      influxdb:
+        condition: service_healthy
     command: ["python", "fronius_modbus_mqtt.py", "-d", "all"]
     environment:
       - TZ=${TZ}
