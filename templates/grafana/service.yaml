@@ -28,11 +28,11 @@ variables:
     generate: password
     prompt: true
   GF_RENDERING_SERVER_URL:
-    default: "http://${SERVER_IP}:${RENDERING_PORT}/render"
+    default: "http://${SERVER_IP}:${RENDERING_PORT:-8081}/render"
     description: "Image renderer URL (uses SERVER_IP for browser accessibility)"
     prompt: false
   GF_RENDERING_CALLBACK_URL:
-    default: "http://${SERVER_IP}:${GRAFANA_PORT}/"
+    default: "http://${SERVER_IP}:${GRAFANA_PORT:-3000}/"
     description: "Grafana callback URL for renderer (uses SERVER_IP for browser accessibility)"
     prompt: false
   GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE:

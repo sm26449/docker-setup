@@ -5,6 +5,38 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.0] - 2026-01-03
+
+### Added
+- **Deployment Strategy Selection**
+  - Interactive prompt when starting services with 3 strategies:
+    - "Only new services" (default) - starts only newly added services
+    - "All services (no recreate)" - starts all but doesn't recreate existing containers
+    - "All services (recreate if changed)" - original behavior
+  - Prevents accidental recreation of running containers when adding new services
+  - New `get_compose_service_name()` helper function for service name extraction
+- **pv-stack.sh Management Script**
+  - Standalone helper script for common pv-stack operations
+  - Commands: restart, recreate, logs, status, list, up, down, pull
+  - Clear guidance on when to use restart vs recreate
+- **Mosquitto Victron Variant** (`service.victron.yaml`)
+  - MQTT bridge template for Venus OS integration
+  - Automatic keepalive and SSL support
+
+### Changed
+- **Fronius Templates**
+  - Added post-deploy hook to auto-create InfluxDB bucket
+  - Added `PING_CHECK_ENABLED=false` environment variable
+- **Telegraf Victron Template**
+  - Improved configuration and documentation
+- **Gitignore Updates**
+  - External projects (fronius, seplos-modbus-mqtt) source files now ignored
+  - Only `service*.yaml` and `INTEGRATION.md` are tracked for integration
+
+### Fixed
+- Container conflict errors when adding new services to existing stack
+- Unnecessary recreation of healthy containers during service additions
+
 ## [2.4.0] - 2025-12-03
 
 ### Added
@@ -194,6 +226,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 2.5.0 | 2026-01-03 | Deployment strategy selection, pv-stack.sh helper, Mosquitto Victron variant |
 | 2.4.0 | 2025-12-03 | Mosquitto bridge auto-config, dependency resolution fixes, hook improvements |
 | 2.3.0 | 2024-12-03 | Security fixes, Grafana renderer improvements, SERVER_IP support |
 | 2.2.0 | 2024-11-30 | Template variants, Fronius Modbus MQTT, Seplos Modbus MQTT |

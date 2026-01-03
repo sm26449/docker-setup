@@ -2515,6 +2515,35 @@ EOF
 }
 
 #######################################
+# Get compose service name from a service identifier
+# Arguments:
+#   $1 - Service name (can include variant like "fronius:meter")
+# Returns: The compose service name (e.g., "fronius-meter")
+#######################################
+get_compose_service_name() {
+    local service=$1
+    local base_service=$(get_base_service_name "$service")
+    local template=$(get_service_template_file "$service")
+    local compose_service_name=""
+
+    if [[ -f "$template" ]]; then
+        local in_compose=false
+        while IFS= read -r line; do
+            if [[ "$line" =~ ^compose:[[:space:]]*\| ]]; then
+                in_compose=true
+                continue
+            fi
+            if $in_compose && [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+): ]]; then
+                compose_service_name="${BASH_REMATCH[1]}"
+                break
+            fi
+        done < "$template"
+    fi
+
+    echo "${compose_service_name:-$base_service}"
+}
+
+#######################################
 # Start services
 #######################################
 start_services() {
@@ -2527,6 +2556,34 @@ start_services() {
 
     print_info "Stack: ${stack}"
     print_info "Compose file: ${compose_file}"
+
+    # Build list of compose service names for newly selected services
+    local -a compose_service_names=()
+    for service in "${SELECTED_SERVICES[@]}"; do
+        local svc_name=$(get_compose_service_name "$service")
+        compose_service_names+=("$svc_name")
+    done
+
+    # Ask user about deployment strategy
+    echo ""
+    echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════${NC}"
+    echo -e "${BOLD}${CYAN}  Deployment Strategy${NC}"
+    echo -e "${BOLD}${CYAN}═══════════════════════════════════════════════════════════${NC}"
+    echo ""
+    echo "How would you like to start the services?"
+    echo ""
+    echo -e "  ${GREEN}1)${NC} Only new services ${GRAY}(recommended)${NC}"
+    echo "     Start only the newly added services without touching existing containers"
+    echo "     Services: ${compose_service_names[*]}"
+    echo ""
+    echo -e "  ${YELLOW}2)${NC} All services (no recreate)"
+    echo "     Start all services but don't recreate existing containers"
+    echo ""
+    echo -e "  ${RED}3)${NC} All services (recreate if changed)"
+    echo "     Recreate containers if their configuration has changed"
+    echo ""
+    read -rp "Select strategy [1]: " deploy_strategy
+    deploy_strategy="${deploy_strategy:-1}"
 
     # Check if any services need to be built
     local needs_build=false
@@ -2555,7 +2612,24 @@ start_services() {
     docker compose -f "$compose_file" pull --ignore-buildable 2>/dev/null || docker compose -f "$compose_file" pull
 
     print_info "Starting containers..."
-    docker compose -f "$compose_file" -p "$stack" up -d
+
+    case "$deploy_strategy" in
+        1)
+            # Only start newly selected services
+            print_info "Starting only new services: ${compose_service_names[*]}"
+            docker compose -f "$compose_file" -p "$stack" up -d "${compose_service_names[@]}"
+            ;;
+        2)
+            # Start all but don't recreate existing
+            print_info "Starting all services (no recreate)..."
+            docker compose -f "$compose_file" -p "$stack" up -d --no-recreate
+            ;;
+        3|*)
+            # Default behavior - recreate if changed
+            print_info "Starting all services (recreate if changed)..."
+            docker compose -f "$compose_file" -p "$stack" up -d
+            ;;
+    esac
 
     echo ""
     print_success "Services started in stack: ${stack}"

@@ -1,0 +1,263 @@
+name: mosquitto_victron
+description: "MQTT Bridge for Victron Venus OS with automatic keepalive"
+
+variables:
+  # Local broker settings
+  MQTT_PORT:
+    default: "1883"
+    description: "Local MQTT port"
+  MQTT_WS_PORT:
+    default: "9001"
+    description: "Local MQTT WebSocket port"
+  MQTT_USERNAME:
+    default: "mqtt"
+    description: "Local MQTT username"
+    prompt: true
+  MQTT_PASSWORD:
+    default: ""
+    description: "Local MQTT password"
+    generate: password
+    prompt: true
+
+  # Venus OS connection
+  VENUS_HOST:
+    default: ""
+    description: "Venus OS hostname or IP (e.g., venus.local or 192.168.1.100)"
+    prompt: true
+  VENUS_PORT:
+    default: "8883"
+    description: "Venus OS MQTT port (8883 for SSL, 1883 for plain)"
+    prompt: true
+  VENUS_USE_SSL:
+    default: "true"
+    description: "Use SSL/TLS connection (Venus OS uses SSL on port 8883)"
+    prompt: true
+  VENUS_USERNAME:
+    default: ""
+    description: "Venus OS MQTT username (leave empty if not required)"
+    prompt: true
+  VENUS_PASSWORD:
+    default: ""
+    description: "Venus OS MQTT password"
+    prompt: true
+  VENUS_PORTAL_ID:
+    default: ""
+    description: "VRM Portal ID (12 hex chars, find in Venus OS: Settings → VRM Online Portal)"
+    prompt: true
+
+  # Bridge settings
+  BRIDGE_KEEPALIVE:
+    default: "30"
+    description: "Bridge keepalive interval in seconds"
+  VENUS_KEEPALIVE_INTERVAL:
+    default: "30"
+    description: "Venus OS keepalive message interval in seconds (must be < 60)"
+
+copy_files:
+  - src: pwfile
+    dest: config/pwfile
+
+hooks:
+  pre_deploy:
+    - "mkdir -p ${SERVICE_DATA}/config ${SERVICE_DATA}/data ${SERVICE_DATA}/logs"
+    - "chmod 755 ${SERVICE_DATA}/config ${SERVICE_DATA}/data ${SERVICE_DATA}/logs"
+    # Create empty password file with correct permissions
+    - "touch ${SERVICE_DATA}/config/pwfile"
+    - "chmod 600 ${SERVICE_DATA}/config/pwfile"
+    - "chown 1883:1883 ${SERVICE_DATA}/config/pwfile 2>/dev/null || true"
+
+    # Generate mosquitto.conf
+    - |
+      cat > ${SERVICE_DATA}/config/mosquitto.conf << 'MOSQUITTO_EOF'
+      # Mosquitto Configuration - Victron Venus OS Bridge
+      # Auto-generated - do not edit manually
+
+      # =============================================================================
+      # LOCAL BROKER SETTINGS
+      # =============================================================================
+      allow_anonymous false
+      listener 1883
+      listener 9001
+      protocol websockets
+      password_file /mosquitto/config/pwfile
+
+      persistence true
+      persistence_file mosquitto.db
+      persistence_location /mosquitto/data/
+
+      log_dest stdout
+      log_type error
+      log_type warning
+      log_type notice
+
+      max_connections -1
+
+      # =============================================================================
+      # VENUS OS BRIDGE CONNECTION
+      # =============================================================================
+      connection victron
+      MOSQUITTO_EOF
+
+    # Add address based on SSL setting
+    - "if [ '${VENUS_USE_SSL}' = 'true' ]; then echo 'address ${VENUS_HOST}:${VENUS_PORT}' >> ${SERVICE_DATA}/config/mosquitto.conf; else echo 'address ${VENUS_HOST}:${VENUS_PORT}' >> ${SERVICE_DATA}/config/mosquitto.conf; fi"
+
+    # Continue config
+    - |
+      cat >> ${SERVICE_DATA}/config/mosquitto.conf << 'MOSQUITTO_EOF'
+      bridge_protocol_version mqttv311
+      keepalive_interval ${BRIDGE_KEEPALIVE}
+      try_private false
+      cleansession false
+      start_type automatic
+      notifications true
+      notification_topic victron/bridge/status
+      MOSQUITTO_EOF
+
+    # Add credentials if provided
+    - "if [ -n '${VENUS_USERNAME}' ]; then echo 'remote_username ${VENUS_USERNAME}' >> ${SERVICE_DATA}/config/mosquitto.conf; fi"
+    - "if [ -n '${VENUS_PASSWORD}' ]; then echo 'remote_password ${VENUS_PASSWORD}' >> ${SERVICE_DATA}/config/mosquitto.conf; fi"
+
+    # Add SSL settings if enabled
+    - "if [ '${VENUS_USE_SSL}' = 'true' ]; then echo 'bridge_insecure true' >> ${SERVICE_DATA}/config/mosquitto.conf; fi"
+
+    # Add topic bridging - subscribe to all Venus data topics
+    - |
+      cat >> ${SERVICE_DATA}/config/mosquitto.conf << 'MOSQUITTO_EOF'
+
+      # =============================================================================
+      # TOPIC BRIDGING
+      # =============================================================================
+      # Subscribe to Venus OS notification topics (N/) - incoming data
+      topic N/${VENUS_PORTAL_ID}/# in 0
+
+      # Allow sending keepalive and read requests to Venus (R/)
+      topic R/${VENUS_PORTAL_ID}/# out 0
+
+      # Allow sending write commands to Venus (W/) if needed
+      topic W/${VENUS_PORTAL_ID}/# out 0
+      MOSQUITTO_EOF
+
+    # Download SSL certificate if SSL is enabled
+    - "if [ '${VENUS_USE_SSL}' = 'true' ] && [ -n '${VENUS_HOST}' ]; then echo | openssl s_client -connect ${VENUS_HOST}:${VENUS_PORT} -servername ${VENUS_HOST} 2>/dev/null | openssl x509 > ${SERVICE_DATA}/config/venus-ca.crt 2>/dev/null && echo '✓ Downloaded SSL certificate from ${VENUS_HOST}:${VENUS_PORT}' || echo '⚠ Could not download SSL certificate (will use insecure mode)'; fi"
+
+    # Create keepalive script
+    - |
+      cat > ${SERVICE_DATA}/config/keepalive.sh << 'KEEPALIVE_EOF'
+      #!/bin/sh
+      # Venus OS Keepalive Script
+      # Sends keepalive message every INTERVAL seconds to prevent Venus from stopping data
+
+      PORTAL_ID="${VENUS_PORTAL_ID}"
+      INTERVAL="${VENUS_KEEPALIVE_INTERVAL}"
+      MQTT_USER="${MQTT_USERNAME}"
+      MQTT_PASS="${MQTT_PASSWORD}"
+
+      echo "Starting Venus OS keepalive (Portal: $PORTAL_ID, Interval: ${INTERVAL}s)"
+
+      while true; do
+        # Send keepalive with suppress-republish option (Venus OS 3.x+)
+        mosquitto_pub -h localhost -p 1883 -u "$MQTT_USER" -P "$MQTT_PASS" \
+          -t "R/$PORTAL_ID/keepalive" \
+          -m '{"keepalive-options":["suppress-republish"]}' 2>/dev/null
+
+        if [ $? -eq 0 ]; then
+          echo "$(date '+%Y-%m-%d %H:%M:%S') Keepalive sent to R/$PORTAL_ID/keepalive"
+        else
+          echo "$(date '+%Y-%m-%d %H:%M:%S') ERROR: Failed to send keepalive"
+        fi
+
+        sleep $INTERVAL
+      done
+      KEEPALIVE_EOF
+    - "chmod +x ${SERVICE_DATA}/config/keepalive.sh"
+    - "chmod 644 ${SERVICE_DATA}/config/mosquitto.conf"
+    - "chown -R 1883:1883 ${SERVICE_DATA} 2>/dev/null || true"
+
+  post_deploy:
+    - "sleep 3"
+    # Create MQTT user
+    - "docker exec ${CONTAINER_NAME} mosquitto_passwd -b /mosquitto/config/pwfile ${MQTT_USERNAME} ${MQTT_PASSWORD} 2>/dev/null && docker exec ${CONTAINER_NAME} kill -HUP 1 2>/dev/null && echo '✓ MQTT user ${MQTT_USERNAME} created' || true"
+    - "echo ''"
+    - "echo '═══════════════════════════════════════════════════════════════════════'"
+    - "echo 'Victron Venus OS MQTT Bridge configured:'"
+    - "echo ''"
+    - "echo '  Local MQTT:     localhost:${MQTT_PORT} (user: ${MQTT_USERNAME})'"
+    - "echo '  Venus OS:       ${VENUS_HOST}:${VENUS_PORT} (SSL: ${VENUS_USE_SSL})'"
+    - "echo '  Portal ID:      ${VENUS_PORTAL_ID}'"
+    - "echo '  Keepalive:      Every ${VENUS_KEEPALIVE_INTERVAL}s'"
+    - "echo ''"
+    - "echo '  Topics available locally:'"
+    - "echo '    N/${VENUS_PORTAL_ID}/battery/#    - Battery data'"
+    - "echo '    N/${VENUS_PORTAL_ID}/grid/#       - Grid meter data'"
+    - "echo '    N/${VENUS_PORTAL_ID}/vebus/#      - Inverter/charger data'"
+    - "echo '    N/${VENUS_PORTAL_ID}/system/#     - System overview'"
+    - "echo '    N/${VENUS_PORTAL_ID}/pvinverter/# - PV inverter data'"
+    - "echo '    victron/bridge/status             - Bridge status (1=online)'"
+    - "echo ''"
+    - "echo '  For Telegraf, use: tcp://localhost:${MQTT_PORT}'"
+    - "echo '═══════════════════════════════════════════════════════════════════════'"
+    - "docker logs ${CONTAINER_NAME} 2>&1 | tail -10 || true"
+
+compose: |
+  mosquitto-victron:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto-victron
+    restart: unless-stopped
+    ports:
+      - "${MQTT_PORT:-1883}:1883"
+      - "${MQTT_WS_PORT:-9001}:9001"
+    volumes:
+      - ${DOCKER_ROOT}/mosquitto-victron/config:/mosquitto/config
+      - ${DOCKER_ROOT}/mosquitto-victron/data:/mosquitto/data
+      - ${DOCKER_ROOT}/mosquitto-victron/logs:/mosquitto/log
+    healthcheck:
+      test: ["CMD", "mosquitto_sub", "-h", "localhost", "-p", "1883", "-u", "${MQTT_USERNAME}", "-P", "${MQTT_PASSWORD}", "-t", "$$SYS/broker/uptime", "-C", "1", "-W", "3"]
+      interval: 30s
+      timeout: 10s
+      start_period: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Keepalive sidecar - sends periodic keepalive to Venus OS
+  victron-keepalive:
+    image: eclipse-mosquitto:latest
+    container_name: victron-keepalive
+    restart: unless-stopped
+    depends_on:
+      mosquitto-victron:
+        condition: service_healthy
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        echo "Waiting for MQTT bridge to be ready..."
+        sleep 10
+
+        PORTAL_ID="${VENUS_PORTAL_ID}"
+        INTERVAL="${VENUS_KEEPALIVE_INTERVAL:-30}"
+        MQTT_USER="${MQTT_USERNAME}"
+        MQTT_PASS="${MQTT_PASSWORD}"
+
+        echo "Starting Venus OS keepalive (Portal: $$PORTAL_ID, Interval: $${INTERVAL}s)"
+
+        while true; do
+          mosquitto_pub -h mosquitto-victron -p 1883 -u "$$MQTT_USER" -P "$$MQTT_PASS" \
+            -t "R/$$PORTAL_ID/keepalive" \
+            -m '{"keepalive-options":["suppress-republish"]}' 2>/dev/null
+
+          if [ $$? -eq 0 ]; then
+            echo "$$(date '+%Y-%m-%d %H:%M:%S') Keepalive sent"
+          else
+            echo "$$(date '+%Y-%m-%d %H:%M:%S') ERROR: Failed to send keepalive"
+          fi
+
+          sleep $$INTERVAL
+        done
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"

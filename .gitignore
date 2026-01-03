@@ -35,3 +35,12 @@ test
 # Logs
 *.log
 logs/
+
+# External projects (integrated as submodules or clones)
+# Keep service*.yaml and INTEGRATION.md, ignore project source
+templates/fronius/*
+!templates/fronius/service*.yaml
+!templates/fronius/INTEGRATION.md
+templates/seplos-modbus-mqtt/*
+!templates/seplos-modbus-mqtt/service*.yaml
+!templates/seplos-modbus-mqtt/INTEGRATION.md

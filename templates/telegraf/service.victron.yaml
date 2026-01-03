@@ -1,13 +1,17 @@
 name: telegraf_victron
-description: "Telegraf - Victron Energy MQTT (Venus OS)"
+description: "Telegraf - Victron Energy MQTT (via local bridge or direct Venus OS connection)"
 
 dependencies:
   - name: influxdb
     variables:
       TELEGRAF_INFLUXDB_URL: "http://${HOST}:${PORT}"
-  - name: mosquitto
+  - name: mosquitto_victron
+    optional: true
     variables:
       TELEGRAF_MQTT_SERVER: "tcp://${HOST}:${PORT}"
+      TELEGRAF_MQTT_USERNAME: "${MQTT_USERNAME}"
+      TELEGRAF_MQTT_PASSWORD: "${MQTT_PASSWORD}"
+      VICTRON_PORTAL_ID: "${VENUS_PORTAL_ID}"
 
 variables:
   # Collection interval
@@ -38,8 +42,8 @@ variables:
 
   # MQTT settings
   TELEGRAF_MQTT_SERVER:
-    default: "ssl://venus.local:8883"
-    description: "Victron Venus OS MQTT URL (ssl:// for TLS)"
+    default: "tcp://mosquitto-victron:1883"
+    description: "MQTT server URL (use local bridge: tcp://mosquitto-victron:1883, or direct: ssl://venus.local:8883)"
     prompt: true
 
   TELEGRAF_MQTT_USERNAME:
