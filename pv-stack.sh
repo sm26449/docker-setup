@@ -7,7 +7,7 @@ set -e
 
 # Configuration
 COMPOSE_FILE="docker-compose.pv-stack.yml"
-PROJECT_NAME="pv-stack"
+PROJECT_NAME="docker-setup"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Colors
