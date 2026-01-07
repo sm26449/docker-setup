@@ -909,8 +909,10 @@ check_dependencies() {
         local required_by=$(echo "$dep_info" | cut -d: -f2)
 
         # Use smart dependency resolution
-        prompt_dependency_choice "$dep" "$required_by"
-        local result=$?
+        # Note: Capture return code without triggering set -e exit
+        # prompt_dependency_choice returns: 0=use existing, 1=create new, 2=skip
+        local result=0
+        prompt_dependency_choice "$dep" "$required_by" || result=$?
 
         case $result in
             0)
@@ -937,8 +939,8 @@ check_dependencies() {
                     if [[ -f "$dep_template" ]]; then
                         # Extract port from template (e.g., INFLUXDB_PORT, MOSQUITTO_PORT)
                         local port_var=$(echo "${dep^^}_PORT" | tr '-' '_')
-                        dep_port=$(grep -E "^[[:space:]]+${port_var}:" "$dep_template" 2>/dev/null | head -1 | grep -oE 'default:[[:space:]]*"?[0-9]+"?' | grep -oE '[0-9]+')
-                        [[ -z "$dep_port" ]] && dep_port=$(grep -E "^[[:space:]]+default:" "$dep_template" 2>/dev/null | head -1 | grep -oE '[0-9]+' | head -1)
+                        dep_port=$(grep -E "^[[:space:]]+${port_var}:" "$dep_template" 2>/dev/null | head -1 | grep -oE 'default:[[:space:]]*"?[0-9]+"?' | grep -oE '[0-9]+' || true)
+                        [[ -z "$dep_port" ]] && dep_port=$(grep -E "^[[:space:]]+default:" "$dep_template" 2>/dev/null | head -1 | grep -oE '[0-9]+' | head -1 || true)
                     fi
                     # Use common defaults if not found
                     case "$dep" in
@@ -1055,9 +1057,9 @@ suggest_portainer_for_stack() {
 
         if [[ -d "${TEMPLATES_DIR}/portainer" ]]; then
             if confirm "  Install Portainer for container management?"; then
+                # Add portainer at the end (it has no deps, so order doesn't matter)
+                # Don't re-sort - preserve topological order!
                 SELECTED_SERVICES+=("portainer")
-                # Remove duplicates
-                SELECTED_SERVICES=($(echo "${SELECTED_SERVICES[@]}" | tr ' ' '\n' | sort -u))
             fi
         else
             print_info "  Install Portainer separately to view stack groupings."
@@ -1094,7 +1096,7 @@ collect_service_variables() {
         echo -e "  Network:     ${GREEN}$(get_env_var DOCKER_NETWORK)${NC}"
         echo ""
 
-        if confirm "Modify global settings?"; then
+        if confirm "Modify global settings?" "N"; then
             run_initial_setup
         fi
     fi
