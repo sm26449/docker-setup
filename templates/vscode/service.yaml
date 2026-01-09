@@ -5,14 +5,17 @@ variables:
   VSCODE_PORT:
     default: "8443"
     description: "Web port"
+    prompt: true
   PASSWORD:
     default: ""
     description: "Web password"
     generate: password
+    prompt: true
   SUDO_PASSWORD:
     default: ""
     description: "Sudo password"
     generate: password
+    prompt: true
 
 compose: |
   ${SERVICE_NAME}:

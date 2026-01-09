@@ -6,7 +6,6 @@ dependencies:
     variables:
       MQTT_EXPLORER_BROKER_HOST: "${HOST}"
       MQTT_EXPLORER_BROKER_PORT: "${PORT}"
-      MOSQUITTO_SERVICE: "${SERVICE_NAME}"
 
 variables:
   MQTT_EXPLORER_PORT:

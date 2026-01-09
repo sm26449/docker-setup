@@ -1,12 +1,12 @@
-# Docker Services Manager v2.3
+# Docker Services Manager v2.6
 
 Script interactiv profesional pentru gestionarea serviciilor Docker pe Ubuntu/CentOS/Rocky/Alma Linux.
 
-**Nou în v2.3:** Security fixes, Grafana Image Renderer improvements, SERVER_IP support.
+**Nou în v2.6:** Multiple instanțe per serviciu, detectare conflicte porturi, prompts pentru variabile importante.
 
-**v2.2:** Sistem de variante pentru template-uri, suport Fronius Modbus MQTT.
+**v2.5:** Suport SERVICE_NAME în template-uri, stacks independente.
 
-**v2.1:** Integrare Victron Energy, configurare modulară Telegraf, suport Modbus/Serial.
+**v2.3:** Security fixes, Grafana Image Renderer improvements, SERVER_IP support.
 
 ## Caracteristici
 
@@ -16,6 +16,13 @@ Script interactiv profesional pentru gestionarea serviciilor Docker pe Ubuntu/Ce
 - **Define Template**: Creare template-uri pentru servicii noi
 - **Backup Config**: Backup configurări existente
 - **Initial Setup Wizard**: Configurare automată la prima rulare
+
+## Caracteristici v2.6
+
+- **Multiple instanțe per serviciu**: Deploy mariadb, mariadb_2, mariadb_3 în același stack
+- **Detectare conflicte porturi**: Verificare automată înainte de deployment cu rezolvare interactivă
+- **Variabile unice per instanță**: MARIADB_PORT_2, MYSQL_PASSWORD_2, etc.
+- **Prompts îmbunătățite**: Template-urile cer acum credențiale și setări importante
 
 ## Caracteristici v2.2
 

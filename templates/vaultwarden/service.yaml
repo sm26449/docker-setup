@@ -5,13 +5,16 @@ variables:
   VAULTWARDEN_PORT:
     default: "8082"
     description: "Web port"
+    prompt: true
   ADMIN_TOKEN:
     default: ""
     description: "Admin panel token"
     generate: random
+    prompt: true
   SIGNUPS_ALLOWED:
     default: "true"
     description: "Allow new signups"
+    prompt: true
 
 compose: |
   ${SERVICE_NAME}:

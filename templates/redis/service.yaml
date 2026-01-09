@@ -5,6 +5,7 @@ variables:
   REDIS_PORT:
     default: "6379"
     description: "Redis port"
+    prompt: true
 
 compose: |
   ${SERVICE_NAME}:

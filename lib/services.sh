@@ -17,6 +17,17 @@ declare -A DEPENDENCY_CONNECTIONS=()
 # Track variables that were set from existing containers (skip port availability check)
 declare -A VARS_FROM_EXISTING_CONTAINERS=()
 
+# Track actual compose service names (with instance numbers)
+# Format: GENERATED_COMPOSE_NAMES[service]="compose_service_name"
+declare -A GENERATED_COMPOSE_NAMES=()
+
+# Track instance numbers and variable suffixes for services
+declare -A SERVICE_INSTANCE_NUM=()
+declare -A SERVICE_VAR_SUFFIX=()
+
+# Current variable suffix (set during service configuration)
+CURRENT_VAR_SUFFIX=""
+
 #######################################
 # Detect running containers by service type
 # Returns container info for services matching the type
@@ -471,8 +482,12 @@ add_services_menu() {
     echo ""
     print_header "Add Services to Stack: ${CURRENT_STACK}"
 
-    # Reset selected services
+    # Reset selected services and generated names
     SELECTED_SERVICES=()
+    GENERATED_COMPOSE_NAMES=()
+    SERVICE_INSTANCE_NUM=()
+    SERVICE_VAR_SUFFIX=()
+    CURRENT_VAR_SUFFIX=""
 
     # Get available services
     local services=($(get_available_services))
@@ -557,6 +572,12 @@ add_services_menu() {
 
     # Collect variables for each service
     collect_service_variables
+
+    # Check for port conflicts before deployment
+    if ! check_port_conflicts; then
+        print_warning "Deployment cancelled due to port conflicts"
+        return
+    fi
 
     # Auto-backup before making changes
     auto_backup "before-add-${CURRENT_STACK}"
@@ -858,35 +879,37 @@ check_dependencies() {
         if [[ -f "$template" ]]; then
             local deps=$(parse_yaml_array "$template" "dependencies")
             for dep in $deps; do
-                # Check if dependency is already selected or installed in current stack
-                if [[ ! " ${SELECTED_SERVICES[*]} " =~ " ${dep} " ]]; then
-                    if ! service_in_compose "$dep"; then
-                        all_deps+=("$dep:$base_service")
-                    fi
+                local stack="${CURRENT_STACK:-default}"
+                local container_name
+                if [[ "$stack" == "default" ]]; then
+                    container_name="${dep}"
                 else
-                    # Dependency is already in SELECTED_SERVICES
-                    # Pre-populate DEPENDENCY_CONNECTIONS with the container name
-                    local stack="${CURRENT_STACK:-default}"
-                    local container_name
-                    if [[ "$stack" == "default" ]]; then
-                        container_name="${dep}"
-                    else
-                        container_name="${stack}-${dep}"
-                    fi
+                    container_name="${stack}-${dep}"
+                fi
 
-                    # Get port for this dependency
-                    local dep_port=""
-                    case "$dep" in
-                        influxdb) dep_port="8086" ;;
-                        mosquitto) dep_port="1883" ;;
-                        mariadb|mysql) dep_port="3306" ;;
-                        postgres*) dep_port="5432" ;;
-                        redis) dep_port="6379" ;;
-                        *) dep_port="0" ;;
-                    esac
+                # Get port for this dependency
+                local dep_port=""
+                case "$dep" in
+                    influxdb) dep_port="8086" ;;
+                    mosquitto) dep_port="1883" ;;
+                    mariadb|mysql) dep_port="3306" ;;
+                    postgres*) dep_port="5432" ;;
+                    redis) dep_port="6379" ;;
+                    *) dep_port="0" ;;
+                esac
 
-                    # Store connection info
+                # Check if dependency is already selected or installed in current stack
+                if [[ " ${SELECTED_SERVICES[*]} " =~ " ${dep} " ]]; then
+                    # Dependency is already in SELECTED_SERVICES for this session
                     DEPENDENCY_CONNECTIONS["${base_service}_${dep}"]="${container_name}:${container_name}:${dep_port}"
+                elif service_in_compose "$dep"; then
+                    # Dependency exists in compose file from previous session
+                    # Pre-populate DEPENDENCY_CONNECTIONS so credentials are copied
+                    DEPENDENCY_CONNECTIONS["${base_service}_${dep}"]="${container_name}:${container_name}:${dep_port}"
+                    print_info "Found existing ${dep} in stack (${container_name})"
+                else
+                    # Dependency not found - needs to be resolved
+                    all_deps+=("$dep:$base_service")
                 fi
             done
         fi
@@ -1203,17 +1226,50 @@ collect_service_vars() {
             in_compose=true
             continue
         fi
-        if $in_compose && [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+): ]]; then
-            compose_service_name="${BASH_REMATCH[1]}"
-            break
+        if $in_compose; then
+            if [[ "$line" =~ ^[[:space:]]+\$\{SERVICE_NAME\}: ]]; then
+                # Template uses ${SERVICE_NAME} - read the name: field from template
+                compose_service_name=$(grep -m1 "^name:" "$template" | sed 's/^name:[[:space:]]*//' | tr -d '[:space:]')
+                # Convert underscores to hyphens for compose service names
+                compose_service_name="${compose_service_name//_/-}"
+                break
+            elif [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+): ]]; then
+                compose_service_name="${BASH_REMATCH[1]}"
+                break
+            fi
         fi
     done < "$template"
     compose_service_name="${compose_service_name:-$base_service}"
 
-    echo -e "${CYAN}Configuring ${BOLD}${service}${NC}${CYAN}:${NC}"
+    # Determine instance number for this service (for variable naming)
+    local instance_num=1
+    local stack="${CURRENT_STACK:-default}"
+    local temp_name="$compose_service_name"
+    while service_in_compose "$temp_name" "$stack"; do
+        instance_num=$((instance_num + 1))
+        temp_name="${compose_service_name}_${instance_num}"
+    done
+
+    # Store the instance number for use during variable collection
+    local var_suffix=""
+    if [[ "$instance_num" -gt 1 ]]; then
+        var_suffix="_${instance_num}"
+        echo -e "${CYAN}Configuring ${BOLD}${service}${NC}${CYAN} (instance #${instance_num}):${NC}"
+    else
+        echo -e "${CYAN}Configuring ${BOLD}${service}${NC}${CYAN}:${NC}"
+    fi
+
+    # Store instance info for later use
+    SERVICE_INSTANCE_NUM["$service"]="$instance_num"
+    SERVICE_VAR_SUFFIX["$service"]="$var_suffix"
+
+    # Set global suffix for use in process_template_variable
+    CURRENT_VAR_SUFFIX="$var_suffix"
 
     # Create service directories (use compose_service_name for directory path to match volume mounts)
-    create_service_dirs "$compose_service_name"
+    local actual_compose_name="$compose_service_name"
+    [[ "$instance_num" -gt 1 ]] && actual_compose_name="${compose_service_name}_${instance_num}"
+    create_service_dirs "$actual_compose_name"
 
     # Apply dependency connection info if available
     apply_dependency_connections "$service"
@@ -1349,6 +1405,9 @@ collect_service_vars() {
         fi
     fi
 
+    # Clear the suffix after configuring this service
+    CURRENT_VAR_SUFFIX=""
+
     echo ""
 }
 
@@ -1368,6 +1427,15 @@ process_template_variable() {
     local var_generate=$3
     local var_prompt=$4
     local var_description=$5
+
+    # Apply instance suffix to variable name for multiple instances
+    # Skip common variables that should be shared
+    if [[ -n "$CURRENT_VAR_SUFFIX" ]]; then
+        case "$var_name" in
+            DOCKER_ROOT|TZ|PUID|PGID|STACK_*) ;;  # Don't suffix these
+            *) var_name="${var_name}${CURRENT_VAR_SUFFIX}" ;;
+        esac
+    fi
 
     # Skip if already exists in .env
     if env_var_exists "$var_name"; then
@@ -1791,9 +1859,17 @@ run_service_hooks() {
             in_compose=true
             continue
         fi
-        if $in_compose && [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+): ]]; then
-            compose_service_name="${BASH_REMATCH[1]}"
-            break
+        if $in_compose; then
+            if [[ "$line" =~ ^[[:space:]]+\$\{SERVICE_NAME\}: ]]; then
+                # Template uses ${SERVICE_NAME} - read the name: field from template
+                compose_service_name=$(grep -m1 "^name:" "$template" | sed 's/^name:[[:space:]]*//' | tr -d '[:space:]')
+                # Convert underscores to hyphens for compose service names
+                compose_service_name="${compose_service_name//_/-}"
+                break
+            elif [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+): ]]; then
+                compose_service_name="${BASH_REMATCH[1]}"
+                break
+            fi
         fi
     done < "$template"
     compose_service_name="${compose_service_name:-$base_service}"
@@ -2013,6 +2089,243 @@ prompt_for_variable() {
 }
 
 #######################################
+# Check for port conflicts before deployment
+# Detects duplicate ports among selected services and
+# conflicts with already running containers
+#######################################
+check_port_conflicts() {
+    print_header "Port Conflict Check"
+
+    local stack="${CURRENT_STACK:-default}"
+
+    # Associative array: port -> "service:var_name"
+    declare -A port_usage
+    # Array of conflicts: "port:service1:var1:service2:var2"
+    local conflicts=()
+    # Array of host conflicts: "port:service:var:container_name"
+    local host_conflicts=()
+
+    # Get currently used ports on the host
+    # Include stack containers - we want to detect conflicts with existing services in the same stack
+    # Only skip containers that we're about to deploy (from GENERATED_COMPOSE_NAMES)
+    declare -A running_ports
+    while IFS= read -r line; do
+        [[ -z "$line" ]] && continue
+        local container_name=$(echo "$line" | awk '{print $1}')
+        local ports_str=$(echo "$line" | cut -d' ' -f2-)
+
+        # Check if this container corresponds to a service we're deploying
+        # Use SERVICE_INSTANCE_NUM to compute expected container name
+        local skip_container=false
+        for svc in "${SELECTED_SERVICES[@]}"; do
+            local base_svc="${svc%%:*}"
+            local inst_num="${SERVICE_INSTANCE_NUM[$svc]:-1}"
+            local expected_name="$base_svc"
+            [[ "$inst_num" -gt 1 ]] && expected_name="${base_svc}_${inst_num}"
+            local expected_container="${stack}-${expected_name}"
+            if [[ "$container_name" == "$expected_container" ]]; then
+                skip_container=true
+                break
+            fi
+        done
+        [[ "$skip_container" == true ]] && continue
+
+        # Extract host ports from port mappings like "0.0.0.0:8080->80/tcp"
+        for port_map in $ports_str; do
+            if [[ "$port_map" =~ 0\.0\.0\.0:([0-9]+) ]]; then
+                running_ports["${BASH_REMATCH[1]}"]="$container_name"
+            elif [[ "$port_map" =~ :::([0-9]+) ]]; then
+                running_ports["${BASH_REMATCH[1]}"]="$container_name"
+            fi
+        done
+    done < <(docker ps --format '{{.Names}} {{.Ports}}' 2>/dev/null)
+
+    # Process each selected service
+    for service in "${SELECTED_SERVICES[@]}"; do
+        local base_service="${service%%:*}"
+        local variant="${service#*:}"
+        [[ "$variant" == "$service" ]] && variant=""
+
+        local template
+        if [[ -n "$variant" ]]; then
+            template="${TEMPLATES_DIR}/${base_service}/service.${variant}.yaml"
+        else
+            template="${TEMPLATES_DIR}/${base_service}/service.yaml"
+        fi
+
+        [[ ! -f "$template" ]] && continue
+
+        # Extract port variables from compose section
+        # Pattern: ${VAR_PORT:-default}:internal or ${VAR_PORT}:internal
+        # Use awk to get everything from compose: to end of file or next top-level key
+        local compose_section=$(awk '/^compose:/{found=1} found{print} /^[a-z]/ && !/^compose:/ && found{exit}' "$template")
+
+        # Get the variable suffix for this service (for multiple instances)
+        local var_suffix="${SERVICE_VAR_SUFFIX[$service]:-}"
+
+        while IFS= read -r port_line; do
+            # Extract variable name and default value
+            if [[ "$port_line" =~ \$\{([A-Z0-9_]+_PORT)(:-([0-9]+))?\}:([0-9]+) ]]; then
+                local var_name="${BASH_REMATCH[1]}"
+                local default_port="${BASH_REMATCH[3]}"
+
+                # Apply suffix for multiple instances
+                [[ -n "$var_suffix" ]] && var_name="${var_name}${var_suffix}"
+
+                # Get actual port value from env
+                local actual_port=$(get_env_var "$var_name")
+                actual_port="${actual_port:-$default_port}"
+
+                [[ -z "$actual_port" ]] && continue
+
+                # Check for duplicate among selected services
+                if [[ -n "${port_usage[$actual_port]}" ]]; then
+                    local existing="${port_usage[$actual_port]}"
+                    local existing_service="${existing%%:*}"
+                    local existing_var="${existing#*:}"
+                    conflicts+=("${actual_port}:${existing_service}:${existing_var}:${service}:${var_name}")
+                else
+                    port_usage["$actual_port"]="${service}:${var_name}"
+                fi
+
+                # Check for conflict with running containers
+                if [[ -n "${running_ports[$actual_port]}" ]]; then
+                    host_conflicts+=("${actual_port}:${service}:${var_name}:${running_ports[$actual_port]}")
+                fi
+            fi
+        done <<< "$compose_section"
+    done
+
+    # No conflicts found
+    if [[ ${#conflicts[@]} -eq 0 && ${#host_conflicts[@]} -eq 0 ]]; then
+        print_success "No port conflicts detected"
+        echo ""
+        return 0
+    fi
+
+    # Display and resolve conflicts
+    local has_conflicts=false
+
+    # Handle conflicts among selected services
+    if [[ ${#conflicts[@]} -gt 0 ]]; then
+        has_conflicts=true
+        echo -e "${YELLOW}Port conflicts detected among selected services:${NC}"
+        echo ""
+
+        for conflict in "${conflicts[@]}"; do
+            IFS=':' read -r port svc1 var1 svc2 var2 <<< "$conflict"
+            echo -e "  ${RED}Port ${port}${NC} is used by both:"
+            echo -e "    • ${CYAN}${svc1}${NC} (${var1})"
+            echo -e "    • ${CYAN}${svc2}${NC} (${var2})"
+            echo ""
+
+            # Prompt for new port for the second service
+            local new_port
+            while true; do
+                read -p "  Enter new port for ${svc2} (${var2}) [or 'skip' to handle later]: " new_port
+
+                if [[ "$new_port" == "skip" ]]; then
+                    echo -e "  ${YELLOW}⚠ Skipped - you'll need to fix this manually${NC}"
+                    break
+                fi
+
+                if [[ ! "$new_port" =~ ^[0-9]+$ ]]; then
+                    echo -e "  ${RED}Invalid port number${NC}"
+                    continue
+                fi
+
+                if [[ "$new_port" -lt 1 || "$new_port" -gt 65535 ]]; then
+                    echo -e "  ${RED}Port must be between 1 and 65535${NC}"
+                    continue
+                fi
+
+                # Check if new port is also in use
+                if [[ -n "${port_usage[$new_port]}" ]]; then
+                    echo -e "  ${RED}Port ${new_port} is already used by ${port_usage[$new_port]%%:*}${NC}"
+                    continue
+                fi
+
+                if [[ -n "${running_ports[$new_port]}" ]]; then
+                    echo -e "  ${RED}Port ${new_port} is already used by container ${running_ports[$new_port]}${NC}"
+                    continue
+                fi
+
+                # Update the port
+                set_env_var "$var2" "$new_port"
+                port_usage["$new_port"]="${svc2}:${var2}"
+                unset "port_usage[$port]"
+                echo -e "  ${GREEN}✓${NC} Updated ${var2}=${new_port}"
+                break
+            done
+            echo ""
+        done
+    fi
+
+    # Handle conflicts with running containers
+    if [[ ${#host_conflicts[@]} -gt 0 ]]; then
+        has_conflicts=true
+        echo -e "${YELLOW}Port conflicts with running containers:${NC}"
+        echo ""
+
+        for conflict in "${host_conflicts[@]}"; do
+            IFS=':' read -r port svc var container <<< "$conflict"
+            echo -e "  ${RED}Port ${port}${NC} is used by:"
+            echo -e "    • ${CYAN}${svc}${NC} (${var}) - selected service"
+            echo -e "    • ${YELLOW}${container}${NC} - running container"
+            echo ""
+
+            # Prompt for new port
+            local new_port
+            while true; do
+                read -p "  Enter new port for ${svc} (${var}) [or 'skip' to handle later]: " new_port
+
+                if [[ "$new_port" == "skip" ]]; then
+                    echo -e "  ${YELLOW}⚠ Skipped - deployment may fail${NC}"
+                    break
+                fi
+
+                if [[ ! "$new_port" =~ ^[0-9]+$ ]]; then
+                    echo -e "  ${RED}Invalid port number${NC}"
+                    continue
+                fi
+
+                if [[ "$new_port" -lt 1 || "$new_port" -gt 65535 ]]; then
+                    echo -e "  ${RED}Port must be between 1 and 65535${NC}"
+                    continue
+                fi
+
+                # Check if new port is also in use
+                if [[ -n "${port_usage[$new_port]}" ]]; then
+                    echo -e "  ${RED}Port ${new_port} is already used by ${port_usage[$new_port]%%:*}${NC}"
+                    continue
+                fi
+
+                if [[ -n "${running_ports[$new_port]}" ]]; then
+                    echo -e "  ${RED}Port ${new_port} is already used by container ${running_ports[$new_port]}${NC}"
+                    continue
+                fi
+
+                # Update the port
+                set_env_var "$var" "$new_port"
+                port_usage["$new_port"]="${svc}:${var}"
+                echo -e "  ${GREEN}✓${NC} Updated ${var}=${new_port}"
+                break
+            done
+            echo ""
+        done
+    fi
+
+    if [[ "$has_conflicts" == true ]]; then
+        echo ""
+        if ! confirm "Continue with deployment?"; then
+            return 1
+        fi
+    fi
+
+    return 0
+}
+
+#######################################
 # Generate docker-compose.yml for current stack
 #######################################
 generate_compose_file() {
@@ -2191,9 +2504,16 @@ add_service_to_compose() {
             if [[ "$line" =~ ^[a-z] ]] && [[ ! "$line" =~ ^[[:space:]] ]]; then
                 break
             fi
-            # Extract service name from first line (e.g., "  fronius-inverters:")
-            if [[ -z "$compose_service_name" ]] && [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+): ]]; then
-                compose_service_name="${BASH_REMATCH[1]}"
+            # Extract service name from first line (e.g., "  fronius-inverters:" or "  ${SERVICE_NAME}:")
+            if [[ -z "$compose_service_name" ]]; then
+                if [[ "$line" =~ ^[[:space:]]+\$\{SERVICE_NAME\}: ]]; then
+                    # Template uses ${SERVICE_NAME} - read the name: field from template
+                    compose_service_name=$(grep -m1 "^name:" "$template" | sed 's/^name:[[:space:]]*//' | tr -d '[:space:]')
+                    # Convert underscores to hyphens for compose service names
+                    compose_service_name="${compose_service_name//_/-}"
+                elif [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+): ]]; then
+                    compose_service_name="${BASH_REMATCH[1]}"
+                fi
             fi
             # Keep the indentation - services need 2-space indent under services: key
             echo "$line" >> "$compose_snippet"
@@ -2209,15 +2529,23 @@ add_service_to_compose() {
     # Use compose_service_name if found, fallback to base_service
     compose_service_name="${compose_service_name:-$base_service}"
 
-    # Check if service already exists in compose file
-    if service_in_compose "$compose_service_name" "$stack"; then
-        print_warning "${compose_service_name} already in stack ${stack}, skipping"
-        rm -f "$compose_snippet"
-        return
+    # Auto-generate unique service name if already exists (for multiple instances)
+    # Format: service-name, service-name_2, service-name_3, etc.
+    local base_compose_name="$compose_service_name"
+    local instance_num=1
+    while service_in_compose "$compose_service_name" "$stack"; do
+        instance_num=$((instance_num + 1))
+        compose_service_name="${base_compose_name}_${instance_num}"
+    done
+    if [[ "$instance_num" -gt 1 ]]; then
+        print_info "Service name: ${compose_service_name} (instance #${instance_num})"
     fi
 
-    # Get data directory for this stack (use base_service for folder path)
-    local data_dir=$(get_service_data_dir "$base_service" "$stack")
+    # Store the generated compose service name for use in start_services
+    GENERATED_COMPOSE_NAMES["$service"]="$compose_service_name"
+
+    # Get data directory for this stack (use compose_service_name for correct instance path)
+    local data_dir=$(get_service_data_dir "$compose_service_name" "$stack")
     local docker_root=$(get_env_var "DOCKER_ROOT")
     docker_root=${docker_root:-"/docker-storage"}
 
@@ -2244,6 +2572,32 @@ add_service_to_compose() {
             echo "$line" >> "$temp_build"
         done < "$compose_snippet"
         mv "$temp_build" "$compose_snippet"
+    fi
+
+    # Replace ${SERVICE_NAME} with actual compose service name (including instance number)
+    # This is critical because Docker Compose cannot interpolate variables in YAML keys
+    sed -i "s/\${SERVICE_NAME}/${compose_service_name}/g" "$compose_snippet"
+
+    # For multiple instances, rename environment variables to be unique per instance
+    # e.g., MARIADB_PORT -> MARIADB_PORT_2 for the second instance
+    # NOTE: The _2 variables are already set during collect_service_variables with CURRENT_VAR_SUFFIX
+    # We only need to update the compose snippet variable references here
+    if [[ "$instance_num" -gt 1 ]]; then
+        # Get all unique environment variable names from compose snippet (excluding common ones)
+        local env_vars=$(grep -oE '\$\{[A-Z][A-Z0-9_]*' "$compose_snippet" | sed 's/\${//' | sort -u)
+
+        for var in $env_vars; do
+            # Skip common variables that should be shared
+            case "$var" in
+                DOCKER_ROOT|TZ|PUID|PGID|STACK_*) continue ;;
+            esac
+
+            local new_var="${var}_${instance_num}"
+
+            # Replace variable name in compose snippet
+            sed -i "s/\${${var}}/\${${new_var}}/g" "$compose_snippet"
+            sed -i "s/\${${var}:-/\${${new_var}:-/g" "$compose_snippet"
+        done
     fi
 
     # Transform the compose snippet for this stack
@@ -2376,6 +2730,24 @@ add_service_to_compose() {
     # This allows templates to use ${SERVICE_NAME} for flexible naming
     sed -i.bak "s/\${SERVICE_NAME}/${compose_service_name}/g" "$compose_snippet"
     rm -f "${compose_snippet}.bak"
+
+    # Substitute dependency service name variables (used in depends_on keys)
+    # Docker Compose cannot interpolate variables in YAML keys, so we do it here
+    # Use env var if set, otherwise use default based on variable name
+    declare -A dep_defaults=(
+        ["MOSQUITTO_SERVICE"]="mosquitto"
+        ["INFLUXDB_SERVICE"]="influxdb"
+        ["MARIADB_SERVICE"]="mariadb"
+        ["GRAFANA_RENDERER_SERVICE"]="grafana-image-renderer"
+    )
+    for dep_var in "${!dep_defaults[@]}"; do
+        local dep_value=$(get_env_var "$dep_var")
+        dep_value="${dep_value:-${dep_defaults[$dep_var]}}"
+        # Convert underscores to hyphens in the value (match compose service naming)
+        dep_value="${dep_value//_/-}"
+        sed -i.bak "s/\${${dep_var}}/${dep_value}/g" "$compose_snippet"
+        rm -f "${compose_snippet}.bak"
+    done
 
     # Append service to compose file (networks section is added at the end by generate_compose_file)
     cat "$compose_snippet" >> "$compose_file"
@@ -2540,9 +2912,17 @@ get_compose_service_name() {
                 in_compose=true
                 continue
             fi
-            if $in_compose && [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+): ]]; then
-                compose_service_name="${BASH_REMATCH[1]}"
-                break
+            if $in_compose; then
+                if [[ "$line" =~ ^[[:space:]]+\$\{SERVICE_NAME\}: ]]; then
+                    # Template uses ${SERVICE_NAME} - read the name: field from template
+                    compose_service_name=$(grep -m1 "^name:" "$template" | sed 's/^name:[[:space:]]*//' | tr -d '[:space:]')
+                    # Convert underscores to hyphens for compose service names
+                    compose_service_name="${compose_service_name//_/-}"
+                    break
+                elif [[ "$line" =~ ^[[:space:]]+([a-zA-Z0-9_-]+): ]]; then
+                    compose_service_name="${BASH_REMATCH[1]}"
+                    break
+                fi
             fi
         done < "$template"
     fi
@@ -2565,9 +2945,14 @@ start_services() {
     print_info "Compose file: ${compose_file}"
 
     # Build list of compose service names for newly selected services
+    # Use GENERATED_COMPOSE_NAMES from add_service_to_compose (includes instance numbers)
     local -a compose_service_names=()
     for service in "${SELECTED_SERVICES[@]}"; do
-        local svc_name=$(get_compose_service_name "$service")
+        local svc_name="${GENERATED_COMPOSE_NAMES[$service]}"
+        # Fallback to get_compose_service_name if not in array (shouldn't happen)
+        if [[ -z "$svc_name" ]]; then
+            svc_name=$(get_compose_service_name "$service")
+        fi
         compose_service_names+=("$svc_name")
     done
 

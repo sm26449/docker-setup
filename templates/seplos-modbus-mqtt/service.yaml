@@ -10,13 +10,11 @@ dependencies:
     variables:
       SEPLOS_MQTT_SERVER: "${HOST}"
       SEPLOS_MQTT_PORT: "${PORT}"
-      MOSQUITTO_SERVICE: "${SERVICE_NAME}"
     # Note: MQTT credentials NOT auto-copied - allows setting separate user for seplos
   - name: influxdb
     variables:
       SEPLOS_INFLUXDB_URL: "http://${HOST}:${PORT}"
       SEPLOS_INFLUXDB_ENABLED: "true"
-      INFLUXDB_SERVICE: "${SERVICE_NAME}"
     credentials:
       SEPLOS_INFLUXDB_TOKEN: "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"
       SEPLOS_INFLUXDB_ORG: "DOCKER_INFLUXDB_INIT_ORG"

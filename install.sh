@@ -3,7 +3,7 @@
 #######################################
 # Docker Services Manager
 # Interactive script for Ubuntu/CentOS
-# Version: 2.0.0
+# Version: 2.6.0
 #######################################
 
 set -e
@@ -48,7 +48,7 @@ show_main_menu() {
     clear
     echo -e "${BOLD}${BLUE}"
     echo "╔════════════════════════════════════════════════════════════╗"
-    echo "║           Docker Services Manager v2.0.0                   ║"
+    echo "║           Docker Services Manager v2.6.0                   ║"
     echo "║           Ubuntu/CentOS/Rocky/Alma Server Setup            ║"
     echo "╚════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"

@@ -5,30 +5,38 @@ variables:
   INFLUXDB1_PORT:
     default: "8086"
     description: "InfluxDB HTTP API port"
+    prompt: true
   INFLUXDB1_DB:
     default: "homeassistant"
     description: "Default database name"
+    prompt: true
   INFLUXDB1_ADMIN_USER:
     default: "admin"
     description: "Admin username"
+    prompt: true
   INFLUXDB1_ADMIN_PASSWORD:
     default: ""
     description: "Admin password"
     generate: password
+    prompt: true
   INFLUXDB1_USER:
     default: "influxdb"
     description: "Regular user username"
+    prompt: true
   INFLUXDB1_USER_PASSWORD:
     default: ""
     description: "Regular user password"
     generate: password
+    prompt: true
   INFLUXDB1_READ_USER:
     default: "grafana"
     description: "Read-only user for Grafana"
+    prompt: true
   INFLUXDB1_READ_PASSWORD:
     default: ""
     description: "Read-only user password"
     generate: password
+    prompt: true
 
 config_files:
   - path: "config/influxdb.conf"

@@ -5,10 +5,12 @@ variables:
   GOTIFY_PORT:
     default: "8083"
     description: "Web port"
+    prompt: true
   GOTIFY_DEFAULTUSER_PASS:
     default: ""
     description: "Default user password"
     generate: password
+    prompt: true
 
 compose: |
   ${SERVICE_NAME}:

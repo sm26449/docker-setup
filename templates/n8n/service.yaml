@@ -5,16 +5,19 @@ variables:
   N8N_PORT:
     default: "5678"
     description: "Web port"
+    prompt: true
   N8N_BASIC_AUTH_ACTIVE:
     default: "true"
     description: "Enable basic auth"
   N8N_BASIC_AUTH_USER:
     default: "admin"
     description: "Auth username"
+    prompt: true
   N8N_BASIC_AUTH_PASSWORD:
     default: ""
     description: "Auth password"
     generate: password
+    prompt: true
 
 compose: |
   ${SERVICE_NAME}:

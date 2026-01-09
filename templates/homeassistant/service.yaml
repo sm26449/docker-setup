@@ -6,17 +6,14 @@ dependencies:
     variables:
       HA_MARIADB_HOST: "${HOST}"
       HA_MARIADB_PORT: "${PORT}"
-      MARIADB_SERVICE: "${SERVICE_NAME}"
   - name: mosquitto
     variables:
       HA_MQTT_HOST: "${HOST}"
       HA_MQTT_PORT: "${PORT}"
-      MOSQUITTO_SERVICE: "${SERVICE_NAME}"
   - name: influxdb
     variables:
       HA_INFLUXDB_HOST: "${HOST}"
       HA_INFLUXDB_PORT: "${PORT}"
-      INFLUXDB_SERVICE: "${SERVICE_NAME}"
 
 variables:
   HA_PORT:

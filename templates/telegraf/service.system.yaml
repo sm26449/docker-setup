@@ -5,7 +5,6 @@ dependencies:
   - name: influxdb
     variables:
       TELEGRAF_INFLUXDB_URL: "http://${HOST}:${PORT}"
-      INFLUXDB_SERVICE: "${SERVICE_NAME}"
 
 variables:
   # Collection interval

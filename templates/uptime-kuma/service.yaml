@@ -5,6 +5,7 @@ variables:
   UPTIME_KUMA_PORT:
     default: "3001"
     description: "Web port"
+    prompt: true
 
 compose: |
   ${SERVICE_NAME}:

@@ -5,18 +5,19 @@ dependencies:
   - name: mosquitto
     variables:
       ZIGBEE2MQTT_CONFIG_MQTT_SERVER: "mqtt://${HOST}:${PORT}"
-      MOSQUITTO_SERVICE: "${SERVICE_NAME}"
 
 variables:
   ZIGBEE2MQTT_PORT:
     default: "8088"
     description: "Web frontend port"
+    prompt: true
   ZIGBEE2MQTT_CONFIG_MQTT_SERVER:
     default: "mqtt://mosquitto:1883"
     description: "MQTT broker URL"
   ZIGBEE_DEVICE:
     default: "/dev/ttyUSB0"
     description: "Zigbee adapter device path"
+    prompt: true
   MOSQUITTO_SERVICE:
     default: "mosquitto"
     description: "Mosquitto service name (for depends_on)"

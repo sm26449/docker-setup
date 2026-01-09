@@ -5,13 +5,16 @@ variables:
   MONGODB_PORT:
     default: "27017"
     description: "MongoDB port"
+    prompt: true
   MONGO_INITDB_ROOT_USERNAME:
     default: "root"
     description: "Root username"
+    prompt: true
   MONGO_INITDB_ROOT_PASSWORD:
     default: ""
     description: "Root password"
     generate: password
+    prompt: true
 
 compose: |
   ${SERVICE_NAME}:

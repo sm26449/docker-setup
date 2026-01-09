@@ -6,12 +6,12 @@ dependencies:
     variables:
       PMA_HOST: "${HOST}"
       PMA_PORT: "${PORT}"
-      MARIADB_SERVICE: "${SERVICE_NAME}"
 
 variables:
   PHPMYADMIN_PORT:
-    default: "8081"
+    default: "8084"
     description: "Web port"
+    prompt: true
   PMA_HOST:
     default: "mariadb"
     description: "Database host"
@@ -25,7 +25,7 @@ compose: |
     container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
-      - "${PHPMYADMIN_PORT:-8081}:80"
+      - "${PHPMYADMIN_PORT:-8084}:80"
     environment:
       - PMA_HOST=${PMA_HOST:-mariadb}
     depends_on:

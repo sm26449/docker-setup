@@ -7,13 +7,10 @@ dependencies:
       GRAFANA_INFLUXDB_URL: "http://${HOST}:${PORT}"
       GRAFANA_INFLUXDB_HOST: "${HOST}"
       GRAFANA_INFLUXDB_UID: "${HOST}"
-      INFLUXDB_SERVICE: "${SERVICE_NAME}"
     credentials:
       GRAFANA_INFLUXDB_TOKEN: "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"
       GRAFANA_INFLUXDB_ORG: "DOCKER_INFLUXDB_INIT_ORG"
   - name: grafana-image-renderer
-    variables:
-      GRAFANA_RENDERER_SERVICE: "${SERVICE_NAME}"
 
 variables:
   GRAFANA_PORT:

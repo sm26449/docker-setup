@@ -93,6 +93,14 @@ variables:
     description: "Enable Home Assistant MQTT autodiscovery"
     prompt: true
 
+  # Service names for depends_on (allows customization when using non-default service names)
+  MOSQUITTO_SERVICE:
+    default: "mosquitto"
+    description: "Mosquitto service name (for depends_on)"
+  INFLUXDB_SERVICE:
+    default: "influxdb"
+    description: "InfluxDB service name (for depends_on)"
+
 # Copy config files (same folder now)
 copy_files:
   - src: config/registers.json

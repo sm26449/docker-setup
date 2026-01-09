@@ -5,6 +5,35 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.6.0] - 2026-01-09
+
+### Added
+- **Multiple Service Instances**
+  - Deploy multiple instances of the same service (e.g., mariadb, mariadb_2, mariadb_3)
+  - Automatic instance numbering when adding services already in stack
+  - Unique variable names per instance (MARIADB_PORT_2, MYSQL_PASSWORD_2, etc.)
+  - Each instance gets its own data directory and container name
+
+- **Port Conflict Detection**
+  - Pre-deployment port conflict check between selected services
+  - Detection of conflicts with running containers on the host
+  - Interactive resolution: choose new port or skip for manual handling
+  - Validates new port isn't already in use
+
+- **Template Variable Prompts**
+  - Added `prompt: true` to important variables across all templates
+  - Users are now prompted for database credentials, ports, and key settings
+  - Affected templates: mariadb, influxdb1, mongodb, gotify, n8n, pihole, vscode, redis, uptime-kuma, vaultwarden, zigbee2mqtt
+
+### Changed
+- **phpmyadmin**: Default port changed from 8081 to 8084 (avoids conflict with grafana-image-renderer)
+- **Template Dependencies**: Cleaned up dependency variable mappings in mqtt-explorer, homeassistant, grafana, zigbee2mqtt, telegraf, seplos-modbus-mqtt, phpmyadmin, fronius templates
+
+### Fixed
+- **SERVICE_NAME substitution**: Fixed regex pattern to correctly detect `${SERVICE_NAME}:` in compose blocks
+- **Variable suffix handling**: Instance-specific variables (_2, _3) are now correctly preserved through compose generation
+- **Port conflict check**: Now includes containers from same stack (not just external containers)
+
 ## [2.5.3] - 2026-01-09
 
 ### Changed

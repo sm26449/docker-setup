@@ -5,20 +5,25 @@ variables:
   MARIADB_PORT:
     default: "3306"
     description: "MariaDB port"
+    prompt: true
   MYSQL_ROOT_PASSWORD:
     default: ""
     description: "Root password"
     generate: password
+    prompt: true
   MYSQL_DATABASE:
     default: "homeassistant"
-    description: "Default database"
+    description: "Default database name"
+    prompt: true
   MYSQL_USER:
     default: "homeassistant"
     description: "Database user"
+    prompt: true
   MYSQL_PASSWORD:
     default: ""
     description: "User password"
     generate: password
+    prompt: true
 
 compose: |
   ${SERVICE_NAME}:
