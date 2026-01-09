@@ -6,20 +6,27 @@ dependencies:
     variables:
       MQTT_EXPLORER_BROKER_HOST: "${HOST}"
       MQTT_EXPLORER_BROKER_PORT: "${PORT}"
+      MOSQUITTO_SERVICE: "${SERVICE_NAME}"
 
 variables:
   MQTT_EXPLORER_PORT:
     default: "4000"
     description: "Web port"
+  MQTT_EXPLORER_BROKER_HOST:
+    default: "mosquitto"
+    description: "MQTT broker host"
+  MOSQUITTO_SERVICE:
+    default: "mosquitto"
+    description: "Mosquitto service name (for depends_on)"
 
 compose: |
-  mqtt-explorer:
+  ${SERVICE_NAME}:
     image: smeagolworms4/mqtt-explorer:latest
-    container_name: mqtt-explorer
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${MQTT_EXPLORER_PORT:-4000}:4000"
     volumes:
-      - ${DOCKER_ROOT}/mqtt-explorer/config:/mqtt-explorer/config
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/mqtt-explorer/config
     depends_on:
-      - mosquitto
+      - ${MOSQUITTO_SERVICE}

@@ -10,11 +10,13 @@ dependencies:
     variables:
       SEPLOS_MQTT_SERVER: "${HOST}"
       SEPLOS_MQTT_PORT: "${PORT}"
+      MOSQUITTO_SERVICE: "${SERVICE_NAME}"
     # Note: MQTT credentials NOT auto-copied - allows setting separate user for seplos
   - name: influxdb
     variables:
       SEPLOS_INFLUXDB_URL: "http://${HOST}:${PORT}"
       SEPLOS_INFLUXDB_ENABLED: "true"
+      INFLUXDB_SERVICE: "${SERVICE_NAME}"
     credentials:
       SEPLOS_INFLUXDB_TOKEN: "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"
       SEPLOS_INFLUXDB_ORG: "DOCKER_INFLUXDB_INIT_ORG"
@@ -92,6 +94,14 @@ variables:
     default: "INFO"
     description: "Log level: DEBUG, INFO, WARNING, ERROR"
 
+  # Service names for depends_on
+  MOSQUITTO_SERVICE:
+    default: "mosquitto"
+    description: "Mosquitto service name (for depends_on)"
+  INFLUXDB_SERVICE:
+    default: "influxdb"
+    description: "InfluxDB service name (for depends_on)"
+
 # Copy files from template to ${DOCKER_ROOT}/<stack>/<service>/
 copy_files:
   - src: seplos_bms_mqtt.ini.example
@@ -112,17 +122,17 @@ hooks:
     - "docker logs ${CONTAINER_NAME} --tail 5 2>/dev/null || true"
 
 compose: |
-  seplos-modbus-mqtt:
+  ${SERVICE_NAME}:
     build:
       context: .
       dockerfile: Dockerfile
     image: seplos-modbus-mqtt:latest
-    container_name: seplos-modbus-mqtt
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     depends_on:
-      mosquitto:
+      ${MOSQUITTO_SERVICE}:
         condition: service_started
-      influxdb:
+      ${INFLUXDB_SERVICE}:
         condition: service_healthy
     devices:
       - ${SEPLOS_SERIAL_PORT:-/dev/ttyUSB0}:${SEPLOS_SERIAL_PORT:-/dev/ttyUSB0}
@@ -146,7 +156,7 @@ compose: |
       - HEALTH_STALE_TIMEOUT=${SEPLOS_HEALTH_STALE_TIMEOUT:-120}
       - GENERAL_LOG_LEVEL=${SEPLOS_LOG_LEVEL:-INFO}
     volumes:
-      - ${DOCKER_ROOT}/seplos-modbus-mqtt/config:/app/config:ro
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/app/config:ro
     healthcheck:
       test: ["CMD", "python3", "/app/healthcheck.py"]
       interval: 60s

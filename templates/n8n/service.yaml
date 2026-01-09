@@ -17,9 +17,9 @@ variables:
     generate: password
 
 compose: |
-  n8n:
+  ${SERVICE_NAME}:
     image: n8nio/n8n:latest
-    container_name: n8n
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${N8N_PORT:-5678}:5678"
@@ -29,4 +29,4 @@ compose: |
       - N8N_BASIC_AUTH_PASSWORD=${N8N_BASIC_AUTH_PASSWORD}
       - TZ=${TZ}
     volumes:
-      - ${DOCKER_ROOT}/n8n/data:/home/node/.n8n
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/home/node/.n8n

@@ -37,9 +37,9 @@ hooks:
     - "echo '  INFLUXDB_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}'"
 
 compose: |
-  influxdb:
+  ${SERVICE_NAME}:
     image: influxdb:2.7
-    container_name: influxdb
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${INFLUXDB_PORT:-8086}:8086"
@@ -51,8 +51,8 @@ compose: |
       - DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET:-default}
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
     volumes:
-      - ${DOCKER_ROOT}/influxdb/data/data:/var/lib/influxdb2
-      - ${DOCKER_ROOT}/influxdb/config:/etc/influxdb2
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data/data:/var/lib/influxdb2
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/etc/influxdb2
     healthcheck:
       test: ["CMD", "influx", "ping"]
       interval: 10s

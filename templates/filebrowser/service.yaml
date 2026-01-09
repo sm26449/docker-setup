@@ -7,9 +7,9 @@ variables:
     description: "Web port"
 
 compose: |
-  filebrowser:
+  ${SERVICE_NAME}:
     image: filebrowser/filebrowser:latest
-    container_name: filebrowser
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${FILEBROWSER_PORT:-8085}:80"
@@ -17,5 +17,5 @@ compose: |
       - PUID=${PUID}
       - PGID=${PGID}
     volumes:
-      - ${DOCKER_ROOT}/filebrowser/data:/srv
-      - ${DOCKER_ROOT}/filebrowser/config/filebrowser.db:/database.db
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/srv
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config/filebrowser.db:/database.db

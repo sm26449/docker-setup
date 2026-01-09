@@ -7,11 +7,13 @@ dependencies:
       GRAFANA_INFLUXDB_URL: "http://${HOST}:${PORT}"
       GRAFANA_INFLUXDB_HOST: "${HOST}"
       GRAFANA_INFLUXDB_UID: "${HOST}"
+      INFLUXDB_SERVICE: "${SERVICE_NAME}"
     credentials:
       GRAFANA_INFLUXDB_TOKEN: "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"
       GRAFANA_INFLUXDB_ORG: "DOCKER_INFLUXDB_INIT_ORG"
   - name: grafana-image-renderer
-    # Renderer URLs configured via SERVER_IP variables for browser accessibility
+    variables:
+      GRAFANA_RENDERER_SERVICE: "${SERVICE_NAME}"
 
 variables:
   GRAFANA_PORT:
@@ -38,6 +40,12 @@ variables:
   GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE:
     default: "true"
     description: "Enable alert screenshots"
+  INFLUXDB_SERVICE:
+    default: "influxdb"
+    description: "InfluxDB service name (for depends_on)"
+  GRAFANA_RENDERER_SERVICE:
+    default: "grafana-image-renderer"
+    description: "Grafana image renderer service name (for depends_on)"
 
 config_files:
   - path: "provisioning/datasources/influxdb.yaml"
@@ -79,14 +87,14 @@ config_files:
             foldersFromFilesStructure: true
 
 compose: |
-  grafana:
+  ${SERVICE_NAME}:
     image: grafana/grafana:latest
-    container_name: grafana
-    hostname: grafana
+    container_name: ${SERVICE_NAME}
+    hostname: ${SERVICE_NAME}
     restart: unless-stopped
     depends_on:
-      - influxdb
-      - grafana-image-renderer
+      - ${INFLUXDB_SERVICE}
+      - ${GRAFANA_RENDERER_SERVICE}
     user: "${PUID}:${PGID}"
     ports:
       - "${GRAFANA_PORT:-3000}:3000"
@@ -98,5 +106,5 @@ compose: |
       - GF_RENDERING_CALLBACK_URL=${GF_RENDERING_CALLBACK_URL:-}
       - GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE=${GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE:-true}
     volumes:
-      - ${DOCKER_ROOT}/grafana/data:/var/lib/grafana
-      - ${DOCKER_ROOT}/grafana/provisioning:/etc/grafana/provisioning
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/var/lib/grafana
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/provisioning:/etc/grafana/provisioning

@@ -112,17 +112,17 @@ hooks:
     - "docker logs ${CONTAINER_NAME} --tail 5 2>/dev/null || true"
 
 compose: |
-  fronius-meter:
+  ${SERVICE_NAME}:
     build:
       context: .
       dockerfile: Dockerfile
     image: fronius-modbus-mqtt:latest
-    container_name: fronius-meter
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     depends_on:
-      mosquitto:
+      ${MOSQUITTO_SERVICE}:
         condition: service_started
-      influxdb:
+      ${INFLUXDB_SERVICE}:
         condition: service_healthy
     command: ["python", "fronius_modbus_mqtt.py", "-d", "meter"]
     environment:
@@ -147,9 +147,9 @@ compose: |
       - PING_CHECK_ENABLED=false
       - HA_DISCOVERY_ENABLED=${FRONIUS_MTR_HA_DISCOVERY_ENABLED}
     volumes:
-      - ${DOCKER_ROOT}/fronius-meter/config:/app/config:ro
-      - ${DOCKER_ROOT}/fronius-meter/data:/app/data
-      - ${DOCKER_ROOT}/fronius-meter/logs:/app/logs
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/app/config:ro
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/app/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/logs:/app/logs
     healthcheck:
       test: ["CMD", "python", "/app/healthcheck.py"]
       interval: 60s

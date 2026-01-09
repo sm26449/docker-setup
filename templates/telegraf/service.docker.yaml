@@ -112,11 +112,11 @@ config_files:
         docker_label_exclude = []
 
 compose: |
-  telegraf-docker:
+  ${SERVICE_NAME}:
     image: telegraf:latest
-    container_name: telegraf-docker
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
-    hostname: telegraf-docker
+    hostname: ${SERVICE_NAME}
     user: "0:0"
     environment:
       - HOST_ETC=/hostfs/etc
@@ -132,7 +132,7 @@ compose: |
       - TELEGRAF_INFLUXDB_BUCKET=${TELEGRAF_INFLUXDB_BUCKET}
       - TELEGRAF_DOCKER_ENDPOINT=${TELEGRAF_DOCKER_ENDPOINT:-unix:///var/run/docker.sock}
     volumes:
-      - ${DOCKER_ROOT}/telegraf-docker/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /sys:/hostfs/sys:ro
       - /proc:/hostfs/proc:ro

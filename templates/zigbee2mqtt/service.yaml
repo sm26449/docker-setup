@@ -5,6 +5,7 @@ dependencies:
   - name: mosquitto
     variables:
       ZIGBEE2MQTT_CONFIG_MQTT_SERVER: "mqtt://${HOST}:${PORT}"
+      MOSQUITTO_SERVICE: "${SERVICE_NAME}"
 
 variables:
   ZIGBEE2MQTT_PORT:
@@ -16,6 +17,9 @@ variables:
   ZIGBEE_DEVICE:
     default: "/dev/ttyUSB0"
     description: "Zigbee adapter device path"
+  MOSQUITTO_SERVICE:
+    default: "mosquitto"
+    description: "Mosquitto service name (for depends_on)"
 
 config_files:
   - path: "config/configuration.yaml"
@@ -56,18 +60,18 @@ config_files:
         legacy: false
 
 compose: |
-  zigbee2mqtt:
+  ${SERVICE_NAME}:
     image: koenkk/zigbee2mqtt:latest
-    container_name: zigbee2mqtt
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${ZIGBEE2MQTT_PORT:-8088}:8080"
     environment:
       - TZ=${TZ}
     volumes:
-      - ${DOCKER_ROOT}/zigbee2mqtt/config:/app/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/app/data
       - /run/udev:/run/udev:ro
     devices:
       - ${ZIGBEE_DEVICE:-/dev/ttyUSB0}:/dev/ttyUSB0
     depends_on:
-      - mosquitto
+      - ${MOSQUITTO_SERVICE}

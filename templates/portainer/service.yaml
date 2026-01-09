@@ -10,13 +10,13 @@ variables:
     description: "Image (portainer-ce:latest or portainer-ee:lts)"
 
 compose: |
-  portainer:
+  ${SERVICE_NAME}:
     image: ${PORTAINER_IMAGE:-portainer/portainer-ce:latest}
-    container_name: portainer
+    container_name: ${SERVICE_NAME}
     restart: always
     ports:
       - "${PORTAINER_PORT:-9443}:9443"
       - "8000:8000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ${DOCKER_ROOT}/portainer/data:/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/data

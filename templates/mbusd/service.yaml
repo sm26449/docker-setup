@@ -74,9 +74,9 @@ config_files:
       # delay_rts_after_send = 0
 
 compose: |
-  mbusd:
+  ${SERVICE_NAME}:
     image: oitc/mbusd:latest
-    container_name: ${COMPOSE_PROJECT_NAME:-docker}-mbusd
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${MBUSD_PORT:-502}:502"
@@ -91,7 +91,4 @@ compose: |
       - MBUSD_MAX_CONNECTIONS=${MBUSD_MAX_CONNECTIONS:-4}
       - MBUSD_TIMEOUT=${MBUSD_TIMEOUT:-3}
     volumes:
-      - ${DOCKER_ROOT}/${COMPOSE_PROJECT_NAME:-docker}/mbusd/config:/etc/mbusd:ro
-    labels:
-      - "com.docker.compose.project=${COMPOSE_PROJECT_NAME:-docker}"
-      - "io.portainer.accesscontrol.teams=homelab"
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/etc/mbusd:ro

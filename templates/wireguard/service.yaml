@@ -13,9 +13,9 @@ variables:
     description: "Number of client configs"
 
 compose: |
-  wireguard:
+  ${SERVICE_NAME}:
     image: lscr.io/linuxserver/wireguard:latest
-    container_name: wireguard
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
@@ -29,7 +29,7 @@ compose: |
       - SERVERURL=${SERVERURL:-auto}
       - PEERS=${PEERS:-1}
     volumes:
-      - ${DOCKER_ROOT}/wireguard/config:/config
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/config
       - /lib/modules:/lib/modules:ro
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1

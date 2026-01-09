@@ -7,13 +7,13 @@ variables:
     description: "TasmoAdmin web port"
 
 compose: |
-  tasmoadmin:
+  ${SERVICE_NAME}:
     image: ghcr.io/tasmoadmin/tasmoadmin:latest
-    container_name: tasmoadmin
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${TASMOADMIN_PORT:-9541}:80"
     environment:
       - TZ=${TZ}
     volumes:
-      - ${DOCKER_ROOT}/tasmoadmin/data:/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/data

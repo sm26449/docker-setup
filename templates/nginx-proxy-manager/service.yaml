@@ -7,14 +7,14 @@ variables:
     description: "Admin panel port"
 
 compose: |
-  nginx-proxy-manager:
+  ${SERVICE_NAME}:
     image: jc21/nginx-proxy-manager:latest
-    container_name: nginx-proxy-manager
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "80:80"
       - "443:443"
       - "${NPM_PORT:-81}:81"
     volumes:
-      - ${DOCKER_ROOT}/nginx-proxy-manager/data:/data
-      - ${DOCKER_ROOT}/nginx-proxy-manager/data/letsencrypt:/etc/letsencrypt
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data/letsencrypt:/etc/letsencrypt

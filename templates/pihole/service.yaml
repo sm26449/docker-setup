@@ -11,9 +11,9 @@ variables:
     generate: password
 
 compose: |
-  pihole:
+  ${SERVICE_NAME}:
     image: pihole/pihole:latest
-    container_name: pihole
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "53:53/tcp"
@@ -23,7 +23,7 @@ compose: |
       - TZ=${TZ}
       - WEBPASSWORD=${WEBPASSWORD}
     volumes:
-      - ${DOCKER_ROOT}/pihole/config:/etc/pihole
-      - ${DOCKER_ROOT}/pihole/config/dnsmasq.d:/etc/dnsmasq.d
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/etc/pihole
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config/dnsmasq.d:/etc/dnsmasq.d
     cap_add:
       - NET_ADMIN

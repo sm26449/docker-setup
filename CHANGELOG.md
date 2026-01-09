@@ -5,6 +5,26 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.5.3] - 2026-01-09
+
+### Changed
+- **SERVICE_NAME Variable Support in Templates**
+  - All templates now use `${SERVICE_NAME}` instead of hardcoded service names
+  - Enables service renaming and multiple instances of the same service type
+  - Volume paths use `${DOCKER_ROOT}/${SERVICE_NAME}/` for automatic path resolution
+  - Container names use `${SERVICE_NAME}` for consistency
+
+### Added
+- **Automatic SERVICE_NAME Substitution**
+  - `lib/services.sh` now substitutes `${SERVICE_NAME}` when generating compose files
+  - Template generators in `lib/templates.sh` use the new pattern by default
+
+### Benefits
+- **Multiple Instances**: Deploy multiple instances of the same service (e.g., `redis-cache`, `redis-session`)
+- **Custom Naming**: Rename services without editing templates (e.g., `my-grafana` instead of `grafana`)
+- **Consistent Paths**: Data directories automatically match service names
+- **Easier Migrations**: Move or rename services without path conflicts
+
 ## [2.5.2] - 2026-01-07
 
 ### Fixed

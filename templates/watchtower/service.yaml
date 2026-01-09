@@ -10,9 +10,9 @@ variables:
     description: "Update schedule (cron)"
 
 compose: |
-  watchtower:
+  ${SERVICE_NAME}:
     image: containrrr/watchtower:latest
-    container_name: watchtower
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     environment:
       - WATCHTOWER_CLEANUP=${WATCHTOWER_CLEANUP:-true}

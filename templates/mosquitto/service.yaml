@@ -41,14 +41,14 @@ hooks:
     - "docker logs ${CONTAINER_NAME} 2>&1 | tail -3 || true"
 
 compose: |
-  mosquitto:
+  ${SERVICE_NAME}:
     image: eclipse-mosquitto:latest
-    container_name: mosquitto
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${MQTT_PORT:-1883}:1883"
       - "${MQTT_WS_PORT:-9001}:9001"
     volumes:
-      - ${DOCKER_ROOT}/mosquitto/config:/mosquitto/config
-      - ${DOCKER_ROOT}/mosquitto/data:/mosquitto/data
-      - ${DOCKER_ROOT}/mosquitto/logs:/mosquitto/log
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/mosquitto/config
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/mosquitto/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/logs:/mosquitto/log

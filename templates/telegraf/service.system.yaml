@@ -5,6 +5,7 @@ dependencies:
   - name: influxdb
     variables:
       TELEGRAF_INFLUXDB_URL: "http://${HOST}:${PORT}"
+      INFLUXDB_SERVICE: "${SERVICE_NAME}"
 
 variables:
   # Collection interval
@@ -32,6 +33,10 @@ variables:
     default: "telegraf"
     description: "InfluxDB bucket"
     prompt: true
+
+  INFLUXDB_SERVICE:
+    default: "influxdb"
+    description: "InfluxDB service name (for depends_on)"
 
 config_files:
   - path: "config/telegraf.conf"
@@ -94,11 +99,11 @@ config_files:
       [[inputs.processes]]
 
 compose: |
-  telegraf-system:
+  ${SERVICE_NAME}:
     image: telegraf:latest
-    container_name: telegraf-system
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
-    hostname: telegraf-system
+    hostname: ${SERVICE_NAME}
     environment:
       - HOST_ETC=/hostfs/etc
       - HOST_PROC=/hostfs/proc
@@ -112,7 +117,7 @@ compose: |
       - TELEGRAF_INFLUXDB_ORG=${TELEGRAF_INFLUXDB_ORG}
       - TELEGRAF_INFLUXDB_BUCKET=${TELEGRAF_INFLUXDB_BUCKET}
     volumes:
-      - ${DOCKER_ROOT}/telegraf-system/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
       - /sys:/hostfs/sys:ro
       - /proc:/hostfs/proc:ro
       - /etc:/hostfs/etc:ro

@@ -161,12 +161,14 @@ EOF
     # Add compose block
     local container_port=$(echo "$ports_input" | cut -d: -f2 | tr -d ' ')
     container_port=${container_port:-80}
-    cat >> "$service_file" << EOF
+    cat >> "$service_file" << 'COMPOSE_EOF'
 
 compose: |
-  ${service_name}:
+  ${SERVICE_NAME}:
+COMPOSE_EOF
+    cat >> "$service_file" << EOF
     image: ${docker_image}
-    container_name: ${service_name}
+    container_name: \${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "\${${port_var}:-${host_port}}:${container_port}"
@@ -175,8 +177,8 @@ compose: |
       - PGID=\${PGID}
       - TZ=\${TZ}
     volumes:
-      - \${DOCKER_ROOT}/${service_name}/config:/config
-      - \${DOCKER_ROOT}/${service_name}/data:/data
+      - \${DOCKER_ROOT}/\${SERVICE_NAME}/config:/config
+      - \${DOCKER_ROOT}/\${SERVICE_NAME}/data:/data
 EOF
 
     # Add depends_on if there are dependencies
@@ -247,9 +249,9 @@ variables:
     description: "Web port"
 
 compose: |
-  ${service_name}:
+  \${SERVICE_NAME}:
     image: ${image_name}
-    container_name: ${service_name}
+    container_name: \${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "\${${port_var}:-${host_port}}:${container_port}"
@@ -258,8 +260,8 @@ compose: |
       - PGID=\${PGID}
       - TZ=\${TZ}
     volumes:
-      - \${DOCKER_ROOT}/${service_name}/config:/config
-      - \${DOCKER_ROOT}/${service_name}/data:${data_path:-/data}
+      - \${DOCKER_ROOT}/\${SERVICE_NAME}/config:/config
+      - \${DOCKER_ROOT}/\${SERVICE_NAME}/data:${data_path:-/data}
 EOF
 
     print_success "Template created for ${service_name}"

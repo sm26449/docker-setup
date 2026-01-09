@@ -21,9 +21,9 @@ variables:
     generate: password
 
 compose: |
-  mariadb:
+  ${SERVICE_NAME}:
     image: mariadb:latest
-    container_name: mariadb
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${MARIADB_PORT:-3306}:3306"
@@ -36,4 +36,4 @@ compose: |
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${DOCKER_ROOT}/mariadb/data:/var/lib/mysql
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/var/lib/mysql

@@ -102,9 +102,9 @@ config_files:
       # ${SER2NET_PORT3:-3003}:raw:0:${SER2NET_SERIAL3:-/dev/ttyAMA0}:${SER2NET_BAUD3:-115200} NONE 1STOPBIT 8DATABITS XONXOFF LOCAL -RTSCTS
 
 compose: |
-  ser2net:
+  ${SERVICE_NAME}:
     image: lscr.io/linuxserver/ser2net:latest
-    container_name: ${COMPOSE_PROJECT_NAME:-docker}-ser2net
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     environment:
       - PUID=1000
@@ -121,7 +121,4 @@ compose: |
       # - "${SER2NET_SERIAL2:-/dev/ttyUSB1}:${SER2NET_SERIAL2:-/dev/ttyUSB1}"
       # - "${SER2NET_SERIAL3:-/dev/ttyAMA0}:${SER2NET_SERIAL3:-/dev/ttyAMA0}"
     volumes:
-      - ${DOCKER_ROOT}/${COMPOSE_PROJECT_NAME:-docker}/ser2net/config:/config
-    labels:
-      - "com.docker.compose.project=${COMPOSE_PROJECT_NAME:-docker}"
-      - "io.portainer.accesscontrol.teams=homelab"
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/config

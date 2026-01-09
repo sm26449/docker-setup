@@ -10,9 +10,9 @@ variables:
     description: "Glances options"
 
 compose: |
-  glances:
+  ${SERVICE_NAME}:
     image: nicolargo/glances:latest-full
-    container_name: glances
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     pid: host
     ports:

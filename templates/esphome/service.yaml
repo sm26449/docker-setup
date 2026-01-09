@@ -7,13 +7,13 @@ variables:
     description: "Web port"
 
 compose: |
-  esphome:
+  ${SERVICE_NAME}:
     image: ghcr.io/esphome/esphome:latest
-    container_name: esphome
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${ESPHOME_PORT:-6052}:6052"
     environment:
       - TZ=${TZ}
     volumes:
-      - ${DOCKER_ROOT}/esphome/config:/config
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/config

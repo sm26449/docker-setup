@@ -6,6 +6,7 @@ dependencies:
     variables:
       PMA_HOST: "${HOST}"
       PMA_PORT: "${PORT}"
+      MARIADB_SERVICE: "${SERVICE_NAME}"
 
 variables:
   PHPMYADMIN_PORT:
@@ -14,15 +15,18 @@ variables:
   PMA_HOST:
     default: "mariadb"
     description: "Database host"
+  MARIADB_SERVICE:
+    default: "mariadb"
+    description: "MariaDB service name (for depends_on)"
 
 compose: |
-  phpmyadmin:
+  ${SERVICE_NAME}:
     image: phpmyadmin:latest
-    container_name: phpmyadmin
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${PHPMYADMIN_PORT:-8081}:80"
     environment:
       - PMA_HOST=${PMA_HOST:-mariadb}
     depends_on:
-      - mariadb
+      - ${MARIADB_SERVICE}

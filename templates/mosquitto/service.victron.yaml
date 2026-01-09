@@ -199,17 +199,17 @@ hooks:
     - "docker logs ${CONTAINER_NAME} 2>&1 | tail -10 || true"
 
 compose: |
-  mosquitto-victron:
+  ${SERVICE_NAME}:
     image: eclipse-mosquitto:latest
-    container_name: mosquitto-victron
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${MQTT_PORT:-1883}:1883"
       - "${MQTT_WS_PORT:-9001}:9001"
     volumes:
-      - ${DOCKER_ROOT}/mosquitto-victron/config:/mosquitto/config
-      - ${DOCKER_ROOT}/mosquitto-victron/data:/mosquitto/data
-      - ${DOCKER_ROOT}/mosquitto-victron/logs:/mosquitto/log
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/mosquitto/config
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/mosquitto/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/logs:/mosquitto/log
     healthcheck:
       test: ["CMD", "mosquitto_sub", "-h", "localhost", "-p", "1883", "-u", "${MQTT_USERNAME}", "-P", "${MQTT_PASSWORD}", "-t", "$$SYS/broker/uptime", "-C", "1", "-W", "3"]
       interval: 30s
@@ -223,12 +223,12 @@ compose: |
         max-file: "3"
 
   # Keepalive sidecar - sends periodic keepalive to Venus OS
-  victron-keepalive:
+  ${SERVICE_NAME}-keepalive:
     image: eclipse-mosquitto:latest
-    container_name: victron-keepalive
+    container_name: ${SERVICE_NAME}-keepalive
     restart: unless-stopped
     depends_on:
-      mosquitto-victron:
+      ${SERVICE_NAME}:
         condition: service_healthy
     entrypoint: ["/bin/sh", "-c"]
     command:

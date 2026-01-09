@@ -14,9 +14,9 @@ variables:
     generate: password
 
 compose: |
-  mongodb:
+  ${SERVICE_NAME}:
     image: mongo:latest
-    container_name: mongodb
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${MONGODB_PORT:-27017}:27017"
@@ -24,4 +24,4 @@ compose: |
       - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME:-root}
       - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     volumes:
-      - ${DOCKER_ROOT}/mongodb/data:/data/db
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/data/db

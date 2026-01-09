@@ -23,10 +23,10 @@ variables:
     description: "Enable verbose logging"
 
 compose: |
-  grafana-image-renderer:
+  ${SERVICE_NAME}:
     image: grafana/grafana-image-renderer:latest
-    container_name: grafana-image-renderer
-    hostname: grafana-image-renderer
+    container_name: ${SERVICE_NAME}
+    hostname: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${RENDERING_PORT:-8081}:8081"

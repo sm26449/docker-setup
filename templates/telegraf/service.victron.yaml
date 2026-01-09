@@ -253,11 +253,11 @@ config_files:
           float = ["value"]
 
 compose: |
-  telegraf-victron:
+  ${SERVICE_NAME}:
     image: telegraf:latest
-    container_name: telegraf-victron
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
-    hostname: telegraf-victron
+    hostname: ${SERVICE_NAME}
     environment:
       - TELEGRAF_INTERVAL=${TELEGRAF_INTERVAL:-10s}
       - TELEGRAF_INFLUXDB_URL=${TELEGRAF_INFLUXDB_URL}
@@ -267,7 +267,7 @@ compose: |
       - TELEGRAF_MQTT_SERVER=${TELEGRAF_MQTT_SERVER}
       - VICTRON_PORTAL_ID=${VICTRON_PORTAL_ID:-+}
     volumes:
-      - ${DOCKER_ROOT}/telegraf-victron/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     healthcheck:
       test: ["CMD", "telegraf", "--test"]
       interval: 60s

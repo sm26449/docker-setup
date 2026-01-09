@@ -14,9 +14,9 @@ variables:
     description: "Allow new signups"
 
 compose: |
-  vaultwarden:
+  ${SERVICE_NAME}:
     image: vaultwarden/server:latest
-    container_name: vaultwarden
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${VAULTWARDEN_PORT:-8082}:80"
@@ -24,4 +24,4 @@ compose: |
       - ADMIN_TOKEN=${ADMIN_TOKEN}
       - SIGNUPS_ALLOWED=${SIGNUPS_ALLOWED:-true}
     volumes:
-      - ${DOCKER_ROOT}/vaultwarden/data:/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/data

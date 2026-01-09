@@ -6,19 +6,31 @@ dependencies:
     variables:
       HA_MARIADB_HOST: "${HOST}"
       HA_MARIADB_PORT: "${PORT}"
+      MARIADB_SERVICE: "${SERVICE_NAME}"
   - name: mosquitto
     variables:
       HA_MQTT_HOST: "${HOST}"
       HA_MQTT_PORT: "${PORT}"
+      MOSQUITTO_SERVICE: "${SERVICE_NAME}"
   - name: influxdb
     variables:
       HA_INFLUXDB_HOST: "${HOST}"
       HA_INFLUXDB_PORT: "${PORT}"
+      INFLUXDB_SERVICE: "${SERVICE_NAME}"
 
 variables:
   HA_PORT:
     default: "8123"
     description: "Home Assistant web port"
+  MARIADB_SERVICE:
+    default: "mariadb"
+    description: "MariaDB service name (for depends_on)"
+  MOSQUITTO_SERVICE:
+    default: "mosquitto"
+    description: "Mosquitto service name (for depends_on)"
+  INFLUXDB_SERVICE:
+    default: "influxdb"
+    description: "InfluxDB service name (for depends_on)"
 
 config_files:
   - path: "config/configuration.yaml"
@@ -93,19 +105,19 @@ config_files:
       # longitude: 26.1025
 
 compose: |
-  homeassistant:
+  ${SERVICE_NAME}:
     image: ghcr.io/home-assistant/home-assistant:stable
-    container_name: homeassistant
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     network_mode: host
     privileged: true
     environment:
       - TZ=${TZ}
     volumes:
-      - ${DOCKER_ROOT}/homeassistant/config:/config
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/config
       - /etc/localtime:/etc/localtime:ro
       - /run/dbus:/run/dbus:ro
     depends_on:
-      - mariadb
-      - mosquitto
-      - influxdb
+      - ${MARIADB_SERVICE}
+      - ${MOSQUITTO_SERVICE}
+      - ${INFLUXDB_SERVICE}

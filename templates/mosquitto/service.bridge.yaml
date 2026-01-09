@@ -132,17 +132,17 @@ hooks:
     - "docker logs ${CONTAINER_NAME} 2>&1 | tail -5 || true"
 
 compose: |
-  mosquitto-bridge:
+  ${SERVICE_NAME}:
     image: eclipse-mosquitto:latest
-    container_name: mosquitto-bridge
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${MQTT_BRIDGE_PORT:-1884}:1883"
       - "${MQTT_BRIDGE_WS_PORT:-9002}:9001"
     volumes:
-      - ${DOCKER_ROOT}/mosquitto-bridge/config:/mosquitto/config
-      - ${DOCKER_ROOT}/mosquitto-bridge/data:/mosquitto/data
-      - ${DOCKER_ROOT}/mosquitto-bridge/logs:/mosquitto/log
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/mosquitto/config
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/mosquitto/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/logs:/mosquitto/log
     healthcheck:
       test: ["CMD", "mosquitto_sub", "-h", "localhost", "-p", "1883", "-u", "${MQTT_BRIDGE_USERNAME}", "-P", "${MQTT_BRIDGE_PASSWORD}", "-t", "$$SYS/broker/uptime", "-C", "1", "-W", "3"]
       interval: 30s

@@ -7,9 +7,9 @@ variables:
     description: "Web port"
 
 compose: |
-  heimdall:
+  ${SERVICE_NAME}:
     image: lscr.io/linuxserver/heimdall:latest
-    container_name: heimdall
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${HEIMDALL_PORT:-8084}:80"
@@ -19,4 +19,4 @@ compose: |
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${DOCKER_ROOT}/heimdall/config:/config
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/config

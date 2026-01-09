@@ -7,9 +7,9 @@ variables:
     description: "Metrics port"
 
 compose: |
-  node-exporter:
+  ${SERVICE_NAME}:
     image: prom/node-exporter:latest
-    container_name: node-exporter
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${NODE_EXPORTER_PORT:-9100}:9100"

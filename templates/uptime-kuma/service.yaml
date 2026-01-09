@@ -7,11 +7,11 @@ variables:
     description: "Web port"
 
 compose: |
-  uptime-kuma:
+  ${SERVICE_NAME}:
     image: louislam/uptime-kuma:latest
-    container_name: uptime-kuma
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${UPTIME_KUMA_PORT:-3001}:3001"
     volumes:
-      - ${DOCKER_ROOT}/uptime-kuma/data:/app/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/app/data

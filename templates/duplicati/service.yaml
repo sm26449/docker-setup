@@ -7,9 +7,9 @@ variables:
     description: "Web port"
 
 compose: |
-  duplicati:
+  ${SERVICE_NAME}:
     image: lscr.io/linuxserver/duplicati:latest
-    container_name: duplicati
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${DUPLICATI_PORT:-8200}:8200"
@@ -18,6 +18,6 @@ compose: |
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - ${DOCKER_ROOT}/duplicati/config:/config
-      - ${DOCKER_ROOT}/duplicati/data/backups:/backups
-      - ${DOCKER_ROOT}/duplicati/data:/source:ro
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/config
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data/backups:/backups
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/source:ro

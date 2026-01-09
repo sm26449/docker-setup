@@ -7,11 +7,11 @@ variables:
     description: "Redis port"
 
 compose: |
-  redis:
+  ${SERVICE_NAME}:
     image: redis:alpine
-    container_name: redis
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${REDIS_PORT:-6379}:6379"
     volumes:
-      - ${DOCKER_ROOT}/redis/data:/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/data

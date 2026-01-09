@@ -15,9 +15,9 @@ variables:
     generate: password
 
 compose: |
-  vscode:
+  ${SERVICE_NAME}:
     image: lscr.io/linuxserver/code-server:latest
-    container_name: vscode
+    container_name: ${SERVICE_NAME}
     restart: unless-stopped
     ports:
       - "${VSCODE_PORT:-8443}:8443"
@@ -28,5 +28,5 @@ compose: |
       - PASSWORD=${PASSWORD}
       - SUDO_PASSWORD=${SUDO_PASSWORD}
     volumes:
-      - ${DOCKER_ROOT}/vscode/config:/config
-      - ${DOCKER_ROOT}/vscode/data:/data
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/config
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/data

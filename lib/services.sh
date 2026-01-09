@@ -2372,6 +2372,11 @@ add_service_to_compose() {
         fi
     fi
 
+    # Substitute SERVICE_NAME with the actual compose service name
+    # This allows templates to use ${SERVICE_NAME} for flexible naming
+    sed -i.bak "s/\${SERVICE_NAME}/${compose_service_name}/g" "$compose_snippet"
+    rm -f "${compose_snippet}.bak"
+
     # Append service to compose file (networks section is added at the end by generate_compose_file)
     cat "$compose_snippet" >> "$compose_file"
     echo "" >> "$compose_file"
