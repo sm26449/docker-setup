@@ -1,0 +1,251 @@
+name: pv-stack-ui
+description: "PV-Stack UI - Home Energy Monitoring Dashboard (Flask)"
+
+# Dependencies with variable mappings
+dependencies:
+  - name: mosquitto
+    variables:
+      PVUI_MQTT_BROKER: "${HOST}"
+      PVUI_MQTT_PORT: "${PORT}"
+    credentials:
+      PVUI_MQTT_USER: "MQTT_USERNAME"
+      PVUI_MQTT_PASS: "MQTT_PASSWORD"
+  - name: influxdb
+    variables:
+      PVUI_INFLUXDB_URL: "http://${HOST}:${PORT}"
+    credentials:
+      PVUI_INFLUXDB_TOKEN: "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"
+      PVUI_INFLUXDB_ORG: "DOCKER_INFLUXDB_INIT_ORG"
+
+variables:
+  # Web port
+  PVUI_PORT:
+    default: "5000"
+    description: "Web UI port"
+    prompt: true
+
+  # InfluxDB (auto-filled from dependency)
+  PVUI_INFLUXDB_URL:
+    default: "http://influxdb:8086"
+    description: "InfluxDB URL"
+  PVUI_INFLUXDB_TOKEN:
+    default: ""
+    description: "InfluxDB API token (auto-filled from InfluxDB if available)"
+  PVUI_INFLUXDB_ORG:
+    default: "pv-stack"
+    description: "InfluxDB organization"
+
+  # InfluxDB Buckets
+  PVUI_BUCKET_METRICS:
+    default: "pv_stack_metrics"
+    description: "Main metrics bucket"
+  PVUI_BUCKET_EVENTS:
+    default: "pv_stack_events"
+    description: "Strategy events bucket"
+  PVUI_BUCKET_DEBUG:
+    default: "pv_stack_debug"
+    description: "Debug metrics bucket"
+  PVUI_BUCKET_FRONIUS:
+    default: "fronius"
+    description: "Fronius inverter bucket"
+  PVUI_BUCKET_VICTRON:
+    default: "victron"
+    description: "Victron grid meter bucket"
+  PVUI_BUCKET_SEPLOS:
+    default: "seplos"
+    description: "Seplos BMS bucket"
+  PVUI_BUCKET_DAILY_PROFILES:
+    default: "daily_profiles"
+    description: "Daily profiles bucket"
+
+  # Node-RED API
+  PVUI_NODERED_URL:
+    default: ""
+    description: "Node-RED API URL (e.g., https://192.168.1.100:1881)"
+    prompt: true
+  PVUI_NODERED_USER:
+    default: "admin"
+    description: "Node-RED username"
+    prompt: true
+  PVUI_NODERED_PASS:
+    default: ""
+    description: "Node-RED password"
+    prompt: true
+  PVUI_NODERED_VERIFY_SSL:
+    default: "false"
+    description: "Verify Node-RED SSL certificate"
+  PVUI_NODERED_TIMEOUT:
+    default: "5"
+    description: "Node-RED request timeout in seconds"
+
+  # MQTT / Live Monitor (auto-filled from dependency)
+  PVUI_MQTT_ENABLED:
+    default: "true"
+    description: "Enable real-time MQTT live monitor"
+  PVUI_MQTT_BROKER:
+    default: "mosquitto"
+    description: "MQTT broker address"
+  PVUI_MQTT_PORT:
+    default: "1883"
+    description: "MQTT broker port"
+  PVUI_MQTT_USER:
+    default: ""
+    description: "MQTT username"
+  PVUI_MQTT_PASS:
+    default: ""
+    description: "MQTT password"
+
+  # Authentication
+  PVUI_AUTH_ENABLED:
+    default: "true"
+    description: "Enable login authentication"
+    prompt: true
+  PVUI_AUTH_USERNAME:
+    default: "admin"
+    description: "Login username"
+    prompt: true
+  PVUI_AUTH_PASSWORD:
+    default: ""
+    description: "Login password"
+    generate: password
+    prompt: true
+
+  # WebAuthn Passkeys
+  PVUI_WEBAUTHN_RP_ID:
+    default: "localhost"
+    description: "Passkey domain (e.g., pv-stack.example.com)"
+    prompt: true
+  PVUI_WEBAUTHN_RP_NAME:
+    default: "PV-Stack"
+    description: "Passkey display name"
+  PVUI_WEBAUTHN_ORIGIN:
+    default: ""
+    description: "WebAuthn origin URL (e.g., https://pv-stack.example.com)"
+    prompt: true
+
+  # Security
+  PVUI_ALLOWED_ORIGINS:
+    default: ""
+    description: "Allowed WebSocket origins (comma-separated, e.g., https://pv-stack.example.com)"
+    prompt: true
+  PVUI_SESSION_COOKIE_SECURE:
+    default: "false"
+    description: "Require HTTPS for session cookies (set true behind HTTPS proxy)"
+
+  # Flask
+  PVUI_FLASK_SECRET_KEY:
+    default: ""
+    description: "Flask secret key (auto-generated if empty)"
+  PVUI_REFRESH_INTERVAL:
+    default: "10"
+    description: "Dashboard auto-refresh interval in seconds"
+
+  # GeoIP Analytics (optional)
+  PVUI_GEOIP_API_URL:
+    default: ""
+    description: "GeoIP API URL (leave empty to disable)"
+
+  # Service names for depends_on
+  MOSQUITTO_SERVICE:
+    default: "mosquitto"
+    description: "Mosquitto service name (for depends_on)"
+  INFLUXDB_SERVICE:
+    default: "influxdb"
+    description: "InfluxDB service name (for depends_on)"
+
+hooks:
+  pre_deploy:
+    - "echo 'Preparing PV-Stack UI service...'"
+    - "mkdir -p ${SERVICE_DATA}/data"
+  post_deploy:
+    - "echo 'PV-Stack UI deployed successfully'"
+    - "echo 'Access at: http://${SERVER_IP}:${PVUI_PORT:-5000}'"
+    - "docker logs ${CONTAINER_NAME} --tail 5 2>/dev/null || true"
+
+compose: |
+  ${SERVICE_NAME}:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pv-stack-ui:latest
+    container_name: ${SERVICE_NAME}
+    restart: unless-stopped
+    depends_on:
+      ${INFLUXDB_SERVICE}:
+        condition: service_healthy
+      ${MOSQUITTO_SERVICE}:
+        condition: service_started
+    ports:
+      - "${PVUI_PORT:-5000}:5000"
+    environment:
+      # InfluxDB
+      - INFLUXDB_URL=${PVUI_INFLUXDB_URL:-http://influxdb:8086}
+      - INFLUXDB_TOKEN=${PVUI_INFLUXDB_TOKEN:-}
+      - INFLUXDB_ORG=${PVUI_INFLUXDB_ORG:-pv-stack}
+      - BUCKET_METRICS=${PVUI_BUCKET_METRICS:-pv_stack_metrics}
+      - BUCKET_EVENTS=${PVUI_BUCKET_EVENTS:-pv_stack_events}
+      - BUCKET_DEBUG=${PVUI_BUCKET_DEBUG:-pv_stack_debug}
+      - BUCKET_FRONIUS=${PVUI_BUCKET_FRONIUS:-fronius}
+      - BUCKET_VICTRON=${PVUI_BUCKET_VICTRON:-victron}
+      - BUCKET_SEPLOS=${PVUI_BUCKET_SEPLOS:-seplos}
+      - BUCKET_DAILY_PROFILES=${PVUI_BUCKET_DAILY_PROFILES:-daily_profiles}
+      # Node-RED
+      - NODERED_URL=${PVUI_NODERED_URL:-}
+      - NODERED_USER=${PVUI_NODERED_USER:-}
+      - NODERED_PASS=${PVUI_NODERED_PASS:-}
+      - NODERED_VERIFY_SSL=${PVUI_NODERED_VERIFY_SSL:-false}
+      - NODERED_TIMEOUT=${PVUI_NODERED_TIMEOUT:-5}
+      # Flask
+      - FLASK_SECRET_KEY=${PVUI_FLASK_SECRET_KEY:-}
+      - FLASK_DEBUG=false
+      - TZ=${TZ:-Europe/Bucharest}
+      - REFRESH_INTERVAL=${PVUI_REFRESH_INTERVAL:-10}
+      # MQTT / Live Monitor
+      - MQTT_ENABLED=${PVUI_MQTT_ENABLED:-true}
+      - MQTT_BROKER=${PVUI_MQTT_BROKER:-mosquitto}
+      - MQTT_PORT=${PVUI_MQTT_PORT:-1883}
+      - MQTT_USER=${PVUI_MQTT_USER:-}
+      - MQTT_PASS=${PVUI_MQTT_PASS:-}
+      - MQTT_KEEPALIVE=60
+      # SocketIO
+      - SOCKETIO_PING_TIMEOUT=60
+      - SOCKETIO_PING_INTERVAL=25
+      # Rate Limiting
+      - LIVE_MAX_SUBSCRIPTIONS=20
+      - LIVE_MAX_CLIENTS=50
+      # Authentication
+      - AUTH_ENABLED=${PVUI_AUTH_ENABLED:-true}
+      - AUTH_USERNAME=${PVUI_AUTH_USERNAME:-admin}
+      - AUTH_PASSWORD=${PVUI_AUTH_PASSWORD:-}
+      - AUTH_DB_PATH=/app/data/auth.db
+      - AUTH_SESSION_LIFETIME=86400
+      - AUTH_RATE_LIMIT_WINDOW=15
+      - AUTH_RATE_LIMIT_MAX_ATTEMPTS=5
+      - REMEMBER_ME_LIFETIME=604800
+      # WebAuthn
+      - WEBAUTHN_RP_ID=${PVUI_WEBAUTHN_RP_ID:-localhost}
+      - WEBAUTHN_RP_NAME=${PVUI_WEBAUTHN_RP_NAME:-PV-Stack}
+      - WEBAUTHN_ORIGIN=${PVUI_WEBAUTHN_ORIGIN:-}
+      # Security
+      - ALLOWED_ORIGINS=${PVUI_ALLOWED_ORIGINS:-}
+      - SESSION_COOKIE_SECURE=${PVUI_SESSION_COOKIE_SECURE:-false}
+      - BOT_PROTECTION=true
+      - BOT_CHALLENGE_MAX_AGE=86400
+      # Analytics
+      - ANALYTICS_DB=/app/data/analytics.db
+      - GEOIP_API_URL=${PVUI_GEOIP_API_URL:-}
+      - GEOIP_TIMEOUT=2
+      # Maintenance
+      - CLEANUP_INTERVAL=3600
+    volumes:
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/app/data
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/api/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
