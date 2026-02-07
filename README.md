@@ -1,12 +1,10 @@
-# Docker Services Manager v2.6
+# Docker Services Manager v2.7
 
 Script interactiv profesional pentru gestionarea serviciilor Docker pe Ubuntu/CentOS/Rocky/Alma Linux.
 
-**Nou în v2.6:** Multiple instanțe per serviciu, detectare conflicte porturi, prompts pentru variabile importante.
+**Nou în v2.7:** Template PV-Stack UI — dashboard Flask pentru monitorizare energie solară.
 
-**v2.5:** Suport SERVICE_NAME în template-uri, stacks independente.
-
-**v2.3:** Security fixes, Grafana Image Renderer improvements, SERVER_IP support.
+**v2.6:** Multiple instanțe per serviciu, detectare conflicte porturi, prompts pentru variabile importante.
 
 ## Caracteristici
 
@@ -121,8 +119,9 @@ Funcționalități:
 | influxdb1 | InfluxDB 1.x | 8086 |
 | tasmoadmin | Tasmota management | 8087 |
 | seplos-modbus-mqtt | Seplos BMS monitoring | - |
+| pv-stack-ui | Energy monitoring dashboard | 5000 |
 
-> **Notă:** Template-urile `fronius-modbus-mqtt` și `seplos-modbus-mqtt` necesită clonarea repository-urilor externe. Vezi secțiunea [Template-uri cu Repository Extern](#template-uri-cu-repository-extern).
+> **Notă:** Template-urile `fronius-modbus-mqtt`, `seplos-modbus-mqtt` și `pv-stack-ui` necesită clonarea repository-urilor externe. Vezi secțiunea [Template-uri cu Repository Extern](#template-uri-cu-repository-extern).
 
 ### 4. Configurare Telegraf (Victron Energy)
 
@@ -359,6 +358,20 @@ cp -r fronius-modbus-mqtt/* docker-setup/templates/fronius/
 - `fronius:meter` - Doar smart meter
 
 Vezi `templates/fronius/INTEGRATION.md` pentru detalii.
+
+### PV-Stack UI
+
+Dashboard Flask pentru monitorizare și control energie solară.
+
+```bash
+cd /opt/
+git clone https://github.com/sm26449/pv-stack-ui.git
+cp -r pv-stack-ui/* docker-setup/templates/pv-stack-ui/
+```
+
+**Dependințe automate:** mosquitto, influxdb (credențiale auto-completate).
+
+**Variabile cu prompt:** Node-RED (URL, user, pass), auth (enabled, user, pass), WebAuthn (domain, origin), allowed origins, port.
 
 ### Seplos Modbus MQTT
 

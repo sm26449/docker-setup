@@ -5,6 +5,18 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.7.0] - 2026-02-07
+
+### Added
+- **PV-Stack UI Template** (`templates/pv-stack-ui/service.yaml`)
+  - Flask dashboard for home solar energy monitoring and control
+  - Dependencies: mosquitto (MQTT credentials auto-filled), influxdb (token/org auto-filled)
+  - 10 prompted variables: port, Node-RED (URL, user, pass), auth (enabled, user, pass), WebAuthn (domain, origin), allowed origins
+  - 24 silent variables with defaults: InfluxDB buckets (7), MQTT settings, SocketIO, rate limits, session, maintenance
+  - 48 environment variables total — full parity with pv-stack-ui docker-compose.yml
+  - Healthcheck via `/api/health` endpoint
+  - Persistent data volume for auth.db, analytics.db, secret key
+
 ## [2.6.0] - 2026-01-09
 
 ### Added
@@ -309,6 +321,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 | Version | Date | Highlights |
 |---------|------|------------|
+| 2.7.0 | 2026-02-07 | PV-Stack UI template (Flask dashboard, 48 env vars, mosquitto+influxdb deps) |
+| 2.6.0 | 2026-01-09 | Multiple instances per service, port conflict detection, template prompts |
 | 2.5.0 | 2026-01-03 | Deployment strategy selection, pv-stack.sh helper, Mosquitto Victron variant |
 | 2.4.0 | 2025-12-03 | Mosquitto bridge auto-config, dependency resolution fixes, hook improvements |
 | 2.3.0 | 2024-12-03 | Security fixes, Grafana renderer improvements, SERVER_IP support |
