@@ -5,6 +5,21 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.8.0] - 2026-03-19
+
+### Added
+- **Janitza Monitor Template** (`templates/janitza-monitor/service.yaml`)
+  - Janitza UMG 512-PRO power analyzer via Modbus TCP
+  - Dependencies: mosquitto (MQTT credentials auto-filled), influxdb (token/org auto-filled)
+  - 7 prompted variables: Modbus host, MQTT (broker, port, user, pass), InfluxDB (enabled, URL, bucket), UI port
+  - Modbus TCP polling with configurable groups (realtime/1s, normal/5s, slow/60s)
+  - MQTT publishing with change detection and Home Assistant autodiscovery
+  - InfluxDB integration with batching and rate limiting
+  - FastAPI web UI with WebSocket real-time dashboard
+  - Register configuration via UI or JSON file
+  - Healthcheck via `/api/status` endpoint
+  - Post-deploy hooks: auto-create MQTT user and InfluxDB bucket
+
 ## [2.7.0] - 2026-02-07
 
 ### Added

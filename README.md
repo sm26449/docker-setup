@@ -119,9 +119,10 @@ Funcționalități:
 | influxdb1 | InfluxDB 1.x | 8086 |
 | tasmoadmin | Tasmota management | 8087 |
 | seplos-modbus-mqtt | Seplos BMS monitoring | - |
+| janitza-monitor | Janitza UMG 512-PRO power analyzer | 8080 |
 | pv-stack-ui | Energy monitoring dashboard | 5000 |
 
-> **Notă:** Template-urile `fronius-modbus-mqtt`, `seplos-modbus-mqtt` și `pv-stack-ui` necesită clonarea repository-urilor externe. Vezi secțiunea [Template-uri cu Repository Extern](#template-uri-cu-repository-extern).
+> **Notă:** Template-urile `fronius-modbus-mqtt`, `seplos-modbus-mqtt`, `janitza-monitor` și `pv-stack-ui` necesită clonarea repository-urilor externe. Vezi secțiunea [Template-uri cu Repository Extern](#template-uri-cu-repository-extern).
 
 ### 4. Configurare Telegraf (Victron Energy)
 
@@ -372,6 +373,27 @@ cp -r pv-stack-ui/* docker-setup/templates/pv-stack-ui/
 **Dependințe automate:** mosquitto, influxdb (credențiale auto-completate).
 
 **Variabile cu prompt:** Node-RED (URL, user, pass), auth (enabled, user, pass), WebAuthn (domain, origin), allowed origins, port.
+
+### Janitza Monitor
+
+Monitorizare power analyzer Janitza UMG 512-PRO via Modbus TCP, cu web UI, MQTT și InfluxDB.
+
+```bash
+cd /opt/
+git clone https://github.com/sm26449/janitza-umg512-modbus-mqtt-ui.git
+cp -r janitza-umg512-modbus-mqtt-ui/* docker-setup/templates/janitza-monitor/
+```
+
+**Dependințe automate:** mosquitto, influxdb (credențiale auto-completate).
+
+**Variabile cu prompt:** Modbus (IP, port), MQTT (broker, port, user, pass), InfluxDB (enabled, URL, bucket), UI port.
+
+**Funcționalități:**
+- Citire registre Modbus TCP cu poll groups configurabile (realtime/1s, normal/5s, slow/60s)
+- Publicare MQTT cu change detection și Home Assistant autodiscovery
+- Scriere InfluxDB cu batching și rate limiting
+- Web UI cu dashboard real-time (FastAPI + WebSocket)
+- Configurare registre din UI sau JSON
 
 ### Seplos Modbus MQTT
 
