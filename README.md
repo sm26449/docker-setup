@@ -380,8 +380,8 @@ Monitorizare power analyzer Janitza UMG 512-PRO via Modbus TCP, cu web UI, MQTT 
 
 ```bash
 cd /opt/
-git clone https://github.com/sm26449/janitza-umg512-modbus-mqtt-ui.git
-cp -r janitza-umg512-modbus-mqtt-ui/* docker-setup/templates/janitza-monitor/
+git clone https://github.com/sm26449/janitza-monitor.git
+cp -r janitza-monitor/* docker-setup/templates/janitza-monitor/
 ```
 
 **Dependințe automate:** mosquitto, influxdb (credențiale auto-completate).
