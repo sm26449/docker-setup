@@ -34,6 +34,10 @@ variables:
     default: "http://${SERVER_IP}:${GRAFANA_PORT:-3000}/"
     description: "Grafana callback URL for renderer (uses SERVER_IP for browser accessibility)"
     prompt: false
+  GF_RENDERING_RENDERER_TOKEN:
+    default: ""
+    description: "Auth token shared between Grafana and image renderer (required since Grafana 12+)"
+    generate: token
   GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE:
     default: "true"
     description: "Enable alert screenshots"
@@ -101,6 +105,7 @@ compose: |
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_RENDERING_SERVER_URL=${GF_RENDERING_SERVER_URL:-}
       - GF_RENDERING_CALLBACK_URL=${GF_RENDERING_CALLBACK_URL:-}
+      - GF_RENDERING_RENDERER_TOKEN=${GF_RENDERING_RENDERER_TOKEN:-}
       - GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE=${GF_UNIFIED_ALERTING_SCREENSHOTS_CAPTURE:-true}
     volumes:
       - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/var/lib/grafana
