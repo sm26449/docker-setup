@@ -92,7 +92,7 @@ sudo ./install.sh
 
 3. **Configurare MQTT:**
    ```
-   Server: ssl://192.168.88.250:8883
+   Server: ssl://192.168.88.235:8883
    Skip TLS verification: Y (pentru Venus OS)
    ```
 
@@ -136,7 +136,7 @@ Configurația generată automat:
 
 ```toml
 [[inputs.mqtt_consumer]]
-  servers = ["ssl://192.168.88.250:8883"]
+  servers = ["ssl://192.168.88.235:8883"]
 
   # Topics pentru diferite adâncimi de path
   topics = [
@@ -201,13 +201,13 @@ SELECT * FROM "temperature" WHERE time > now() - 1h
 
 ```bash
 # Test cu mosquitto_sub
-mosquitto_sub -h 192.168.88.250 -p 8883 \
+mosquitto_sub -h 192.168.88.235 -p 8883 \
   --capath /etc/ssl/certs/ \
   --insecure \
   -t "N/xxxxxxxxxxxx/#" -v
 
 # Sau fără SSL
-mosquitto_sub -h 192.168.88.250 -p 1883 -t "N/#" -v
+mosquitto_sub -h 192.168.88.235 -p 1883 -t "N/#" -v
 ```
 
 ### Verificare Telegraf

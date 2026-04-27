@@ -7,12 +7,14 @@ dependencies:
     variables:
       FRONIUS_INV_MQTT_BROKER: "${HOST}"
       FRONIUS_INV_MQTT_PORT: "${PORT}"
+      MOSQUITTO_SERVICE: "${SERVICE_NAME}"
     credentials:
       FRONIUS_INV_MQTT_USERNAME: "MQTT_USERNAME"
       FRONIUS_INV_MQTT_PASSWORD: "MQTT_PASSWORD"
   - name: influxdb
     variables:
       FRONIUS_INV_INFLUXDB_URL: "http://${HOST}:${PORT}"
+      INFLUXDB_SERVICE: "${SERVICE_NAME}"
     credentials:
       FRONIUS_INV_INFLUXDB_TOKEN: "DOCKER_INFLUXDB_INIT_ADMIN_TOKEN"
       FRONIUS_INV_INFLUXDB_ORG: "DOCKER_INFLUXDB_INIT_ORG"
@@ -93,13 +95,13 @@ variables:
     description: "Enable Home Assistant MQTT autodiscovery"
     prompt: true
 
-  # Service names for depends_on (allows customization when using non-default service names)
+  # Service dependencies (for depends_on)
   MOSQUITTO_SERVICE:
     default: "mosquitto"
-    description: "Mosquitto service name (for depends_on)"
+    description: "Mosquitto service name"
   INFLUXDB_SERVICE:
     default: "influxdb"
-    description: "InfluxDB service name (for depends_on)"
+    description: "InfluxDB service name"
 
 # Copy config files (same folder now)
 copy_files:
@@ -115,9 +117,8 @@ hooks:
     - "mkdir -p ${SERVICE_DATA}/data ${SERVICE_DATA}/logs"
   post_deploy:
     - "echo 'Fronius Inverters service deployed successfully'"
-    # Create InfluxDB bucket in stack influxdb container (if exists)
-    - "docker exec ${STACK}-influxdb influx bucket create -n '${FRONIUS_INV_INFLUXDB_BUCKET}' -o '${FRONIUS_INV_INFLUXDB_ORG}' 2>/dev/null && echo '✓ InfluxDB bucket ${FRONIUS_INV_INFLUXDB_BUCKET} created' || true"
-    - "docker logs ${CONTAINER_NAME} --tail 5 2>/dev/null || true"
+    # Bucket creation is handled in container entrypoint.sh
+    - "sleep 3 && docker logs ${CONTAINER_NAME} --tail 10 2>/dev/null || true"
 
 compose: |
   ${SERVICE_NAME}:
@@ -155,7 +156,7 @@ compose: |
       - PING_CHECK_ENABLED=false
       - HA_DISCOVERY_ENABLED=${FRONIUS_INV_HA_DISCOVERY_ENABLED}
     volumes:
-      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/app/config:ro
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/app/config
       - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/app/data
       - ${DOCKER_ROOT}/${SERVICE_NAME}/logs:/app/logs
     healthcheck:
