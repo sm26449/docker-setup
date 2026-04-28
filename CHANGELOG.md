@@ -5,6 +5,22 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.0] - 2026-04-29
+
+### Added
+
+- **`tuya-bridge` service** — HTTP REST API bridge that translates Node-RED commands into Tuya local protocol calls. Replaces the standalone bridge that used to run on a separate host (`192.168.100.25:8080`). Source: `/home/stefanm/tuya_bridge`. Built from local Dockerfile (multi-stage, gunicorn, non-root `tuya:999` user, healthcheck on `/api/health`).
+  - Port: `8085` host → `8080` container (configurable via `TUYA_BRIDGE_PORT`).
+  - Volume: `${DOCKER_ROOT}/pv-stack/tuya-bridge/data:/app/data` (logs.db). **Must be `chown 999:999` on first install** so the non-root container can write to it.
+  - Network: `pv-stack-network` (DNS-reachable as `pv-stack-tuya-bridge`).
+  - Reachable from Node-RED on Ekrano via LAN IP (`http://192.168.88.239:8085`); from pv-stack-ui via Docker DNS (`http://pv-stack-tuya-bridge:8080`).
+  - Stateless: Node-RED sends `{device_id, ip, local_key, version, action, params}` per request — no in-bridge device registry. Configuration lives in `pv-stack-ui/policy.db` `ac_devices` table (F2).
+  - Knobs: `TUYA_DEVICE_TIMEOUT`, `TUYA_DEVICE_RETRY`, `TUYA_POOL_MAX`, `TUYA_RATE_LIMIT_SEC`, `TUYA_LOG_LEVEL`, etc.
+
+### Changed
+
+- AC control path now goes through the local bridge container instead of the external host. The legacy bridge URL (`192.168.100.25:8080`) is configured per-device as `bridge_url_fallback` for resilience.
+
 ## [2.8.0] - 2026-03-19
 
 ### Added
