@@ -5,6 +5,26 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.1] - 2026-05-12
+
+### Changed
+
+- **Pin mosquitto + node-red to specific minor versions (audit B-O5).**
+  `eclipse-mosquitto:latest` → `eclipse-mosquitto:2.1.2-alpine` (both
+  `mosquitto` and `mosquitto-bridge` services), and
+  `nodered/node-red:latest` → `nodered/node-red:4.1.10`. Both tags
+  verified to exist on Docker Hub. Matches the versions currently
+  running, so this is a pin without an upgrade. Bumps now happen
+  intentionally instead of by surprise on next `docker compose pull`.
+
+  Mosquitto's `2.1` line only ships as the `-alpine` variant on Docker
+  Hub; the current container is already alpine-based under `:latest`,
+  so this is the exact same image content with a deterministic tag.
+
+  Other `:latest` references (grafana, esphome, telegraf, watchtower,
+  redis, mqtt-explorer, phpmyadmin, portainer) remain unpinned for
+  now — audit only flagged the two operationally-critical ones.
+
 ## [2.9.0] - 2026-04-29
 
 ### Added

@@ -71,7 +71,10 @@ config_files:
 
 compose: |
   ${SERVICE_NAME}:
-    image: nodered/node-red:latest
+    # Pinned to a specific minor — audit B-O5 (pv-stack-ui Phase-2).
+    # Node-RED's `:latest` tracks every release including breaking
+    # ones (the 3→4 jump dropped Node 14 support). Bump intentionally.
+    image: nodered/node-red:4.1.10
     container_name: ${SERVICE_NAME}
     restart: unless-stopped
     user: "${PUID}:${PGID}"
