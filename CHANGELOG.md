@@ -5,6 +5,44 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.0] - 2026-05-20
+
+### Added
+
+- **alertd self-watch** (`tools/alertd-watchdog/`). Host-side cron job
+  that closes the recursive monitoring gap: alertd cannot alert on
+  itself being down, so an out-of-band watcher running outside any
+  container probes alertd's `/v1/health` every 5 min and, on
+  sustained failure, POSTs SMS directly to `sms-gateway:5080`,
+  bypassing alertd entirely.
+
+  Files: `alertd_watchdog.sh` (script, ~110 LOC, runs as root from
+  /usr/local/sbin), `alertd-watchdog.cron` (systemd-compatible
+  /etc/cron.d/ entry, `*/5 * * * *`), `install.sh` (idempotent
+  installer).
+
+  Behaviour:
+  - `FAIL_THRESHOLD=2` consecutive misses before alerting (~10 min
+    worst-case detection latency at 5-min cadence). Tolerates a
+    single network blip / restart.
+  - State in `/var/lib/alertd-watchdog/`: `fail_count` (zeroed on
+    recovery), `last_alert_ts` (epoch of most recent SMS).
+  - `RE_ALERT_MIN=30` suppression window — at most one SMS per 30 min
+    while still down.
+  - `priority=critical` on the SMS call bypasses sms-gateway rate
+    limit + dedup so the alert is never throttled.
+  - All knobs overridable via `/etc/default/alertd-watchdog` (seeded
+    by installer with every value commented).
+  - `DRY_RUN=1` env logs intended SMS instead of sending — used in
+    the 5-scenario validation suite.
+  - `RECOVERY_SMS=1` env opts in to "alertd recovered" notification.
+
+  Verified offline against 5 scenarios (healthy / first miss /
+  threshold met / re-alert suppression / recovery / window-expired
+  re-send), all pass. Installed live; cron daemon is reloaded by the
+  installer.
+
+
 ## [2.10.0] - 2026-05-19
 
 ### Added

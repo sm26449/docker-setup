@@ -1,0 +1,15 @@
+# /etc/cron.d/alertd-watchdog — out-of-band liveness check for alertd.
+# Runs every 5 minutes as root (curl needs no privilege but the state
+# dir + log file live in /var/lib + /var/log which are root-owned).
+#
+# Cron syntax sanity:
+#   m  h  dom mon dow user  command
+#   The 6-field form (user before command) is REQUIRED in /etc/cron.d/.
+#
+# To install: copy this file to /etc/cron.d/alertd-watchdog (no
+# extension). install.sh does it for you.
+
+SHELL=/bin/bash
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+*/5 * * * * root /usr/local/sbin/alertd_watchdog.sh
