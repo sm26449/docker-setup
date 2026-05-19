@@ -5,6 +5,35 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.0] - 2026-05-19
+
+### Added
+
+- **docker-monitor sidecar** (`templates/docker-monitor/`). Tiny Python
+  container that polls the local Docker daemon every 30 s (read-only
+  socket mount) and publishes per-container state to
+  `pv-stack/infra/docker/<name>/state` retained, plus a rollup snapshot
+  on `pv-stack/infra/docker/_summary`. Payload fields: `state`,
+  `running`, `health`, `exit_code`, `uptime_s`, `restart_count`,
+  `image`, `ts`. Tracks every `pv-stack-*` container by default; excludes
+  itself via `CONTAINER_BLACKLIST`. Consumed by alertd MQTT variables —
+  see `pv-stack-alerts/scripts/seed_container_down_rules.py` for the
+  9-rule wiring (4 Tier-1 critical + 5 Tier-2 warning).
+
+  Image is ~80 MB (python:3.12-slim + paho-mqtt + docker SDK).
+  Healthcheck pings the broker every 60 s. Logs ≤ 5 MB × 2 rotate.
+
+  Wired in `docker-compose.pv-stack.yml` after `watchtower` and
+  `janitza-monitor`. New env vars in `.env`:
+  - `DOCKER_MONITOR_MQTT_USER` / `DOCKER_MONITOR_MQTT_PASS`
+  - `DOCKER_MONITOR_INTERVAL_S` (default 30)
+  - `DOCKER_MONITOR_LOG_LEVEL` (default INFO)
+
+  Verified 24/24 pv-stack-* containers reporting healthy state on
+  first tick; alertd eval-now on 4 sample rules returned matched=false
+  with live `running=true` context.
+
+
 ## [2.9.1] - 2026-05-12
 
 ### Changed
