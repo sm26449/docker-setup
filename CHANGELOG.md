@@ -5,6 +5,31 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.1] - 2026-05-26
+
+### Changed
+
+- **`tools/alertd-watchdog/alertd_watchdog.sh`** — `send_sms()` now
+  forwards `X-API-Key: $SMS_API_KEY` when the env var is set in
+  `/etc/default/alertd-watchdog`. Closes the zero-auth surface on
+  `pv-stack-sms-gateway:5080` that was previously exploitable from any
+  LAN host (sms-gateway 1.1.0 added the auth layer; this change wires
+  the watchdog into it).
+
+  Empty key keeps backwards-compat with deployments that haven't
+  enabled auth yet. The matching operator-config line is:
+
+  ```bash
+  echo "SMS_API_KEY=$(cat /path/to/secret)" >> /etc/default/alertd-watchdog
+  ```
+
+  Plus matching env in `~/sms-gateway/.env` (`SMS_API_KEY=`) and
+  `~/pv-stack-alerts/.env` (`SMS_GATEWAY_API_KEY=` — same value, just
+  the resolved-by-alertd alias).
+
+  Verified live via dry-run: script syntax clean, watchdog last
+  self-test still green (`/var/lib/alertd-watchdog/fail_count=0`).
+
 ## [2.11.0] - 2026-05-20
 
 ### Added
