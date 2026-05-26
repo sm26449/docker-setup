@@ -91,6 +91,9 @@ log() {
 }
 
 # Send SMS via sms-gateway, return 0 on HTTP 200, 1 otherwise.
+# SMS_API_KEY is optional — when set (via /etc/default/alertd-watchdog
+# matching sms-gateway's SMS_API_KEY env), the watchdog authenticates
+# every call. Empty key keeps backwards-compat with legacy deployments.
 send_sms() {
     local body="$1"
     if [ "$DRY_RUN" = "1" ]; then
@@ -101,9 +104,14 @@ send_sms() {
     local escaped="${body//\"/\\\"}"
     local payload="{\"number\":\"$SMS_TO\",\"message\":\"$escaped\",\"priority\":\"critical\"}"
     local resp http_code
+    local auth_args=()
+    if [ -n "${SMS_API_KEY:-}" ]; then
+        auth_args=(-H "X-API-Key: $SMS_API_KEY")
+    fi
     resp=$(curl -sS -m 10 -o /tmp/alertd_wd_resp.$$ -w "%{http_code}" \
         -X POST "$SMS_API" \
         -H 'Content-Type: application/json' \
+        "${auth_args[@]}" \
         -d "$payload" 2>>"$LOG_FILE")
     http_code="$resp"
     rm -f /tmp/alertd_wd_resp.$$
