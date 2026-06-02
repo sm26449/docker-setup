@@ -1,0 +1,190 @@
+name: telegraf_policy
+description: "Telegraf - PV-Stack control/derived state (pv-stack/* MQTT → pv_stack_metrics). Replaces the Ekrano NR persistence retired at the 2026-05-31 strip."
+
+dependencies:
+  - name: influxdb
+    variables:
+      TELEGRAF_INFLUXDB_URL: "http://${HOST}:${PORT}"
+  - name: mosquitto
+    optional: true
+    variables:
+      POLICY_MQTT_SERVER: "tcp://${HOST}:${PORT}"
+      POLICY_MQTT_USERNAME: "${MQTT_USERNAME}"
+      POLICY_MQTT_PASSWORD: "${MQTT_PASSWORD}"
+
+variables:
+  TELEGRAF_INTERVAL:
+    default: "10s"
+    description: "Metrics collection interval"
+
+  TELEGRAF_INFLUXDB_URL:
+    default: "http://influxdb:8086"
+    description: "InfluxDB URL"
+    prompt: true
+
+  TELEGRAF_INFLUXDB_TOKEN:
+    default: ""
+    description: "InfluxDB API token"
+    prompt: true
+
+  TELEGRAF_INFLUXDB_ORG:
+    default: "pv-stack"
+    description: "InfluxDB organization"
+    prompt: true
+
+  POLICY_INFLUXDB_BUCKET:
+    default: "pv_stack_metrics"
+    description: "InfluxDB bucket for control/derived state"
+
+  POLICY_MQTT_SERVER:
+    default: "tcp://pv-stack-mosquitto:1883"
+    description: "Main PV-Stack MQTT broker (carries pv-stack/* topics)"
+    prompt: true
+
+  POLICY_MQTT_USERNAME:
+    default: "admin"
+    description: "MQTT username"
+    prompt: true
+
+  POLICY_MQTT_PASSWORD:
+    default: ""
+    description: "MQTT password"
+    prompt: true
+
+config_files:
+  - path: "config/telegraf.conf"
+    content: |
+      # Telegraf - PV-Stack control/derived state persistence.
+      # Subscribes to the local-NR pv-stack/* JSON state topics and writes them
+      # to pv_stack_metrics, restoring the time-series history the Ekrano NR
+      # "04. Monitoring" tab used to write (retired at the 2026-05-31 strip).
+      # json (v1) parser: numeric keys -> fields; tag_keys -> tags; other strings
+      # dropped; nested objects flatten to parent_child; arrays ignored.
+
+      [global_tags]
+        source = "pv-stack-policy"
+
+      [agent]
+        interval = "${TELEGRAF_INTERVAL}"
+        round_interval = true
+        metric_batch_size = 1000
+        metric_buffer_limit = 10000
+        flush_interval = "10s"
+        omit_hostname = true
+
+      [[outputs.influxdb_v2]]
+        urls = ["${TELEGRAF_INFLUXDB_URL}"]
+        token = "${TELEGRAF_INFLUXDB_TOKEN}"
+        organization = "${TELEGRAF_INFLUXDB_ORG}"
+        bucket = "${POLICY_INFLUXDB_BUCKET}"
+        namepass = ["dvcc", "grid", "discharge", "forecast", "consumption", "thermal_control", "regime"]
+
+      [[inputs.mqtt_consumer]]
+        servers = ["${POLICY_MQTT_SERVER}"]
+        client_id = "telegraf-policy-dvcc"
+        qos = 0
+        connection_timeout = "30s"
+        username = "${POLICY_MQTT_USERNAME}"
+        password = "${POLICY_MQTT_PASSWORD}"
+        topics = ["pv-stack/policy/dvcc/state"]
+        data_format = "json"
+        name_override = "dvcc"
+        tag_keys = ["strategy", "matched_rule", "override_mode"]
+
+      [[inputs.mqtt_consumer]]
+        servers = ["${POLICY_MQTT_SERVER}"]
+        client_id = "telegraf-policy-grid"
+        qos = 0
+        connection_timeout = "30s"
+        username = "${POLICY_MQTT_USERNAME}"
+        password = "${POLICY_MQTT_PASSWORD}"
+        topics = ["pv-stack/policy/grid/state"]
+        data_format = "json"
+        name_override = "grid"
+        tag_keys = ["strategy", "matched_rule", "grid_src", "override_mode"]
+
+      [[inputs.mqtt_consumer]]
+        servers = ["${POLICY_MQTT_SERVER}"]
+        client_id = "telegraf-policy-discharge"
+        qos = 0
+        connection_timeout = "30s"
+        username = "${POLICY_MQTT_USERNAME}"
+        password = "${POLICY_MQTT_PASSWORD}"
+        topics = ["pv-stack/policy/discharge/state"]
+        data_format = "json"
+        name_override = "discharge"
+        tag_keys = ["decision_mode", "reason_code", "matched_rule", "forecast_tier", "regime", "tariff_regime", "window", "override_mode"]
+        fieldexclude = ["_calc_*", "inputs_status_*"]
+
+      [[inputs.mqtt_consumer]]
+        servers = ["${POLICY_MQTT_SERVER}"]
+        client_id = "telegraf-policy-forecast"
+        qos = 0
+        connection_timeout = "30s"
+        username = "${POLICY_MQTT_USERNAME}"
+        password = "${POLICY_MQTT_PASSWORD}"
+        topics = ["pv-stack/derived/forecast"]
+        data_format = "json"
+        name_override = "forecast"
+        tag_keys = ["tier", "tier_basis", "confidence", "source"]
+
+      [[inputs.mqtt_consumer]]
+        servers = ["${POLICY_MQTT_SERVER}"]
+        client_id = "telegraf-policy-consumption"
+        qos = 0
+        connection_timeout = "30s"
+        username = "${POLICY_MQTT_USERNAME}"
+        password = "${POLICY_MQTT_PASSWORD}"
+        topics = ["pv-stack/derived/consumption"]
+        data_format = "json"
+        name_override = "consumption"
+        tag_keys = ["window_agg", "source"]
+
+      [[inputs.mqtt_consumer]]
+        servers = ["${POLICY_MQTT_SERVER}"]
+        client_id = "telegraf-policy-regime"
+        qos = 0
+        connection_timeout = "30s"
+        username = "${POLICY_MQTT_USERNAME}"
+        password = "${POLICY_MQTT_PASSWORD}"
+        topics = ["pv-stack/derived/regime"]
+        data_format = "json"
+        name_override = "regime"
+        tag_keys = ["regime", "source"]
+        fieldexclude = ["inputs_fresh_*"]
+
+      [[inputs.mqtt_consumer]]
+        servers = ["${POLICY_MQTT_SERVER}"]
+        client_id = "telegraf-policy-thermal"
+        qos = 0
+        connection_timeout = "30s"
+        username = "${POLICY_MQTT_USERNAME}"
+        password = "${POLICY_MQTT_PASSWORD}"
+        topics = ["pv-stack/policy/thermal/state"]
+        data_format = "json"
+        name_override = "thermal_control"
+        tag_keys = ["current_mode", "override_mode", "last_rule", "last_action"]
+
+compose: |
+  ${SERVICE_NAME}:
+    image: telegraf:latest
+    container_name: ${SERVICE_NAME}
+    restart: unless-stopped
+    hostname: ${SERVICE_NAME}
+    depends_on:
+      - influxdb
+      - mosquitto
+    environment:
+      - TZ=${TZ}
+    volumes:
+      - ${DOCKER_ROOT}/${SERVICE_NAME}/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    healthcheck:
+      test: ["CMD", "telegraf", "--test"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
