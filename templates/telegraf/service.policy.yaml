@@ -135,10 +135,11 @@ config_files:
         connection_timeout = "30s"
         username = "${POLICY_MQTT_USERNAME}"
         password = "${POLICY_MQTT_PASSWORD}"
-        topics = ["pv-stack/derived/consumption"]
+        topics = ["pv-stack/runtime/consumption_data"]
         data_format = "json"
         name_override = "consumption"
-        tag_keys = ["window_agg", "source"]
+        tag_keys = []
+        fieldexclude = ["last_update"]
 
       [[inputs.mqtt_consumer]]
         servers = ["${POLICY_MQTT_SERVER}"]
