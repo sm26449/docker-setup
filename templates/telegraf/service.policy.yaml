@@ -113,7 +113,7 @@ config_files:
         topics = ["pv-stack/policy/discharge/state"]
         data_format = "json"
         name_override = "discharge"
-        tag_keys = ["decision_mode", "reason_code", "matched_rule", "forecast_tier", "regime", "tariff_regime", "window", "override_mode"]
+        tag_keys = ["decision_mode", "reason_code", "matched_rule", "forecast_tier", "regime", "tariff_regime", "window", "override_mode", "active"]
         fieldexclude = ["_calc_*", "inputs_status_*"]
 
       [[inputs.mqtt_consumer]]
