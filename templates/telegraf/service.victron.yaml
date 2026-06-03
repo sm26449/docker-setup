@@ -269,7 +269,7 @@ compose: |
     volumes:
       - ${DOCKER_ROOT}/${SERVICE_NAME}/config/telegraf.conf:/etc/telegraf/telegraf.conf:ro
     healthcheck:
-      test: ["CMD", "telegraf", "--test"]
+      test: ["CMD", "pidof", "telegraf"]
       interval: 60s
       timeout: 10s
       retries: 3
