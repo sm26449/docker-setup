@@ -47,3 +47,6 @@ templates/seplos-modbus-mqtt/*
 templates/janitza-monitor/*
 !templates/janitza-monitor/service*.yaml
 !templates/janitza-monitor/INTEGRATION.md
+
+# Local UI screenshots (not part of the deployment config)
+screenshots/
