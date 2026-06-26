@@ -21,8 +21,8 @@ dependencies:
 variables:
   # Modbus settings
   JANITZA_MODBUS_HOST:
-    default: "192.168.100.17"
-    description: "Janitza UMG 512-PRO IP address"
+    default: "192.168.88.207"
+    description: "Janitza UMG 512-PRO IP address (or leave blank and set it from the UI)"
     prompt: true
   JANITZA_MODBUS_PORT:
     default: "502"
@@ -142,25 +142,27 @@ compose: |
       - "${JANITZA_UI_PORT:-8080}:${JANITZA_UI_PORT:-8080}"
     environment:
       - TZ=${TZ:-Europe/Bucharest}
-      # Modbus
-      - MODBUS_HOST=${JANITZA_MODBUS_HOST:-192.168.100.17}
-      - MODBUS_PORT=${JANITZA_MODBUS_PORT:-502}
-      - MODBUS_UNIT_ID=${JANITZA_MODBUS_UNIT_ID:-1}
-      # MQTT
-      - MQTT_ENABLED=${JANITZA_MQTT_ENABLED:-true}
-      - MQTT_BROKER=${JANITZA_MQTT_BROKER:-mosquitto}
-      - MQTT_PORT=${JANITZA_MQTT_PORT:-1883}
-      - MQTT_USERNAME=${JANITZA_MQTT_USERNAME:-}
-      - MQTT_PASSWORD=${JANITZA_MQTT_PASSWORD:-}
-      - MQTT_PREFIX=${JANITZA_MQTT_PREFIX:-janitza/umg512}
-      - MQTT_PUBLISH_MODE=${JANITZA_MQTT_PUBLISH_MODE:-changed}
-      # InfluxDB
-      - INFLUXDB_ENABLED=${JANITZA_INFLUXDB_ENABLED:-false}
-      - INFLUXDB_URL=${JANITZA_INFLUXDB_URL:-http://influxdb:8086}
-      - INFLUXDB_TOKEN=${JANITZA_INFLUXDB_TOKEN:-}
-      - INFLUXDB_ORG=${JANITZA_INFLUXDB_ORG:-}
-      - INFLUXDB_BUCKET=${JANITZA_INFLUXDB_BUCKET:-janitza}
-      - INFLUXDB_PUBLISH_MODE=${JANITZA_INFLUXDB_PUBLISH_MODE:-changed}
+      # Modbus / MQTT / InfluxDB connection settings are configured from the UI
+      # (Config -> Settings), persisted to the mounted config/config.yaml and applied
+      # without a restart — NOT pinned here (an env value would override the UI/yaml on
+      # every restart). The current Janitza is at 192.168.88.207 (flat LAN). To pre-seed
+      # a brand-new deploy from the environment instead, uncomment the lines below.
+      # - MODBUS_HOST=${JANITZA_MODBUS_HOST:-192.168.88.207}
+      # - MODBUS_PORT=${JANITZA_MODBUS_PORT:-502}
+      # - MODBUS_UNIT_ID=${JANITZA_MODBUS_UNIT_ID:-1}
+      # - MQTT_ENABLED=${JANITZA_MQTT_ENABLED:-true}
+      # - MQTT_BROKER=${JANITZA_MQTT_BROKER:-mosquitto}
+      # - MQTT_PORT=${JANITZA_MQTT_PORT:-1883}
+      # - MQTT_USERNAME=${JANITZA_MQTT_USERNAME:-}
+      # - MQTT_PASSWORD=${JANITZA_MQTT_PASSWORD:-}
+      # - MQTT_PREFIX=${JANITZA_MQTT_PREFIX:-janitza/umg512}
+      # - MQTT_PUBLISH_MODE=${JANITZA_MQTT_PUBLISH_MODE:-changed}
+      # - INFLUXDB_ENABLED=${JANITZA_INFLUXDB_ENABLED:-false}
+      # - INFLUXDB_URL=${JANITZA_INFLUXDB_URL:-http://influxdb:8086}
+      # - INFLUXDB_TOKEN=${JANITZA_INFLUXDB_TOKEN:-}
+      # - INFLUXDB_ORG=${JANITZA_INFLUXDB_ORG:-}
+      # - INFLUXDB_BUCKET=${JANITZA_INFLUXDB_BUCKET:-janitza}
+      # - INFLUXDB_PUBLISH_MODE=${JANITZA_INFLUXDB_PUBLISH_MODE:-changed}
       # UI
       - UI_PORT=${JANITZA_UI_PORT:-8080}
     volumes:
