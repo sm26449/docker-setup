@@ -1,0 +1,15 @@
+# Prometheus — PV-Stack. Scrapes the Multi-Bus Gateway's /metrics.
+global:
+  scrape_interval: 10s
+  evaluation_interval: 30s
+
+scrape_configs:
+  - job_name: multibus-gateway
+    static_configs:
+      - targets: ['janitza-monitor:8080']
+        labels:
+          stack: pv-stack
+
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
