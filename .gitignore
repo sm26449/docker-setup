@@ -44,9 +44,9 @@ templates/fronius/*
 templates/seplos-modbus-mqtt/*
 !templates/seplos-modbus-mqtt/service*.yaml
 !templates/seplos-modbus-mqtt/INTEGRATION.md
-templates/janitza-monitor/*
-!templates/janitza-monitor/service*.yaml
-!templates/janitza-monitor/INTEGRATION.md
+templates/multi-bus-gateway/*
+!templates/multi-bus-gateway/service*.yaml
+!templates/multi-bus-gateway/INTEGRATION.md
 
 # Local UI screenshots (not part of the deployment config)
 screenshots/
