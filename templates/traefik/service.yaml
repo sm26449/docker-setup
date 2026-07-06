@@ -1,0 +1,13 @@
+name: traefik
+description: "LAN-only TLS termination (Let's Encrypt via Cloudflare DNS-01) for pv-stack web UIs"
+
+dependencies:
+  - name: multi-bus-gateway
+
+variables:
+  TRAEFIK_HTTPS_PORT:
+    default: "443"
+    description: "HTTPS entrypoint"
+  TRAEFIK_HTTP_PORT:
+    default: "80"
+    description: "HTTP entrypoint (redirects to HTTPS)"

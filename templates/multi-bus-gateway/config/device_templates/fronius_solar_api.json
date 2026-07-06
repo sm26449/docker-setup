@@ -1,0 +1,261 @@
+{
+  "device_template": {
+    "schema_version": 1,
+    "id": "fronius_solar_api",
+    "name": "Fronius Smart Meter (Solar API / HTTP-JSON)",
+    "vendor": "Fronius International GmbH",
+    "model": "Smart Meter via DataManager Solar API",
+    "version": "1.0.0",
+    "author": "pv-stack",
+    "description": "Read the Fronius Smart Meter over the DataManager's Solar API (HTTP JSON) instead of Modbus — values arrive already scaled and the HTTP API tolerates concurrent clients. Point the device URL at GetMeterRealtimeData.cgi?Scope=Device&DeviceId=<meter id> (the Solar-API meter id, from Discover Fronius). Names are Janitza canonical so EM24/Fronius output profiles re-serve it unchanged.",
+    "source_document": "Fronius Solar API v1 (GetMeterRealtimeData.cgi)",
+    "protocol": {
+      "transports": [
+        "http"
+      ],
+      "byte_order": "big"
+    },
+    "poll_groups": {
+      "realtime": {
+        "interval": 5,
+        "description": "Live power/voltage/current"
+      },
+      "normal": {
+        "interval": 10,
+        "description": "Reactive/apparent/PF"
+      },
+      "slow": {
+        "interval": 60,
+        "description": "Energy counters"
+      }
+    },
+    "categories": {
+      "voltage_line_neutral": {
+        "label": "Voltage L-N",
+        "order": 1
+      },
+      "current_phase": {
+        "label": "Current per phase",
+        "order": 2
+      },
+      "power_active": {
+        "label": "Active power (W)",
+        "order": 3
+      },
+      "power_reactive": {
+        "label": "Reactive power (var)",
+        "order": 4
+      },
+      "power_apparent": {
+        "label": "Apparent power (VA)",
+        "order": 5
+      },
+      "power_factor_pf": {
+        "label": "Power factor",
+        "order": 6
+      },
+      "energy_active": {
+        "label": "Energy (Wh)",
+        "order": 7
+      },
+      "frequency": {
+        "label": "Frequency",
+        "order": 8
+      }
+    },
+    "registers": [
+      {
+        "address": 1,
+        "name": "_G_P_SUM3",
+        "label": "Total real power",
+        "unit": "W",
+        "data_type": "float",
+        "access": "RD",
+        "category": "power_active",
+        "description": "Total real power",
+        "json_path": "Body.Data.PowerReal_P_Sum",
+        "poll_group": "realtime"
+      },
+      {
+        "address": 2,
+        "name": "_PLN[0]",
+        "label": "Phase A real power",
+        "unit": "W",
+        "data_type": "float",
+        "access": "RD",
+        "category": "power_active",
+        "description": "Phase A real power",
+        "json_path": "Body.Data.PowerReal_P_Phase_1",
+        "poll_group": "realtime"
+      },
+      {
+        "address": 3,
+        "name": "_PLN[1]",
+        "label": "Phase B real power",
+        "unit": "W",
+        "data_type": "float",
+        "access": "RD",
+        "category": "power_active",
+        "description": "Phase B real power",
+        "json_path": "Body.Data.PowerReal_P_Phase_2",
+        "poll_group": "realtime"
+      },
+      {
+        "address": 4,
+        "name": "_PLN[2]",
+        "label": "Phase C real power",
+        "unit": "W",
+        "data_type": "float",
+        "access": "RD",
+        "category": "power_active",
+        "description": "Phase C real power",
+        "json_path": "Body.Data.PowerReal_P_Phase_3",
+        "poll_group": "realtime"
+      },
+      {
+        "address": 5,
+        "name": "_G_FREQ",
+        "label": "AC frequency",
+        "unit": "Hz",
+        "data_type": "float",
+        "access": "RD",
+        "category": "frequency",
+        "description": "AC frequency",
+        "json_path": "Body.Data.Frequency_Phase_Average",
+        "poll_group": "realtime"
+      },
+      {
+        "address": 6,
+        "name": "_G_ULN[0]",
+        "label": "Phase A voltage L-N",
+        "unit": "V",
+        "data_type": "float",
+        "access": "RD",
+        "category": "voltage_line_neutral",
+        "description": "Phase A voltage L-N",
+        "json_path": "Body.Data.Voltage_AC_Phase_1",
+        "poll_group": "realtime"
+      },
+      {
+        "address": 7,
+        "name": "_G_ULN[1]",
+        "label": "Phase B voltage L-N",
+        "unit": "V",
+        "data_type": "float",
+        "access": "RD",
+        "category": "voltage_line_neutral",
+        "description": "Phase B voltage L-N",
+        "json_path": "Body.Data.Voltage_AC_Phase_2",
+        "poll_group": "realtime"
+      },
+      {
+        "address": 8,
+        "name": "_G_ULN[2]",
+        "label": "Phase C voltage L-N",
+        "unit": "V",
+        "data_type": "float",
+        "access": "RD",
+        "category": "voltage_line_neutral",
+        "description": "Phase C voltage L-N",
+        "json_path": "Body.Data.Voltage_AC_Phase_3",
+        "poll_group": "realtime"
+      },
+      {
+        "address": 9,
+        "name": "_ILN[0]",
+        "label": "Phase A current",
+        "unit": "A",
+        "data_type": "float",
+        "access": "RD",
+        "category": "current_phase",
+        "description": "Phase A current",
+        "json_path": "Body.Data.Current_AC_Phase_1",
+        "poll_group": "realtime"
+      },
+      {
+        "address": 10,
+        "name": "_ILN[1]",
+        "label": "Phase B current",
+        "unit": "A",
+        "data_type": "float",
+        "access": "RD",
+        "category": "current_phase",
+        "description": "Phase B current",
+        "json_path": "Body.Data.Current_AC_Phase_2",
+        "poll_group": "realtime"
+      },
+      {
+        "address": 11,
+        "name": "_ILN[2]",
+        "label": "Phase C current",
+        "unit": "A",
+        "data_type": "float",
+        "access": "RD",
+        "category": "current_phase",
+        "description": "Phase C current",
+        "json_path": "Body.Data.Current_AC_Phase_3",
+        "poll_group": "realtime"
+      },
+      {
+        "address": 12,
+        "name": "_G_Q_SUM3",
+        "label": "Total reactive power",
+        "unit": "var",
+        "data_type": "float",
+        "access": "RD",
+        "category": "power_reactive",
+        "description": "Total reactive power",
+        "json_path": "Body.Data.PowerReactive_Q_Sum",
+        "poll_group": "normal"
+      },
+      {
+        "address": 13,
+        "name": "_G_S_SUM3",
+        "label": "Total apparent power",
+        "unit": "VA",
+        "data_type": "float",
+        "access": "RD",
+        "category": "power_apparent",
+        "description": "Total apparent power",
+        "json_path": "Body.Data.PowerApparent_S_Sum",
+        "poll_group": "normal"
+      },
+      {
+        "address": 14,
+        "name": "_G_PF_SUM3",
+        "label": "Average power factor",
+        "unit": "",
+        "data_type": "float",
+        "access": "RD",
+        "category": "power_factor_pf",
+        "description": "Average power factor",
+        "json_path": "Body.Data.PowerFactor_Sum",
+        "poll_group": "normal"
+      },
+      {
+        "address": 15,
+        "name": "_WH_V[4]",
+        "label": "Imported energy (consumption)",
+        "unit": "Wh",
+        "data_type": "float",
+        "access": "RD",
+        "category": "energy_active",
+        "description": "Imported energy (consumption)",
+        "json_path": "Body.Data.EnergyReal_WAC_Sum_Consumed",
+        "poll_group": "slow"
+      },
+      {
+        "address": 16,
+        "name": "_WH_Z[4]",
+        "label": "Exported energy (injection)",
+        "unit": "Wh",
+        "data_type": "float",
+        "access": "RD",
+        "category": "energy_active",
+        "description": "Exported energy (injection)",
+        "json_path": "Body.Data.EnergyReal_WAC_Sum_Produced",
+        "poll_group": "slow"
+      }
+    ]
+  }
+}

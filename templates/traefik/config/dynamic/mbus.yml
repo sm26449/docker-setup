@@ -1,0 +1,14 @@
+# mbus.diysolar.ro → Multi-Bus Gateway (HTTP+WS), TLS terminated here.
+http:
+  routers:
+    mbus:
+      rule: "Host(`mbus.diysolar.ro`)"
+      entryPoints: [websecure]
+      service: mbus
+      tls:
+        certResolver: cloudflare
+  services:
+    mbus:
+      loadBalancer:
+        servers:
+          - url: "http://multi-bus-gateway:8080"

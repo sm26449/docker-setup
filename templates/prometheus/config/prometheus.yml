@@ -6,7 +6,7 @@ global:
 scrape_configs:
   - job_name: multibus-gateway
     static_configs:
-      - targets: ['janitza-monitor:8080']
+      - targets: ['multi-bus-gateway:8080']
         labels:
           stack: pv-stack
 

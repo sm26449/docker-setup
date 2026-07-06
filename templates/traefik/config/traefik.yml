@@ -1,0 +1,37 @@
+# Traefik static config — LAN-only TLS termination for pv-stack services.
+# Certificates come via DNS-01 (Cloudflare API), so nothing is exposed
+# publicly: the names resolve to private IPs and traffic never leaves the LAN.
+entryPoints:
+  web:
+    address: ":80"
+    http:
+      redirections:
+        entryPoint:
+          to: websecure
+          scheme: https
+  websecure:
+    address: ":443"
+
+providers:
+  file:
+    directory: /etc/traefik/dynamic
+    watch: true
+
+certificatesResolvers:
+  cloudflare:
+    acme:
+      email: stefan.maldaianu@gmail.com
+      storage: /acme/acme.json
+      dnsChallenge:
+        provider: cloudflare
+        # public resolvers: the TXT check must not ask the MikroTik (which
+        # holds LAN overrides), it must see the real Cloudflare zone
+        resolvers:
+          - "1.1.1.1:53"
+          - "8.8.8.8:53"
+
+api:
+  dashboard: false
+
+log:
+  level: INFO
