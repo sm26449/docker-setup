@@ -1,5 +1,5 @@
 name: multi-bus-gateway
-description: "Janitza UMG 512-PRO Modbus TCP to MQTT/InfluxDB Bridge with Web UI"
+description: "Multi-Bus Gateway — multi-protocol acquisition (Modbus/HTTP/MQTT) to MQTT/InfluxDB/virtual meters, with Web UI"
 
 # Dependencies with variable mappings
 dependencies:
@@ -22,7 +22,7 @@ variables:
   # Modbus settings
   JANITZA_MODBUS_HOST:
     default: "192.168.88.207"
-    description: "Janitza UMG 512-PRO IP address (or leave blank and set it from the UI)"
+    description: "Primary device IP address (or leave blank and set it from the UI)"
     prompt: true
   JANITZA_MODBUS_PORT:
     default: "502"
