@@ -1,0 +1,14 @@
+name: prometheus
+description: "Prometheus metrics — scrapes the Multi-Bus Gateway /metrics (devices, sinks, virtual meters)"
+
+dependencies:
+  - name: janitza-monitor
+
+variables:
+  PROMETHEUS_PORT:
+    default: "9090"
+    description: "Prometheus web/API port"
+    prompt: true
+  PROMETHEUS_RETENTION:
+    default: "90d"
+    description: "TSDB retention window"
