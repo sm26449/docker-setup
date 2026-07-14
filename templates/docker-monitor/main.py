@@ -44,6 +44,18 @@ Failure modes
   ``status='exited'`` with ``running=False``. That is the intended
   signal.
 
+Ghost-topic cleanup
+-------------------
+A REMOVED container (``docker rm`` / compose service deleted) used to
+leave its last retained ``.../state`` payload on the broker forever —
+a "exited/unhealthy" ghost that confuses operators and audits (seen
+2026-07-14 with pv-stack-janitza-monitor, removed 07-06). The monitor
+now subscribes to its own ``<prefix>/+/state`` topics; any name with a
+retained payload that no longer matches an existing tracked container
+for two consecutive ticks gets cleared (empty retained publish). Two
+ticks, not one, so a ``docker compose up --force-recreate`` (remove +
+create with the same name) never blips the topic.
+
 Security
 --------
 ``/var/run/docker.sock`` is mounted read-only (``-ro`` in compose).
@@ -163,6 +175,29 @@ def _build_payload(c) -> dict:
     }
 
 
+# Names that currently have a retained .../state payload on the broker.
+# Fed by the MQTT subscription below; compared against the live docker
+# list each tick to find ghosts left behind by removed containers.
+_retained_names: set[str] = set()
+
+
+def _on_connect(client, _userdata, _flags, rc):
+    if rc == 0:
+        client.subscribe(f"{TOPIC_PREFIX}/+/state", qos=1)
+
+
+def _on_message(_client, _userdata, msg):
+    parts = msg.topic.split("/")
+    if len(parts) < 2 or parts[-1] != "state":
+        return
+    name = parts[-2]
+    if msg.payload:
+        _retained_names.add(name)
+    else:
+        # An empty retained publish (ours or someone's) cleared it.
+        _retained_names.discard(name)
+
+
 def main() -> int:
     log.info("starting docker-monitor: prefix=%r whitelist=%r "
              "poll=%ds broker=%s:%d",
@@ -176,6 +211,8 @@ def main() -> int:
         return 2
 
     mqtt_client = mqtt.Client(client_id=CLIENT_ID, clean_session=True)
+    mqtt_client.on_connect = _on_connect
+    mqtt_client.on_message = _on_message
     if MQTT_USER:
         mqtt_client.username_pw_set(MQTT_USER, MQTT_PASS)
     mqtt_client.reconnect_delay_set(min_delay=1, max_delay=60)
@@ -184,6 +221,10 @@ def main() -> int:
     except Exception as e:
         log.warning("initial broker connect failed: %s (will retry)", e)
     mqtt_client.loop_start()
+
+    # name → consecutive ticks it has had a retained topic but no
+    # matching docker container. Cleared at 2 (recreate-safe).
+    ghost_strikes: dict[str, int] = {}
 
     while not _stop:
         t0 = time.time()
@@ -224,6 +265,30 @@ def main() -> int:
                                 json.dumps(summary), qos=1, retain=True)
         except Exception:
             pass
+
+        # Ghost-topic sweep: retained state topics whose container no
+        # longer exists (or is no longer tracked). Clear on the second
+        # consecutive miss so a compose recreate never blips the topic.
+        tracked_names = {c.name for c in tracked}
+        _retained_names.update(tracked_names)
+        for name in list(_retained_names - tracked_names):
+            strikes = ghost_strikes.get(name, 0) + 1
+            if strikes < 2:
+                ghost_strikes[name] = strikes
+                continue
+            try:
+                mqtt_client.publish(f"{TOPIC_PREFIX}/{name}/state",
+                                    payload=None, qos=1, retain=True)
+                log.info("cleared ghost retained topic for removed "
+                         "container %r", name)
+            except Exception as e:
+                log.warning("ghost clear %r failed: %s", name, e)
+                continue
+            _retained_names.discard(name)
+            ghost_strikes.pop(name, None)
+        for name in list(ghost_strikes):
+            if name in tracked_names:
+                ghost_strikes.pop(name)
 
         dt = time.time() - t0
         log.debug("tick: %d containers, %d running, %d unhealthy "
