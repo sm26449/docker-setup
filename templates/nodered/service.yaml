@@ -77,6 +77,8 @@ compose: |
     image: nodered/node-red:5.0.0
     container_name: ${SERVICE_NAME}
     restart: unless-stopped
+    # Primary controller — shield from the OOM killer (2026-07-15 cascade).
+    oom_score_adj: -800
     user: "${PUID}:${PGID}"
     ports:
       - "${NODERED_PORT:-1880}:1880"

@@ -50,6 +50,13 @@ compose: |
       - DOCKER_INFLUXDB_INIT_ORG=${DOCKER_INFLUXDB_INIT_ORG:-homelab}
       - DOCKER_INFLUXDB_INIT_BUCKET=${DOCKER_INFLUXDB_INIT_BUCKET:-default}
       - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${DOCKER_INFLUXDB_INIT_ADMIN_TOKEN}
+      # Query memory guardrails (2026-07-15 OOM incident): a runaway query
+      # must die, not the host. MAX must be >= concurrency x per-query.
+      - INFLUXD_QUERY_CONCURRENCY=4
+      - INFLUXD_QUERY_QUEUE_SIZE=50
+      - INFLUXD_QUERY_MEMORY_BYTES=536870912
+      - INFLUXD_QUERY_MAX_MEMORY_BYTES=2147483648
+    mem_limit: 6g
     volumes:
       - ${DOCKER_ROOT}/${SERVICE_NAME}/data/data:/var/lib/influxdb2
       - ${DOCKER_ROOT}/${SERVICE_NAME}/config:/etc/influxdb2
