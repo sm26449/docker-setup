@@ -128,6 +128,7 @@ compose: |
     image: fronius-modbus-mqtt:latest
     container_name: ${SERVICE_NAME}
     restart: unless-stopped
+    stop_grace_period: 60s   # OV power-limit restore + Influx flush (review 2026-08-02 HIGH-3)
     depends_on:
       ${MOSQUITTO_SERVICE}:
         condition: service_started
