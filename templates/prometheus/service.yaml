@@ -2,7 +2,7 @@ name: prometheus
 description: "Prometheus metrics — scrapes the Multi-Bus Gateway /metrics (devices, sinks, virtual meters)"
 
 dependencies:
-  - name: janitza-monitor
+  - name: multi-bus-gateway
 
 variables:
   PROMETHEUS_PORT:
