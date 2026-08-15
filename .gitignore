@@ -50,3 +50,7 @@ templates/multi-bus-gateway/*
 
 # Local UI screenshots (not part of the deployment config)
 screenshots/
+
+# Local deploy backups (timestamped)
+*.bak-*
+.env.bak-*
