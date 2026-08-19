@@ -1,0 +1,19 @@
+# Mosquitto ACL — security audit 2026-08-19 Val 1.5.
+# Trusted server-side services (all drivers, Node-RED, pv-stack-ui) share
+# the `admin` user and keep full access — tightening them is a separate,
+# higher-risk effort with no immediate security gain.
+user admin
+topic readwrite #
+
+# seplos-modbus driver: full access preserved (publishes seplos/# +
+# 541 homeassistant/# discovery topics; scoping it would break HA).
+user seplos
+topic readwrite #
+
+# bridge_ro — the ONLY component that relays broker data to browsers
+# (mqtt-bridge WS fan-out). Read-only, and DENIED the credential-bearing
+# config namespace at the broker level (defense in depth behind the
+# bridge's own ingress deny-list). The bridge never publishes.
+user bridge_ro
+topic read #
+topic deny pv-stack/config/#
