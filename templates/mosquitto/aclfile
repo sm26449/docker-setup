@@ -4,6 +4,11 @@
 # higher-risk effort with no immediate security gain.
 user admin
 topic readwrite #
+# $SYS/# is NOT covered by the '#' wildcard in mosquitto — it needs an
+# explicit grant. The broker's Docker healthcheck subscribes to
+# $SYS/broker/uptime as admin; without this it times out and the
+# container reads 'unhealthy' (regression fixed 2026-08-19).
+topic read $SYS/#
 
 # seplos-modbus driver: full access preserved (publishes seplos/# +
 # 541 homeassistant/# discovery topics; scoping it would break HA).
