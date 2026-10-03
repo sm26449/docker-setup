@@ -5,6 +5,19 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-10-03
+
+### Changed
+
+- **Lipia phase 2 complete** — the USB serial adapters moved physically to
+  hp840. The Fronius 65A meter's FTDI adapter maps by-id into
+  `multi-bus-gateway` as `/dev/ttyFRONIUS` (DIRECT serial, no serial-bridge
+  hop; needs the MBG image's dialout fix, MBG commit 63d46ec); the Seplos
+  CH340 serves the local `seplos-modbus-mqtt` (SEPLOS_SERIAL_PORT in .env
+  now a stable /dev/serial/by-id path). `docker-compose.serial-remote.yml`
+  (lipia) is obsolete; lipia is retired. Hand-edit backed up as
+  `docker-compose.pv-stack.yml.bak-serial-direct-20261003`.
+
 ## [2.11.1] - 2026-05-26
 
 ### Changed
