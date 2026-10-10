@@ -97,7 +97,8 @@ To show the "ESP nodes" link on its Devices page, set `ui.nodes_url: /nodes/` in
 | service / container | `esphome-builder` / `pv-stack-esphome-builder` | |
 | image | `ghcr.io/esphome/esphome:2026.9.1` | from 2026.6 the stock image runs Device Builder as its dashboard |
 | ports | **none** | it has no login; reached only through Traefik |
-| volume | `${DOCKER_ROOT}/pv-stack/esphome/config:/config` | **the same folder** as `pv-stack-esphome`: both dashboards see the same files. Don't compile the same configuration from both at once (one build tree) |
+| volumes | `${DOCKER_ROOT}/pv-stack/esphome/config:/config` and `${DOCKER_ROOT}/pv-stack/esphome-builder/data:/data` | the YAML is **shared** with `pv-stack-esphome`; the build state is **not** |
+| env | `ESPHOME_DATA_DIR=/data` | **required.** Without it, Device Builder writes its 2026.9.1 build trees and storage into `/config/.esphome`, and the 2026.5.3 compiler's next build breaks (seen 2026-10-10; the service's ADR 0007) |
 | mem_limit | `6g` | firmware compiles spike memory |
 
 Traefik router `mbus-esphome`:
