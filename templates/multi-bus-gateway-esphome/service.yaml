@@ -1,9 +1,10 @@
 name: mbg-esphome
 description: "multi-bus-gateway-esphome — flash ESPs from the browser and list the nodes, at <mbus host>/nodes behind MBG's login"
 
-# Reached ONLY through Traefik (templates/traefik/config/dynamic/mbus.yml:
-# router mbus-nodes, forwardAuth → multi-bus-gateway /api/auth/forward). It
-# trusts the role headers Traefik sets, so it publishes no port. The code is
+# The app (8090) is reached ONLY through Traefik (templates/traefik/config/
+# dynamic/mbus.yml: router mbus-nodes, forwardAuth → multi-bus-gateway
+# /api/auth/forward); it trusts the role headers Traefik sets, so 8090 is never
+# published. Only 8091 is: the node update downloads (one route, tokens). The code is
 # an rsync copy of /home/stefanm/multi-bus-gateway-esphome (like MBG's).
 # The data dir must be owned by uid 10001 (the image's user).
 

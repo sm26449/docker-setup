@@ -58,6 +58,7 @@ Environment (values come from `.env`; never put them in the compose file):
 | `NODE_MQTT_USERNAME` / `NODE_MQTT_PASSWORD` | the node account | `MBG_NODE_MQTT_USERNAME`, `MBG_NODE_MQTT_PASSWORD` |
 | `AUTH_MODE` | `forward` | — |
 | `MBG_URL` | `http://multi-bus-gateway:8080` | — |
+| `BUILDER_URL` | `/esphome/` | — (a link to Device Builder for admins) |
 
 The service refuses to prepare images while `NODE_MQTT_*` is missing or equal to `MQTT_USERNAME`
 (`GET /nodes/api/status` → `problems`).
@@ -89,6 +90,33 @@ http:
 Requires a Multi-Bus Gateway with `/api/auth/forward` and an absolute login redirect (commits `2a82232`, `8dd8985`).
 To show the "ESP nodes" link on its Devices page, set `ui.nodes_url: /nodes/` in MBG's config (Settings → Security).
 
+## ESPHome Device Builder (`esphome-builder`, the advanced editor)
+
+| Setting | Value | Why |
+|---|---|---|
+| service / container | `esphome-builder` / `pv-stack-esphome-builder` | |
+| image | `ghcr.io/esphome/esphome:2026.9.1` | from 2026.6 the stock image runs Device Builder as its dashboard |
+| ports | **none** | it has no login; reached only through Traefik |
+| volume | `${DOCKER_ROOT}/pv-stack/esphome/config:/config` | **the same folder** as `pv-stack-esphome`: both dashboards see the same files. Don't compile the same configuration from both at once (one build tree) |
+| mem_limit | `6g` | firmware compiles spike memory |
+
+Traefik router `mbus-esphome`:
+- **rule:** `Path(/esphome) || PathPrefix(/esphome/)`, priority 100;
+- **`esphome-slash`:** redirects `/esphome` → `/esphome/`;
+- **`mbg-admin`:** forwardAuth `…/api/auth/forward?need=admin` (MBG `a5bda6f`); a viewer or operator gets 403;
+- **`esphome-strip`:** `stripPrefix /esphome`, which also sets the `X-Forwarded-Prefix` Device Builder uses for
+  `<base href>`.
+
+On its first start it:
+- turns `/config` into a git repository ("version history"). `secrets.yaml` and `.esphome/` are excluded by
+  `/config/.gitignore`; check this before adding files;
+- writes `.device-builder*` files;
+- connects to the broker for MQTT discovery;
+- listens on 6055 (remote builds; not published).
+
+**Back up `/config` before changing its version:**
+`tar -C ${DOCKER_ROOT}/pv-stack/esphome -czf …/config-backup-<ts>.tgz --exclude=config/.esphome config`.
+
 ## Mosquitto: the node account
 
 Nodes connect as `mbg-node`. The account must be confined, because a board's flash can be read by whoever holds it.
@@ -115,3 +143,5 @@ Rotation without downtime (a second account) is described in the service's `docs
 - **The ESPHome dashboard** (`templates/esphome`, `pv-stack-esphome`, 2026.5.3) is the compiler. The service writes
   `mbg-bootstrap-*.yaml`, `.mbg-core.yaml` and the `mbg_*` keys of `secrets.yaml` into its `/config`.
 - **Its `:6052` is published on the LAN without a login** (a known gap, listed in the service's `docs/security.md`).
+  Device Builder now offers the same editing behind the gateway's login, so the published port can go once nothing on
+  the LAN uses it.
