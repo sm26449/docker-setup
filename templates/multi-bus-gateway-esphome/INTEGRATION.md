@@ -142,6 +142,5 @@ Rotation without downtime (a second account) is described in the service's `docs
 
 - **The ESPHome dashboard** (`templates/esphome`, `pv-stack-esphome`, 2026.5.3) is the compiler. The service writes
   `mbg-bootstrap-*.yaml`, `.mbg-core.yaml` and the `mbg_*` keys of `secrets.yaml` into its `/config`.
-- **Its `:6052` is published on the LAN without a login** (a known gap, listed in the service's `docs/security.md`).
-  Device Builder now offers the same editing behind the gateway's login, so the published port can go once nothing on
-  the LAN uses it.
+- **Its `:6052` is no longer published** (closed 2026-10-10). It has no login, so it is reachable only on
+  `pv-stack-network`; people edit through Device Builder behind the gateway's login.
