@@ -18,5 +18,12 @@ variables:
     description: "The broker as the ESP nodes reach it (LAN address, baked into the basic image)"
     prompt: true
 
+  MBG_NODE_MQTT_USERNAME:
+    default: "mbg-node"
+    description: "Broker account baked into node firmware; the broker ACL must confine it to mbg/nodes/#"
+  MBG_NODE_MQTT_PASSWORD:
+    default: ""
+    description: "Its password (random; also add it to the broker's pwfile)"
+
 volumes:
   - "${DOCKER_ROOT}/pv-stack/mbg-esphome/data:/data"
