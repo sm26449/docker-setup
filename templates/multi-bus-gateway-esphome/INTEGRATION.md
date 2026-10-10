@@ -133,6 +133,10 @@ Nodes connect as `mbg-node`. The account must be confined, because a board's fla
    topic write mbg/nodes/+/announce
    topic write mbg/nodes/+/event
    topic read mbg/nodes/+/cmd
+   # configured nodes (the wizard's YAML): online/offline, states out, commands in
+   topic write mbg/nodes/+/status
+   topic write mbg/nodes/+/+/+/state
+   topic read mbg/nodes/+/+/+/command
    ```
 5. **Reload:** `docker exec pv-stack-mosquitto sh -c 'kill -HUP 1'`. Existing clients stay connected.
 6. **Check** that `mbg-node` can publish to `mbg/nodes/x/announce` and that a publish to any other topic is dropped.
