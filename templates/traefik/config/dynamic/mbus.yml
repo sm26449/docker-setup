@@ -2,6 +2,9 @@
 # /nodes → multi-bus-gateway-esphome (ESP flashing + the node list), behind
 # the gateway's own login: forwardAuth asks MBG, which answers with the
 # user and role the nodes service trusts (it publishes no port of its own).
+# /esphome → ESPHome Device Builder (advanced editing of the node configs),
+# admin only: it has no login and cannot read roles, so forwardAuth asks with
+# need=admin. stripPrefix also sets X-Forwarded-Prefix, which it needs.
 http:
   routers:
     mbus:
@@ -18,7 +21,27 @@ http:
       service: mbus-nodes
       tls:
         certResolver: cloudflare
+    mbus-esphome:
+      rule: "Host(`mbus.diysolar.ro`) && (Path(`/esphome`) || PathPrefix(`/esphome/`))"
+      priority: 100
+      entryPoints: [websecure]
+      middlewares: [esphome-slash, mbg-admin, esphome-strip]
+      service: mbus-esphome
+      tls:
+        certResolver: cloudflare
   middlewares:
+    mbg-admin:
+      forwardAuth:
+        address: "http://multi-bus-gateway:8080/api/auth/forward?need=admin"
+        authResponseHeaders: [X-Mbg-User, X-Mbg-Role]
+    esphome-slash:
+      redirectRegex:
+        regex: "^(https?://[^/]+/esphome)$"
+        replacement: "${1}/"
+        permanent: true
+    esphome-strip:
+      stripPrefix:
+        prefixes: ["/esphome"]
     mbg-login:
       forwardAuth:
         address: "http://multi-bus-gateway:8080/api/auth/forward"
@@ -28,6 +51,10 @@ http:
       loadBalancer:
         servers:
           - url: "http://multi-bus-gateway:8080"
+    mbus-esphome:
+      loadBalancer:
+        servers:
+          - url: "http://esphome-builder:6052"
     mbus-nodes:
       loadBalancer:
         servers:
