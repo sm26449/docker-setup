@@ -1,4 +1,7 @@
 # mbus.diysolar.ro → Multi-Bus Gateway (HTTP+WS), TLS terminated here.
+# /nodes → multi-bus-gateway-esphome (ESP flashing + the node list), behind
+# the gateway's own login: forwardAuth asks MBG, which answers with the
+# user and role the nodes service trusts (it publishes no port of its own).
 http:
   routers:
     mbus:
@@ -7,8 +10,25 @@ http:
       service: mbus
       tls:
         certResolver: cloudflare
+    mbus-nodes:
+      rule: "Host(`mbus.diysolar.ro`) && PathPrefix(`/nodes`)"
+      priority: 100
+      entryPoints: [websecure]
+      middlewares: [mbg-login]
+      service: mbus-nodes
+      tls:
+        certResolver: cloudflare
+  middlewares:
+    mbg-login:
+      forwardAuth:
+        address: "http://multi-bus-gateway:8080/api/auth/forward"
+        authResponseHeaders: [X-Mbg-User, X-Mbg-Role]
   services:
     mbus:
       loadBalancer:
         servers:
           - url: "http://multi-bus-gateway:8080"
+    mbus-nodes:
+      loadBalancer:
+        servers:
+          - url: "http://mbg-esphome:8090"

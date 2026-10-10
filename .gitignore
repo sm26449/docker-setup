@@ -47,6 +47,8 @@ templates/seplos-modbus-mqtt/*
 templates/multi-bus-gateway/*
 !templates/multi-bus-gateway/service*.yaml
 !templates/multi-bus-gateway/INTEGRATION.md
+templates/multi-bus-gateway-esphome/*
+!templates/multi-bus-gateway-esphome/service*.yaml
 
 # Local UI screenshots (not part of the deployment config)
 screenshots/

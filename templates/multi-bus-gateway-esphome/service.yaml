@@ -1,0 +1,22 @@
+name: mbg-esphome
+description: "multi-bus-gateway-esphome — flash ESPs from the browser and list the nodes, at <mbus host>/nodes behind MBG's login"
+
+# Reached ONLY through Traefik (templates/traefik/config/dynamic/mbus.yml:
+# router mbus-nodes, forwardAuth → multi-bus-gateway /api/auth/forward). It
+# trusts the role headers Traefik sets, so it publishes no port. The code is
+# an rsync copy of /home/stefanm/multi-bus-gateway-esphome (like MBG's).
+# The data dir must be owned by uid 10001 (the image's user).
+
+dependencies:
+  - name: mosquitto
+  - name: esphome
+  - name: multi-bus-gateway
+
+variables:
+  MBG_NODE_MQTT_HOST:
+    default: "192.168.88.239"
+    description: "The broker as the ESP nodes reach it (LAN address, baked into the basic image)"
+    prompt: true
+
+volumes:
+  - "${DOCKER_ROOT}/pv-stack/mbg-esphome/data:/data"
