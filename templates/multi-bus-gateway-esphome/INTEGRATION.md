@@ -49,7 +49,8 @@ Environment (values come from `.env`; never put them in the compose file):
 
 | Variable | Set to | `.env` key |
 |---|---|---|
-| `ESPHOME_URL` | `http://pv-stack-esphome:6052` | — |
+| `ESPHOME_URL` | `http://esphome-compiler:6052` | — |
+| `COMPILER_TOKEN` | the compiler's token | `MBG_COMPILER_TOKEN` |
 | `NODE_MQTT_HOST` | `${MBG_NODE_MQTT_HOST:-192.168.88.239}` | `MBG_NODE_MQTT_HOST` (optional) |
 | `NODE_MQTT_PORT` | `1883` | — |
 | `NODE_OTA_URL` | `http://${MBG_NODE_MQTT_HOST:-192.168.88.239}:8091` | — |
@@ -89,6 +90,23 @@ http:
 
 Requires a Multi-Bus Gateway with `/api/auth/forward` and an absolute login redirect (commits `2a82232`, `8dd8985`).
 To show the "ESP nodes" link on its Devices page, set `ui.nodes_url: /nodes/` in MBG's config (Settings → Security).
+
+## The compiler (`esphome-compiler`)
+
+| Setting | Value | Why |
+|---|---|---|
+| service / container | `esphome-compiler` / `pv-stack-esphome-compiler` | |
+| build | `context: templates/multi-bus-gateway-esphome/compiler` | image `mbg-esphome-compiler:latest`, FROM `ghcr.io/esphome/esphome:2026.9.1`. **The ESPHome version is that tag** |
+| ports | **none** | only `mbg-esphome` reaches it, with `X-Compiler-Token` |
+| env | `COMPILER_TOKEN=${MBG_COMPILER_TOKEN}`, `ESPHOME_DATA_DIR=/data`, `TZ` | the token (generated into `.env`, never printed); its own build state |
+| volumes | `…/esphome/config:/config`, `…/esphome-compiler/data:/data`, `…/esphome-compiler/cache:/cache` | the YAML is shared with Device Builder; the build state and toolchains are its own |
+| mem_limit | `6g` | firmware compiles spike memory |
+
+`mbg-esphome` gets `ESPHOME_URL=http://esphome-compiler:6052` and `COMPILER_TOKEN=${MBG_COMPILER_TOKEN}`, and depends on
+it. The service's ADR 0008 has the why. **Upgrading ESPHome** is in its `docs/operations.md`.
+
+**Retired 2026-10-11:** the old `esphome` service (`pv-stack-esphome`, 2026.5.3), whose dashboard API no longer exists
+in ESPHome 2026.9. Its `/config/.esphome` (build state and toolchains, about 6 GB) is unused from then on.
 
 ## ESPHome Device Builder (`esphome-builder`, the advanced editor)
 
