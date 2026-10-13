@@ -15,6 +15,22 @@ variables:
     default: ""
     description: "Secret for encrypting credentials"
     generate: random
+  NODERED_ADMIN_USER:
+    default: "admin"
+    description: "Editor / admin API login (adminAuth)"
+  NODERED_ADMIN_PASSWORD:
+    default: ""
+    description: "Editor / admin API password (plain, for clients and scripts)"
+    generate: random
+  NODERED_ADMIN_PASSWORD_HASH:
+    default: ""
+    description: "bcrypt hash of NODERED_ADMIN_PASSWORD (single-quote it in .env: it contains $)"
+  NODERED_INFLUXDB_TOKEN:
+    default: ""
+    description: "Read-only InfluxDB token for the derived nodes (${NODERED_INFLUXDB_TOKEN} in the flows)"
+  TUYA_AC_DEVICES:
+    default: "[]"
+    description: "JSON list of Tuya AC devices for ac-tuya-in/out (${TUYA_AC_DEVICES} in the flows)"
 
 config_files:
   - path: "data/settings.js"
@@ -27,8 +43,25 @@ config_files:
           flowFile: 'flows.json',
           flowFilePretty: true,
 
+          // Persist context to disk (a restart never wipes runtime state).
+          contextStorage: {
+              default: { module: 'localfilesystem', config: { flushInterval: 15 } },
+              memory:  { module: 'memory' },
+          },
+
           // Credential encryption
           credentialSecret: process.env.NODE_RED_CREDENTIAL_SECRET || false,
+
+          // Editor / admin API login. Without it anyone on the LAN can read
+          // the flows and deploy flows that command the battery (S12).
+          adminAuth: process.env.NODERED_ADMIN_PASSWORD_HASH ? {
+              type: "credentials",
+              users: [{
+                  username: process.env.NODERED_ADMIN_USER || "admin",
+                  password: process.env.NODERED_ADMIN_PASSWORD_HASH,
+                  permissions: "*"
+              }]
+          } : undefined,
 
           // User directory
           userDir: '/data',
@@ -85,5 +118,10 @@ compose: |
     environment:
       - TZ=${TZ}
       - NODE_RED_CREDENTIAL_SECRET=${NODE_RED_CREDENTIAL_SECRET}
+      # Secrets live in .env, never in the flows (S12 2026-10-13).
+      - NODERED_ADMIN_USER=${NODERED_ADMIN_USER}
+      - NODERED_ADMIN_PASSWORD_HASH=${NODERED_ADMIN_PASSWORD_HASH}
+      - NODERED_INFLUXDB_TOKEN=${NODERED_INFLUXDB_TOKEN}
+      - TUYA_AC_DEVICES=${TUYA_AC_DEVICES}
     volumes:
       - ${DOCKER_ROOT}/${SERVICE_NAME}/data:/data
