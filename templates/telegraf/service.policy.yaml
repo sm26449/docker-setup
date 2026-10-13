@@ -241,3 +241,55 @@ compose: |
         [[inputs.mqtt_consumer.topic_parsing]]
           topic = "pv-stack/devices/nsx-motorized/+"
           tags = "_/_/_/entity"
+
+      # ── bus_raw: raw MQTT messages for replay (pv-stack-ems phase 0) ──
+      # Every message of the controller inputs, outputs and config, unparsed:
+      # topic as a tag, receive time (ns) as the timestamp. Keep forever.
+      [[outputs.influxdb_v2]]
+        urls = ["${TELEGRAF_INFLUXDB_URL}"]
+        token = "${TELEGRAF_INFLUXDB_TOKEN}"
+        organization = "${TELEGRAF_INFLUXDB_ORG}"
+        bucket = "bus_raw"
+        namepass = ["bus"]
+
+      [[inputs.mqtt_consumer]]
+        servers = ["${POLICY_MQTT_SERVER}"]
+        client_id = "telegraf-policy-bus-raw"
+        qos = 0
+        connection_timeout = "30s"
+        persistent_session = false
+        username = "${POLICY_MQTT_USERNAME}"
+        password = "${POLICY_MQTT_PASSWORD}"
+        topics = [
+          "N/+/vebus/+/Ac/ActiveIn/Connected",
+          "N/+/vebus/+/Alarms/BmsConnectionLost",
+          "N/+/system/0/SystemState/State",
+          "N/+/temperature/+/Temperature",
+          "N/+/settings/0/Settings/CGwacs/AcPowerSetPoint",
+          "N/+/settings/0/Settings/SystemSetup/MaxChargeCurrent",
+          "meters/umg512/power/active/total",
+          "pv/inverters/+/power/active/total",
+          "pv/inverters/+/runtime/last_seen",
+          "pv/inverters/+/voltage/+",
+          "pv/inverters/+/status/operating_state",
+          "seplos/pack/#",
+          "pv-stack/devices/ac/#",
+          "pv-stack/devices/nsx-motorized/retea",
+          "pv-stack/system/#",
+          "pv-stack/config/rules/#",
+          "pv-stack/config/devices/+",
+          "pv-stack/config/tariff",
+          "pv-stack/runtime/#",
+          "pv-stack/derived/#",
+          "pv-stack/policy/#",
+          "pv-stack/override/#",
+          "pv-stack/nodered/#",
+          "pv-stack/forecast/best",
+          "pv-stack/prediction/current",
+          "W/#",
+          "pv/inverters/+/cmd/#"
+        ]
+        topic_tag = "topic"
+        data_format = "value"
+        data_type = "string"
+        name_override = "bus"
