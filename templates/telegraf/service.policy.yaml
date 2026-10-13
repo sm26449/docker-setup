@@ -267,6 +267,8 @@ compose: |
           "N/+/temperature/+/Temperature",
           "N/+/settings/0/Settings/CGwacs/AcPowerSetPoint",
           "N/+/settings/0/Settings/SystemSetup/MaxChargeCurrent",
+          "N/+/settings/0/Settings/CGwacs/#",
+          "N/+/settings/0/Settings/SystemSetup/#",
           "meters/umg512/power/active/total",
           "pv/inverters/+/power/active/total",
           "pv/inverters/+/runtime/last_seen",
