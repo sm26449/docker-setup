@@ -53,7 +53,7 @@ set -u
 # Load env overrides (idempotent — file may not exist on first run)
 [ -r /etc/default/nodered-watchdog ] && . /etc/default/nodered-watchdog
 
-NODERED_URL=${NODERED_URL:-https://192.168.88.235:1881/api/status}
+NODERED_URL=${NODERED_URL:-http://localhost:1880/}
 NODERED_USER=${NODERED_USER:-}
 NODERED_PASS=${NODERED_PASS:-}
 # Marker that must appear in the JSON body — defends against nginx
@@ -92,8 +92,14 @@ send_sms() {
     local escaped="${body//\"/\\\"}"
     local payload="{\"number\":\"$SMS_TO\",\"message\":\"$escaped\",\"priority\":\"critical\"}"
     local resp http_code
+    # SMS_API_KEY (from /etc/default/nodered-watchdog, matching sms-gateway's
+    # SMS_API_KEY env): without it the gateway answers 401 since auth was enabled.
+    local auth_args=()
+    if [ -n "${SMS_API_KEY:-}" ]; then
+        auth_args=(-H "X-API-Key: $SMS_API_KEY")
+    fi
     resp=$(curl -sS -m 10 -o /tmp/nr_wd_resp.$$ -w "%{http_code}" \
-        -X POST "$SMS_API" \
+        -X POST "$SMS_API" "${auth_args[@]}" \
         -H 'Content-Type: application/json' \
         -d "$payload" 2>>"$LOG_FILE")
     http_code="$resp"
@@ -169,7 +175,7 @@ if [ -n "$last" ] && [ "$last" -gt 0 ]; then
     fi
 fi
 
-body="NR HTTP DOWN ${fc}x ($probe_failed_reason). Overrides + deploys broken. Check Ekrano NR."
+body="NR HTTP DOWN ${fc}x ($probe_failed_reason). Overrides + deploys broken. Check local-1 NR (pv-stack-nodered)."
 if send_sms "$body"; then
     echo "$now" > "$STATE_FILE"
 fi

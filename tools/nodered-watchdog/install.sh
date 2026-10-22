@@ -51,13 +51,19 @@ if [ ! -f "$DEFAULTS_DST" ]; then
 # Uncomment + edit before the watchdog can probe + alert.
 
 # --- Required --------------------------------------------------------
-# NODERED_URL=https://192.168.88.235:1881/api/status
-# NODERED_USER=admin
-# NODERED_PASS=changeme
+# The local Node-RED (pv-stack-nodered) since 2026-10-22; the Ekrano
+# /api/status endpoint was retired on 2026-05-31 and answered 404.
+# The editor page needs no credentials; NODERED_USER/PASS only for an
+# endpoint behind basic auth.
+# NODERED_URL=http://localhost:1880/
+# JSON_MARKER=Node-RED           # string that MUST appear in body
+#                                # (defends against nginx placeholder)
+# SMS_API_KEY=                   # sms-gateway's SMS_API_KEY (X-API-Key);
+#                                # without it every SMS fails with 401
 
 # --- Optional --------------------------------------------------------
-# JSON_MARKER='"battery"'        # string that MUST appear in body
-#                                # (defends against nginx placeholder)
+# NODERED_USER=admin
+# NODERED_PASS=changeme
 # SMS_API=http://localhost:5080/api/sms/send
 # SMS_TO=+40722296753            # same number as alertd sms_main
 # FAIL_THRESHOLD=2               # consecutive misses before SMS (5 min each)
