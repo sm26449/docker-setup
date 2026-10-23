@@ -5,6 +5,17 @@ All notable changes to Docker Services Manager will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased] - 2026-10-23
+
+### Changed
+
+- **docker-monitor watches the EMS containers** — `CONTAINER_PREFIX` takes a
+  comma-separated list; the stack sets `pv-stack-,ems-` so `ems-io`,
+  `ems-control`, `ems-app-stats` and `ems-reports` (pv-stack-ems, shadow since
+  2026-10-16) get a `pv-stack/infra/docker/<name>/state` topic and count in
+  `_summary` (pv-stack-ems audit 2026-10-22, B4). Their images now declare a
+  HEALTHCHECK, so `health` is `healthy`/`unhealthy` for them, not `none`.
+
 ## [Unreleased] - 2026-10-03
 
 ### Changed
@@ -486,3 +497,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 | 2.1.0 | 2024-11-27 | Victron Energy integration, Telegraf modes |
 | 2.0.0 | 2024-11-26 | Complete rewrite, modular architecture |
 | 1.0.0 | 2024-11-01 | Initial release |
+
+## 2026-10-07 — seplos-modbus-mqtt retired: the pack bus moves to MBG rtu_tap
+
+- MBG reads the Seplos inter-pack RS485 bus directly (listen-only
+  `rtu_tap`, `battery-bank` endpoint with 8 materialized units) and
+  publishes the collector's exact topics (`seplos/battery_N/*`,
+  `seplos/pack/*`) + InfluxDB bucket `seplos` (`seplos_battery` +
+  `endpoint` measurements).
+- `seplos-modbus-mqtt` stopped and moved to the `retired` compose
+  profile (rollback documented inline). Config backup:
+  `config.yaml.pre-seplos-cutover-20261007`; alertd variables backup:
+  `alertd-variables.pre-seplos-cutover-20261007.sql`; grafana dashboard
+  backup: `energy-flow-new.json.pre-seplos-cutover-20261007`.
+- alertd variables 10/112/188/189 retopiced (units_online, voltage
+  freshness, endpoint status, soc freshness); Grafana energy-flow bank
+  queries moved to measurement `endpoint` fields `pack_average_soc` /
+  `pack_total_power`.

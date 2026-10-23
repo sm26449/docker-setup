@@ -97,7 +97,12 @@ MQTT_PORT = int(os.environ.get("MQTT_PORT", "1883"))
 MQTT_USER = os.environ.get("MQTT_USER", "")
 MQTT_PASS = os.environ.get("MQTT_PASS", "")
 POLL_INTERVAL_S = max(10, int(os.environ.get("POLL_INTERVAL_S", "30")))
+# one prefix or several, comma-separated ("pv-stack-,ems-" since 2026-10-23: the
+# EMS shadow containers ems-io/-control/-app-stats/-reports are watched too)
 CONTAINER_PREFIX = os.environ.get("CONTAINER_PREFIX", "pv-stack-")
+CONTAINER_PREFIXES = tuple(
+    p.strip() for p in CONTAINER_PREFIX.split(",") if p.strip()
+) or ("pv-stack-",)
 WHITELIST = {
     n.strip() for n in os.environ.get("CONTAINER_WHITELIST", "").split(",")
     if n.strip()
@@ -132,7 +137,7 @@ def _select(containers):
             continue
         if WHITELIST and name not in WHITELIST:
             continue
-        if not WHITELIST and not name.startswith(CONTAINER_PREFIX):
+        if not WHITELIST and not name.startswith(CONTAINER_PREFIXES):
             continue
         yield c
 
