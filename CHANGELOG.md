@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] - 2026-10-23
 
+### Added
+
+- **`.env.example` for `docker-compose.pv-stack.yml`** — the 149 names the
+  live `.env` carries, grouped per service, each with a `# class:` tag
+  (SITE / SECRET / SERVICE / TUNABLE / UNUSED) read by the configuration-
+  surface map (`pv-stack-ui/scripts/config_surface_map.py`, two-roles plan
+  P4.1). Secrets are placeholders; 17 names are tagged UNUSED (read by no
+  compose file or template — removal candidates, not removed).
+
 ### Changed
 
 - **docker-monitor watches the EMS containers** — `CONTAINER_PREFIX` takes a
