@@ -22,3 +22,41 @@ topic readwrite #
 user bridge_ro
 topic read #
 topic deny pv-stack/config/#
+
+# mbg-node — the account baked into ESP node firmware (multi-bus-gateway-esphome,
+# 2026-10-10). A board's flash can be read by whoever holds it, so this account
+# reaches ONLY the nodes' own namespace: announcements now, node state and
+# commands later. Never # — that would hand the whole stack (Victron control
+# included) to anyone with a node in hand.
+# A node only says who it is and answers; it reads its commands and cannot
+# write any — so a board in someone's hands cannot command the others.
+user mbg-node
+topic write mbg/nodes/+/announce
+topic write mbg/nodes/+/event
+topic read mbg/nodes/+/cmd
+# a configured node (the wizard's YAML, topic_prefix mbg/nodes/<mac>):
+# online/offline, its entities' states out, their commands in — ESPHome's
+# own <prefix>/<component>/<object_id>/{state,command}
+topic write mbg/nodes/+/status
+topic write mbg/nodes/+/+/+/state
+topic read mbg/nodes/+/+/+/command
+# the node's own log (warnings by default; more for a while on request, 2026-10-11)
+topic write mbg/nodes/+/log
+
+# EMS containers (pv-stack-ems, audit 2026-10-22 A6): read everything, write
+# only their own namespace. One writer per actuator: W/# and
+# pv/inverters/+/cmd/# stay with Node-RED (admin) — a user with rules of its
+# own is denied every topic not listed here.
+user ems-io
+topic read #
+topic write ems/v1/#
+# ADR-0015 §3 (2026-10-25): ems-io's writes are the gateway's commands on the GX
+# device — one topic family, nothing else of mbg/#. The gateway guards, verifies
+# and arms the dead-man; the command must also be enabled on the device there.
+topic write mbg/devices/victron-gx/cmd/#
+user ems-control
+topic read #
+topic write ems/v1/#
+user ems-app
+topic read #
+topic write ems/v1/#
